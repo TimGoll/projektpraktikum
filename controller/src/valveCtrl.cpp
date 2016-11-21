@@ -1,4 +1,7 @@
-//
-// Created by Tim Goll on 17.11.16.
-//
+#include <include/valveCtrl.h>
 
+namespace control {
+    void ValveCtrl::ValveCtrl() {
+
+    }
+}

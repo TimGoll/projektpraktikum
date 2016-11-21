@@ -1,4 +1,7 @@
-//
-// Created by Tim Goll on 17.11.16.
-//
+#include <include/mfcCtrl.h>
 
+namespace control {
+    void MfcCtrl::MfcCtrl() {
+
+    }
+}
