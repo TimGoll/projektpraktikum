@@ -16,3 +16,5 @@
 5. Arduino-Network-Communication [[link]](https://github.com/evothings/evothings-examples/blob/master/examples/arduino-led-onoff-tcp/arduinoethernet/arduinoethernet/arduinoethernet.ino)
 
 Arduino kann kein Multithreading. Wie sieht es mit dem Teensy Board aus? Ansonsten: http://www.kwartzlab.ca/2010/09/arduino-multi-threading-librar/
+
+Klassiche Struktur in einem Arduino Programm: http://arduino.stackexchange.com/questions/13178/classes-and-objects-how-many-and-which-file-types-do-i-actually-need-to-use-the/13182#13182
