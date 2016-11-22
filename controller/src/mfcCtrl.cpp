@@ -1,7 +1,7 @@
-#include <include/mfcCtrl.h>
+#include "mfcCtrl.h"
 
 namespace control {
-    void MfcCtrl::MfcCtrl() {
+    MfcCtrl::MfcCtrl() {
 
     }
 }

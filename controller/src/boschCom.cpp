@@ -1,7 +1,7 @@
-#include <include/boschCom.h>
+#include "boschCom.h"
 
 namespace communication {
-    void BoschCom::BoschCom() {
+    BoschCom::BoschCom() {
 
     }
 }

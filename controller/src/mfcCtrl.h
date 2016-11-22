@@ -1,8 +1,13 @@
+#ifndef mfcCtrl_h
+#define mfcCtrl_h
+
 namespace control {
     class MfcCtrl {
     public:
         //Defaultconstructor
-        MfCtrl();
+        MfcCtrl();
     private:
     };
 }
+
+#endif

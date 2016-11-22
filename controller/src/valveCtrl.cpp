@@ -1,7 +1,7 @@
-#include <include/valveCtrl.h>
+#include "valveCtrl.h"
 
 namespace control {
-    void ValveCtrl::ValveCtrl() {
+    ValveCtrl::ValveCtrl() {
 
     }
 }

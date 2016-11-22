@@ -1,0 +1,34 @@
+Hardware:
+========
+Teensy3.6-Board
+Micro-SD Karte
+I2C 20x4 Display (optional)
+Optokopler (nötig bei Transistor??)
+
+LabView:
+=======
+01 Empfangen der Messparameter
+02 Herstellen einer seriellen Verbindung (USB) mit dem Microcontroller
+03 Übertragung der Tabelle zeilenweise als Strings (Header getrennt, auf Bestätigung warten vor weiterer Übertragung)
+04 Stream geöffnet halten für den Empfang der Daten vom Microcontroller
+
+Microcontroller:
+==============
+01 Warten auf Empfang des Daten-Headers (Adressen, Taktzeit/Auflösung, Uhrzeit, ...)
+02 Überprüfung des Headers -> Senden einer Bestätigung an LabView
+03 Empfangen des Messparameterstrings, Überprüfung auf Vollständigkeit und Zerlegung in einzelne Parameter --> in Queue speichern
+04 Erstellung leerer Text-Datei mit Header (Displayanzeige: Messung startet), (RTC-Wert wird als Nullpunkt gesetzt??)
+05
+
+
+
+RTC-Zeit wird als Absolutzeit für die gesamte Steuerung angesehen (Steuerung und Messung ist immer im selben Takt)
+
+
+
+FRAGEN:
+Überprüfbarkeit der Verfügbarkeit der einzelnen Geräte? (Ventile, MFCs, Bosch-Sensoren)
+Wie erkennen wir Messfehler??
+Wie genau ist die RTC?
+Sensoren I2C? Muktiplexer?
+Ventilschaltung verstärkt mit Transistor?

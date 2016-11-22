@@ -1,3 +1,6 @@
+#ifndef boschCom_h
+#define boschCom_h
+
 namespace communication {
     class BoschCom {
     public:
@@ -6,3 +9,5 @@ namespace communication {
     private:
     };
 }
+
+#endif

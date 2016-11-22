@@ -1,7 +1,10 @@
-#include <include/labCom.h>
+#include "labCom.h"
 
 namespace communication {
-    void LabCom::LabCom() {
+    LabCom::LabCom() {
 
+    }
+    int LabCom::return5() {
+        return 5;
     }
 }
