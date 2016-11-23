@@ -4,7 +4,16 @@ namespace communication {
     LabCom::LabCom() {
 
     }
-    int LabCom::return5() {
-        return 5;
+    LabCom::~LabCom() {
+
+    }
+
+    bool LabCom::loop() {
+        //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
+        if (kill_flag)
+            return false;
+
+        Serial.println("loop called");
+        return true;
     }
 }

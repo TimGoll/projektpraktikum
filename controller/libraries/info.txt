@@ -1,0 +1,2 @@
+Die Bibliotheken müssen alle in den Bibliotheks-Ordner (%PROGRAM_FILES%/Arduino/libraries) verschoben werden,
+damit sie von der Arduino IDE gefunden werden.
