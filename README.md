@@ -1,4 +1,4 @@
-# Projektpratikum
+# Projektpraktikum
 
 ## Hardware
 1. **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/)
