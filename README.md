@@ -7,6 +7,7 @@
 2. SD Karte
 3. Optokoppler
 4. Pegelwandler
+5. BME 280
 
 ## Nützliche Links
 1. ThreadSafe-Queues [[link]](https://www.justsoftwaresolutions.co.uk/threading/implementing-a-thread-safe-queue-using-condition-variables.html)
