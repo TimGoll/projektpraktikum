@@ -13,7 +13,7 @@ namespace communication {
         if (kill_flag)
             return false;
 
-        Serial.println("loop called");
+        //Serial.println("loop called");
         return true;
     }
 }

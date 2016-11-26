@@ -6,6 +6,8 @@
 #include <mthread.h>
 
 namespace communication {
+    // an die MFCs werden absolutwerte uerbtragen. Diese basieren auf der Zeit, die gespeichert
+    // wird, wenn diese Klasse erstellt wird
     class LabCom : public Thread {
     public:
         //Defaultconstructor
