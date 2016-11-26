@@ -18,6 +18,12 @@ namespace communication {
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
     private:
+        bool reading;
+        bool sending;
+
+        char inDataBuffer[256];
+        char singleCharBuffer;
+        int bufferCharIndex;
     };
 }
 
