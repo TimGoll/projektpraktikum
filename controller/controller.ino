@@ -15,7 +15,7 @@
 void setup() {
     // ERSTELLE GEBRAUCHTE OBJEKTE
     communication::LabCom *labCom = new communication::LabCom();
-    control::MfcCtrl *mfcCtrl     = new control::MfcCtrl();
+    control::MfcCtrl *mfcCtrl     = new control::MfcCtrl(1);
 
     // STARTE PSEUDOTHREADS
     main_thread_list -> add_thread(labCom);

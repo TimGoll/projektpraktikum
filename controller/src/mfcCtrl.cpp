@@ -12,12 +12,12 @@ namespace control {
 
         Serial.print("MFC ");
         Serial.print(this->id);
-        Serial.println(" created.")
+        Serial.println(" created.");
     }
     MfcCtrl::~MfcCtrl() {
         Serial.print("MFC ");
         Serial.print(this->id);
-        Serial.println(" deleted.")
+        Serial.println(" deleted.");
     }
 
     void MfcCtrl::setType(char type[]) {
@@ -48,13 +48,13 @@ namespace control {
 
         if (this->ready) {
             if (this->nextEvent->time == -1) //lade erstes Event in nextEvent
-                nextEvent = eventList.pop()
+                nextEvent = eventList.pop();
 
             if (this->nextEvent->time >= millis()) {
                 //TODO: set MFC to this->nextEvent->value
                 if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
                     return false;
-                nextEvent = eventList.pop()
+                nextEvent = eventList.pop();
             }
         }
 

@@ -20,7 +20,7 @@ namespace control {
     class MfcCtrl : public Thread {
     public:
         //Defaultconstructor
-        MfcCtrl();
+        MfcCtrl(int id);
         //Destructor
         ~MfcCtrl();
         //Es gibt zwei verschiedene Typen von MFCs, der Typ muss vorher gesetzt werden
