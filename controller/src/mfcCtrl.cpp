@@ -41,11 +41,7 @@ namespace control {
     }
 
     //HAUPTSCHLEIFE
-    bool MfcCtrl::loop() {
-        //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
-        if (kill_flag)
-            return false;
-
+    bool MfcCtrl::compute() {
         Serial.print("MFC ");
         Serial.print(this->id);
         Serial.println(" wird ausgefuert.");

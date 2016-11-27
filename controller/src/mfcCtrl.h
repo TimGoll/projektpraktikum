@@ -32,9 +32,8 @@ namespace control {
         void setEvent(int value, unsigned int time);
         //sobald diese Funktion ausgefuehrt wird, beginnt das Programm mit der Ansteuerung
         void start();
-    protected:
-        //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
-        bool loop();
+        //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
+        bool compute();
     private:
         int id; //kontunierliche MFC-Id
         char type[];

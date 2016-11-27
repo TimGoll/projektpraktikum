@@ -96,9 +96,7 @@ namespace communication {
                 if (errCode == 1) { //Funktion wird ausgefuerhrt und bei Erfolg in If gegangen
                     int arraySize = this->splitLine();
 
-                    //for (int i = 0; i < arraySize; i++) {
-                    //    Serial.println(this->inDataArray[i]);
-                    //}
+                    //TODO: Zuweisung der Objekte sollte in der Main passieren
 
                     if (this->headerLineCounter == 0) { //ZEILE 1: MFC+Ventilanzahl
                         this->amount_MFC   = atoi(this->inDataArray[0]);
@@ -106,12 +104,15 @@ namespace communication {
 
                         //erstelle MFC-Objekte
                         for (int i = 0; i < this->amount_MFC; i++) {
-                            mfc_list[i] = new control::MfcCtrl(i);
-                            main_thread_list -> add_thread(mfc_list[i]);
+                            this->mfc_list[i] = new control::MfcCtrl(i);
                         }
                     }
 
                     this->headerLineCounter++;
+
+                    //test
+                    this->reading = false;
+                    this->sending = true;
                 } else {
                     //TODO: ErrorCode muss verarbeitet werden (Displayanzeige?)
                 }
@@ -120,6 +121,10 @@ namespace communication {
 
         if (this->sending) { //Sende Messwerte parallel zur Messung
 
+            //Testaufruf der Funktionen (loop-aehnlich)
+            for (int i = 0; i < this->amount_MFC; i++) {
+                this->mfc_list[i]->compute();
+            }
         }
 
         return true;
