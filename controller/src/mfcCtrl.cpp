@@ -12,12 +12,12 @@ namespace control {
 
         Serial.print("MFC ");
         Serial.print(this->id);
-        Serial.println(" created.");
+        Serial.println(" erstellt.");
     }
     MfcCtrl::~MfcCtrl() {
         Serial.print("MFC ");
         Serial.print(this->id);
-        Serial.println(" deleted.");
+        Serial.println(" geloescht.");
     }
 
     void MfcCtrl::setType(char type[]) {
@@ -45,6 +45,10 @@ namespace control {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;
+
+        Serial.print("MFC ");
+        Serial.print(this->id);
+        Serial.println(" wird ausgefuert.");
 
         if (this->ready) {
             if (this->nextEvent->time == -1) //lade erstes Event in nextEvent
