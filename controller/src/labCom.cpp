@@ -13,6 +13,10 @@ namespace communication {
 
     }
 
+    void LabCom::setMainMfcObjectPointer(control::MfcMain *mfcMain) {
+        this->mfcMain = mfcMain;
+    }
+
     int LabCom::readLine() {
         this->bufferCharIndex = 0; //setze index auf Startposition zurueck
         this->startTime = millis();
@@ -102,10 +106,8 @@ namespace communication {
                         this->amount_MFC   = atoi(this->inDataArray[0]);
                         this->amount_valve = atoi(this->inDataArray[1]);
 
-                        //erstelle MFC-Objekte
-                        for (int i = 0; i < this->amount_MFC; i++) {
-                            this->mfc_list[i] = new control::MfcCtrl(i);
-                        }
+                        //erstelle MFC-Objekte in der mfc_main
+                        mfcMain->createMFC(this->amount_MFC);
                     }
 
                     this->headerLineCounter++;
@@ -122,9 +124,9 @@ namespace communication {
         if (this->sending) { //Sende Messwerte parallel zur Messung
 
             //Testaufruf der Funktionen (loop-aehnlich)
-            for (int i = 0; i < this->amount_MFC; i++) {
-                this->mfc_list[i]->compute();
-            }
+            //for (int i = 0; i < this->amount_MFC; i++) {
+            //    this->mfc_list[i]->compute();
+            //}
         }
 
         return true;

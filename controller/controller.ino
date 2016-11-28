@@ -8,6 +8,7 @@
 
 #include "src/boschCom.h"
 #include "src/labCom.h"
+#include "src/mfc_main.h"
 #include "src/mfcCtrl.h"
 #include "src/valveCtrl.h"
 #include "src/StoreD.h"
@@ -18,7 +19,12 @@ void setup() {
   
     // ERSTELLE GEBRAUCHTE OBJEKTE
     communication::LabCom *labCom = new communication::LabCom();
+    control::MfcMain *mfcMain     = new control::MfcMain();
+
+    // TAUSCHE DATEN ZWISCHEN THREADS AUS
+    labCom->setMainMfcObjectPointer(mfcMain);
 
     // STARTE PSEUDOTHREADS
     main_thread_list -> add_thread(labCom);
+    main_thread_list -> add_thread(mfcMain);
 }

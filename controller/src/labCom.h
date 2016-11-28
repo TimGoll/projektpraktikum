@@ -6,7 +6,7 @@
 #include <mthread.h>
 
 #include "config.h"
-#include "mfcCtrl.h"
+#include "mfc_main.h"
 
 namespace communication {
     // an die MFCs werden absolutwerte uerbtragen. Diese basieren auf der Zeit, die gespeichert
@@ -17,6 +17,8 @@ namespace communication {
         LabCom();
         //Destructor
         ~LabCom();
+        //Gebe Adresse des Hauptobjektes an LabCom, um zu kommunizieren
+        void setMainMfcObjectPointer(control::MfcMain *mfcMain);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -29,7 +31,7 @@ namespace communication {
         //Gibt nach vollstaendiger Durchfuehrung die Anzahl an Eintraegen im Array zurueck.
         int splitLine();
 
-        control::MfcCtrl *mfc_list[MAX_AMOUNT_MFC]; //Hier werden die Adressen der MFC-Objekte gespeichert
+        control::MfcMain *mfcMain;
 
         bool reading;
         bool sending;
