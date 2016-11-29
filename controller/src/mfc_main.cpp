@@ -12,6 +12,7 @@ namespace control {
         this->amount_MFC = amount;
         for (int i = 0; i < this->amount_MFC; i++) {
             mfc_list[i] = new control::MfcCtrl(i);
+            mfc_continue_next_loop[i] = true;
         }
     }
 
@@ -21,8 +22,20 @@ namespace control {
         }
     }
 
-    void MfcMain::setEvent(int mfcID, int value, unsigned int time) {
+    void MfcMain::setTypes(char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
+        for (int i = 0; i < this->amount_MFC; i++) {
+            mfc_list[i]->setType(adresses[i]);
+        }
+    }
+
+    void MfcMain::setEvent(int mfcID, int value, unsigned long time) {
         mfc_list[mfcID]->setEvent(value, time);
+    }
+
+    void MfcMain::start(unsigned long startTime) {
+        for (int i = 0; i < this->amount_MFC; i++) {
+            mfc_list[i]->start(startTime);
+        }
     }
 
     bool MfcMain::loop() {
@@ -30,7 +43,14 @@ namespace control {
         if (kill_flag)
             return false;
 
-        //Serial.println("loop called");
+        //TODO Aufrufen der MFC.compute() Funktionen. Kann immer getan werden, hat erst Wirkung nach demsie mit MFC.start() aktiviert werden.
+        for (int i = 0; i < this->amount_MFC; i++) {
+            if (mfc_continue_next_loop[i])
+                mfc_continue_next_loop[i] = mfc_list[i]->compute();
+        }
+
+        //TODO: Ueberpruefe, ob alle MFC Objekte abgeschlossen sind
+
         return true;
     }
 }

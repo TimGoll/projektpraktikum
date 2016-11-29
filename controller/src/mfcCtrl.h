@@ -9,7 +9,7 @@
 namespace control {
     typedef struct eventElementStruct {
         int value;
-        unsigned int time;
+        unsigned long time;
     } eventElement;
 
 
@@ -29,19 +29,20 @@ namespace control {
         void setAdress(char adress[]);
         //Stellwerte fuer die MFCs koennen als Pseudoevents gesetzt werden. Die Ereignisse
         //werden in einer Queue gespeichert und bei gegebenen Zeitpunkt ausgefuehrt
-        void setEvent(int value, unsigned int time);
+        void setEvent(int value, unsigned long time);
         //sobald diese Funktion ausgefuehrt wird, beginnt das Programm mit der Ansteuerung
-        void start();
+        void start(unsigned long startTime);
         //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool compute();
     private:
         int id; //kontunierliche MFC-Id
         char type[];
         char adress[];
-        QueueList <eventElement*> eventList;
+        QueueList <eventElement> eventList;
         bool ready;
+        unsigned long startTime;
 
-        eventElement *nextEvent;
+        eventElement nextEvent;
     };
 }
 

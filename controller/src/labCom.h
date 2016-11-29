@@ -30,6 +30,9 @@ namespace communication {
         //Eingetroffene und vollstaendige Zeile wird an Kommata zerlegt und in Array gespeichert.
         //Gibt nach vollstaendiger Durchfuehrung die Anzahl an Eintraegen im Array zurueck.
         int splitLine();
+        //gibt Befehl zum Start der Threads von MFC und Ventil, uebergibt die Startzeit, welche als
+        //Nullpunkt dient
+        void start(unsigned long startTime);
 
         control::MfcMain *mfcMain;
 
@@ -37,9 +40,7 @@ namespace communication {
         bool sending;
 
         char inDataBuffer[SERIAL_READ_MAX_LINE_SIZE];
-        char singleCharBuffer;
         int bufferCharIndex;
-        unsigned int startTime;
 
         char inDataArray [SERIAL_READ_MAX_BLOCK_AMOUNT][SERIAL_READ_MAX_BLOCK_SIZE];
         int headerLineCounter;
