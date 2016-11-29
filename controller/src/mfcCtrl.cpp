@@ -67,7 +67,9 @@ namespace control {
             if (millis() >= this->startTime + this->nextEvent.time) {
                 //TODO: set MFC to this->nextEvent->value
 
-                Serial.print("MFC ");
+                Serial.print("[Zeit: ");
+                Serial.print(millis());
+                Serial.print("] MFC ");
                 Serial.print(this->id);
                 Serial.print(" gesetzt auf: ");
                 Serial.println(this->nextEvent.value);
