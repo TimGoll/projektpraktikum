@@ -21,15 +21,17 @@
  Hier werden die Hauptobjekte erstellt und verwaltet. Außerdem werden an dieser Stellte die Threads gestartet und später auch wieder gestoppt. Vor dem Start der Threads werden noch Adressen zwischen den einzelnen Objekten ausgetauscht (beispielsweise die der Queues zum späteren Datenaustausch).
 
 ### Hauptklassen:
-1. **main_labCom**:
-2. **main_boschCom**:
-3. **main_StoreD**:
-4. **main_mfcCtrl**:
-5. **main_valveStrl**:
+Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgeleitet. Außerdem besitzen sie eine ```loop()```-Funktion, da die Klasse in Pseudothreads ausgeführt wird.
+
+1. **main_labCom** [[cpp]]() [[h]]():
+2. **main_boschCom** [[cpp]]() [[h]]():
+3. **main_StoreD** [[cpp]]() [[h]]():
+4. **main_mfcCtrl** [[cpp]]() [[h]]():
+5. **main_valveStrl** [[cpp]]() [[h]]():
 
 ### Nebenklassen:
-1. **mfcCtrl**:
-2. **valveCtrl**:
+1. **mfcCtrl** [[cpp]]() [[h]]():
+2. **valveCtrl** [[cpp]]() [[h]]():
 
 ## LabView:
 
