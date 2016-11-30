@@ -31,7 +31,16 @@
 1. **mfcCtrl**:
 2. **valveCtrl**:
 
+## LabView:
 
+## Hardware:
+1. **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/)
+ * Vorderseite [[link]](http://www.pjrc.com/teensy/beta/card9a_rev1_print.pdf)
+ * Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
+2. **20x4 LCD Display (I2C, Buntes Backlight)** [[link]](https://www.adafruit.com/product/499)
+
+## Sonstiges:
+1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
 
 
