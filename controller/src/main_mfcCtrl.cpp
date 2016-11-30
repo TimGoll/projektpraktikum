@@ -1,14 +1,14 @@
-#include "mfc_main.h"
+#include "main_mfcCtrl.h"
 
 namespace control {
-    MfcMain::MfcMain() {
+    Main_MfcCtrl::Main_MfcCtrl() {
 
     }
-    MfcMain::~MfcMain() {
+    Main_MfcCtrl::~Main_MfcCtrl() {
 
     }
 
-    void MfcMain::createMFC(int amount) {
+    void Main_MfcCtrl::createMFC(int amount) {
         this->amount_MFC = amount;
         for (int i = 0; i < this->amount_MFC; i++) {
             mfc_list[i] = new control::MfcCtrl(i);
@@ -16,29 +16,29 @@ namespace control {
         }
     }
 
-    void MfcMain::setAdresses(char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
+    void Main_MfcCtrl::setAdresses(char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
         for (int i = 0; i < this->amount_MFC; i++) {
             mfc_list[i]->setAdress(adresses[i]);
         }
     }
 
-    void MfcMain::setTypes(char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
+    void Main_MfcCtrl::setTypes(char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
         for (int i = 0; i < this->amount_MFC; i++) {
             mfc_list[i]->setType(adresses[i]);
         }
     }
 
-    void MfcMain::setEvent(int mfcID, int value, unsigned long time) {
+    void Main_MfcCtrl::setEvent(int mfcID, int value, unsigned long time) {
         mfc_list[mfcID]->setEvent(value, time);
     }
 
-    void MfcMain::start(unsigned long startTime) {
+    void Main_MfcCtrl::start(unsigned long startTime) {
         for (int i = 0; i < this->amount_MFC; i++) {
             mfc_list[i]->start(startTime);
         }
     }
 
-    bool MfcMain::loop() {
+    bool Main_MfcCtrl::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;

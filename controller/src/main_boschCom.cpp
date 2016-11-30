@@ -1,14 +1,14 @@
-#include "boschCom.h"
+#include "main_boschCom.h"
 
 namespace communication {
-    BoschCom::BoschCom() {
+    Main_BoschCom::Main_BoschCom() {
 
     }
-    BoschCom::~BoschCom() {
+    Main_BoschCom::~Main_BoschCom() {
 
     }
 
-    bool BoschCom::loop() {
+    bool Main_BoschCom::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;

@@ -1,14 +1,14 @@
-#include "StoreD.h"
+#include "main_StoreD.h"
 
 namespace storage {
-    StoreD::StoreD() {
+    Main_StoreD::Main_StoreD() {
 
     }
-    StoreD::~StoreD() {
+    Main_StoreD::~Main_StoreD() {
 
     }
 
-    bool StoreD::loop() {
+    bool Main_StoreD::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;

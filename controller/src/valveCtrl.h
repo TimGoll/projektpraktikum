@@ -1,5 +1,5 @@
-#ifndef ValveCtrl_h
-#define ValveCtrl_h
+#ifndef VALVECTRL_H
+#define VALVECTRL_H
 
 #include <Arduino.h>
 #include <newdel.h> //fügt new und delete hinzu, wird für "mthread" benötigt
@@ -12,9 +12,8 @@ namespace control {
         ValveCtrl();
         //Destructor
         ~ValveCtrl();
-    protected:
-        //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
-        bool loop();
+        //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
+        bool compute();
     private:
     };
 }

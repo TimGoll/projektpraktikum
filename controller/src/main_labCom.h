@@ -1,24 +1,24 @@
-#ifndef labCom_h
-#define labCom_h
+#ifndef MAIN_LABCOM_H
+#define MAIN_LABCOM_H
 
 #include <Arduino.h>
 #include <newdel.h> //fügt new und delete hinzu, wird für "mthread" benötigt
 #include <mthread.h>
 
 #include "config.h"
-#include "mfc_main.h"
+#include "main_mfcCtrl.h"
 
 namespace communication {
     // an die MFCs werden absolutwerte uerbtragen. Diese basieren auf der Zeit, die gespeichert
     // wird, wenn diese Klasse erstellt wird
-    class LabCom : public Thread {
+    class Main_LabCom : public Thread {
     public:
         //Defaultconstructor
-        LabCom();
+        Main_LabCom();
         //Destructor
-        ~LabCom();
+        ~Main_LabCom();
         //Gebe Adresse des Hauptobjektes an LabCom, um zu kommunizieren
-        void setMainMfcObjectPointer(control::MfcMain *mfcMain);
+        void setMainMfcObjectPointer(control::Main_MfcCtrl *main_mfcCtrl);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -34,7 +34,7 @@ namespace communication {
         //Nullpunkt dient
         void start(unsigned long startTime);
 
-        control::MfcMain *mfcMain;
+        control::Main_MfcCtrl *main_mfcCtrl;
 
         bool reading;
         bool sending;

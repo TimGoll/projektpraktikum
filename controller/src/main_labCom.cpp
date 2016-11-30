@@ -1,7 +1,7 @@
-#include "labCom.h"
+#include "main_labCom.h"
 
 namespace communication {
-    LabCom::LabCom() {
+    Main_LabCom::Main_LabCom() {
         this->reading = true;
         this->sending = false;
 
@@ -9,15 +9,15 @@ namespace communication {
 
         Serial.println("LabCom erstellt.");
     }
-    LabCom::~LabCom() {
+    Main_LabCom::~Main_LabCom() {
 
     }
 
-    void LabCom::setMainMfcObjectPointer(control::MfcMain *mfcMain) {
-        this->mfcMain = mfcMain;
+    void Main_LabCom::setMainMfcObjectPointer(control::Main_MfcCtrl *main_mfcCtrl) {
+        this->main_mfcCtrl = main_mfcCtrl;
     }
 
-    int LabCom::readLine() {
+    int Main_LabCom::readLine() {
         this->bufferCharIndex = 0; //setze index auf Startposition zurueck
         unsigned long startTime = millis();
 
@@ -58,7 +58,7 @@ namespace communication {
         return ERR_SERIAL_READ_TIMEOUT; //Timeout
     }
 
-    int LabCom::splitLine() {
+    int Main_LabCom::splitLine() {
         int currentCharIndex = 0;
         int endCharIndex = this->bufferCharIndex -1; //da letztes Zeichen '>' ist
 
@@ -83,16 +83,16 @@ namespace communication {
         }
     }
 
-    void LabCom::start(unsigned long startTime) {
+    void Main_LabCom::start(unsigned long startTime) {
         //starte MFCs
-        mfcMain->start(startTime);
+        main_mfcCtrl->start(startTime);
 
         //starte Ventile
     }
 
     //////////////////// MAINLOOP ////////////////////
 
-    bool LabCom::loop() {
+    bool Main_LabCom::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;
@@ -112,19 +112,19 @@ namespace communication {
                         this->amount_valve = atoi(this->inDataArray[1]);
 
                         //erstelle MFC-Objekte in der mfc_main
-                        mfcMain->createMFC(this->amount_MFC);
+                        main_mfcCtrl->createMFC(this->amount_MFC);
 
                         this->headerLineCounter = 1;
                     }
 
                     else if (this->headerLineCounter == 1) { //ZEILE 2: MFC-Adressen
-                        mfcMain->setAdresses(this->inDataArray);
+                        main_mfcCtrl->setAdresses(this->inDataArray);
 
                         this->headerLineCounter = 2;
                     }
 
                     else if (this->headerLineCounter == 2) { //ZEILE 3: MFC-Typen
-                        mfcMain->setTypes(this->inDataArray);
+                        main_mfcCtrl->setTypes(this->inDataArray);
 
                         this->headerLineCounter = 3;
                     }
@@ -147,10 +147,10 @@ namespace communication {
 
                     else if (this->headerLineCounter == 5) { //ZEILE 5: Eventliste
                         if (strcmp(this->inDataArray[0], "M") == 0) { //MFC
-                            mfcMain->setEvent(
+                            main_mfcCtrl->setEvent(
                                 atoi(this->inDataArray[1]), //MFC-ID
                                 atoi(this->inDataArray[2]), //value //TODO: verschiedene Werte je nach typ
-                                strtoul(this->inDataArray[3], NULL, 0) //time 
+                                strtoul(this->inDataArray[3], NULL, 0) //time
                             );
                         } else if (strcmp(this->inDataArray[0], "V") == 0) { //Ventil
                             //TODO: Setzte Ventilevents

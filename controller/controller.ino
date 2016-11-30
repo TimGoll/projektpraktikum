@@ -6,25 +6,28 @@
 #include <mthread.h>
 #include <QueueList.h> //vielleicht hier nicht gebraucht
 
-#include "src/boschCom.h"
-#include "src/labCom.h"
-#include "src/mfc_main.h"
+//Klassen aus Includes mit einem "main" im Namen werden in dieser Datei erstellt
+//und haben einen Thread
+#include "src/main_labCom.h"
+#include "src/main_mfcCtrl.h"
+#include "src/main_valveCtrl.h"
+#include "src/main_boschCom.h"
+#include "src/main_StoreD.h"
 #include "src/mfcCtrl.h"
 #include "src/valveCtrl.h"
-#include "src/StoreD.h"
 
 void setup() {
     // DEBUG
     Serial.begin(SERIAL_BAUDRATE);
   
     // ERSTELLE GEBRAUCHTE OBJEKTE
-    communication::LabCom *labCom = new communication::LabCom();
-    control::MfcMain *mfcMain     = new control::MfcMain();
+    communication::Main_LabCom *main_labCom = new communication::Main_LabCom();
+    control::Main_MfcCtrl *main_mfcCtrl     = new control::Main_MfcCtrl();
 
     // TAUSCHE DATEN ZWISCHEN THREADS AUS
-    labCom->setMainMfcObjectPointer(mfcMain);
+    main_labCom->setMainMfcObjectPointer(main_mfcCtrl);
 
     // STARTE PSEUDOTHREADS
-    main_thread_list -> add_thread(labCom);
-    main_thread_list -> add_thread(mfcMain);
+    main_thread_list -> add_thread(main_labCom);
+    main_thread_list -> add_thread(main_mfcCtrl);
 }

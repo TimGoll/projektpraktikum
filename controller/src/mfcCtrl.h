@@ -1,5 +1,5 @@
-#ifndef mfcCtrl_h
-#define mfcCtrl_h
+#ifndef MFCCTRL_H
+#define MFCCTRL_H
 
 #include <Arduino.h>
 #include <newdel.h> //fügt new und delete hinzu, wird für "mthread" benötigt
