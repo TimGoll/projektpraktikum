@@ -23,15 +23,15 @@
 ### Hauptklassen:
 Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgeleitet. Außerdem besitzen sie eine ```loop()```-Funktion, da die Klasse in Pseudothreads ausgeführt wird.
 
-1. **main_labCom** [[cpp]]() [[h]]():
-2. **main_boschCom** [[cpp]]() [[h]]():
-3. **main_StoreD** [[cpp]]() [[h]]():
-4. **main_mfcCtrl** [[cpp]]() [[h]]():
-5. **main_valveStrl** [[cpp]]() [[h]]():
+1. **main_labCom** [[cpp]](../master/controller/src/main_labCom.cpp) [[h]](../master/controller/src/main_labCom.h):
+2. **main_boschCom** [[cpp]](../master/controller/src/main_boschCom.cpp) [[h]](../master/controller/src/main_boschCom.h):
+3. **main_StoreD** [[cpp]](../master/controller/src/main_StoreD.cpp) [[h]](../master/controller/src/main_StoreD.h):
+4. **main_mfcCtrl** [[cpp]](../master/controller/src/main_mfcCtrl.cpp) [[h]](../master/controller/src/main_mfcCtrl.h):
+5. **main_valveCtrl** [[cpp]](../master/controller/src/main_valveCtrl.cpp) [[h]](../master/controller/src/main_valveCtrl.h):
 
 ### Nebenklassen:
-1. **mfcCtrl** [[cpp]]() [[h]]():
-2. **valveCtrl** [[cpp]]() [[h]]():
+1. **mfcCtrl** [[cpp]](../master/controller/src/mfcCtrl.cpp) [[h]](../master/controller/src/mfcCtrl.h):
+2. **valveCtrl** [[cpp]](../master/controller/src/valveCtrl.cpp) [[h]](../master/controller/src/valveCtrl.h):
 
 ## LabView:
 
@@ -41,16 +41,17 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
  * Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
 2. **20x4 LCD Display (I2C, Buntes Backlight)** [[link]](https://www.adafruit.com/product/499)
 
+[[**Schaltskizze als PDF**]](../master/electronic/Schalplan.pdf)
+
 ## Sonstiges:
 1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
+---
 
+ALT (zu überprüfen und zu entfernen)
 
+--- 
 
-
-
------------------------------- ALT ------------------------------
- 
 # Projektpraktikum
 
 ## Hardware
