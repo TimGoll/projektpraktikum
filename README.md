@@ -1,3 +1,56 @@
+# Dokumentation
+## Verwendete Bibliotheken:
+1. [**mThread**](http://www.kwartzlab.ca/2010/09/arduino-multi-threading-librar/): 
+
+ Erstellt Pseudothreads auf dem Board, die nacheinander ausgeführt werden. Jeder Thread hat seine eigene ```loop()```.
+ 
+ Threads werden hinzugefügt mittels ```main_thread_list -> add_thread(CLASSNAME)```, anschließend laufen sie unbegrenzt weiter. **Hinweis:** Es sind scheinbar maximal nur 10 Threads möglich.
+
+2. [**newdel**](https://github.com/jlamothe/newdel):
+ 
+ Fügt die Keywörter ```new``` und ```delete``` hinzu. Wird für mThread benötigt und musste leicht angepasst werden, damit sie auf neueren Arduino-Boards funktioniert.
+ 
+3. [**QueueList**](http://playground.arduino.cc/Code/QueueList):
+ 
+ Fügt verkettete Listen hinzu, welche beliebige Datentypen speichern können. **Hinweis:** es ist nicht möglich Pointer in ihnen zu speichern.
+
+## Programmaufbau:
+### Hauptdatei:
+1. **Controller.ino**:
+
+ Hier werden die Hauptobjekte erstellt und verwaltet. Außerdem werden an dieser Stellte die Threads gestartet und später auch wieder gestoppt. Vor dem Start der Threads werden noch Adressen zwischen den einzelnen Objekten ausgetauscht (beispielsweise die der Queues zum späteren Datenaustausch).
+
+### Hauptklassen:
+Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgeleitet. Außerdem besitzen sie eine ```loop()```-Funktion, da die Klasse in Pseudothreads ausgeführt wird.
+
+1. **main_labCom** [[cpp]]() [[h]]():
+2. **main_boschCom** [[cpp]]() [[h]]():
+3. **main_StoreD** [[cpp]]() [[h]]():
+4. **main_mfcCtrl** [[cpp]]() [[h]]():
+5. **main_valveStrl** [[cpp]]() [[h]]():
+
+### Nebenklassen:
+1. **mfcCtrl** [[cpp]]() [[h]]():
+2. **valveCtrl** [[cpp]]() [[h]]():
+
+## LabView:
+
+## Hardware:
+1. **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/)
+ * Vorderseite [[link]](http://www.pjrc.com/teensy/beta/card9a_rev1_print.pdf)
+ * Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
+2. **20x4 LCD Display (I2C, Buntes Backlight)** [[link]](https://www.adafruit.com/product/499)
+
+## Sonstiges:
+1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+
+
+
+
+
+
+------------------------------ ALT ------------------------------
+ 
 # Projektpraktikum
 
 ## Hardware
