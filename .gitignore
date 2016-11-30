@@ -1,8 +1,0 @@
-#igonore build
-build
-
-#igonore any executables
-bin/*
-
-#ignore c-lion data
-.idea
