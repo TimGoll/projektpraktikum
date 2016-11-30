@@ -1,3 +1,45 @@
+# Dokumentation
+## Verwendete Bibliotheken:
+1. [**mThread**](http://www.kwartzlab.ca/2010/09/arduino-multi-threading-librar/): 
+
+ Erstellt Pseudothreads auf dem Board, die nacheinander ausgeführt werden. Jeder Thread hat seine eigene ```loop()```.
+ 
+ Threads werden hinzugefügt mittels ```main_thread_list -> add_thread(CLASSNAME)```, anschließend laufen sie unbegrenzt weiter. **Hinweis:** Es sind scheinbar maximal nur 10 Threads möglich.
+
+2. [**newdel**](https://github.com/jlamothe/newdel):
+ 
+ Fügt die Keywörter ```new``` und ```delete``` hinzu. Wird für mThread benötigt und musste leicht angepasst werden, damit sie auf neueren Arduino-Boards funktioniert.
+ 
+3. [**QueueList**](http://playground.arduino.cc/Code/QueueList):
+ 
+ Fügt verkettete Listen hinzu, welche beliebige Datentypen speichern können. **Hinweis:** es ist nicht möglich Pointer in ihnen zu speichern.
+
+## Programmaufbau:
+### Hauptdatei:
+1. **Controller.ino**:
+
+ Hier werden die Hauptobjekte erstellt und verwaltet. Außerdem werden an dieser Stellte die Threads gestartet und später auch wieder gestoppt. Vor dem Start der Threads werden noch Adressen zwischen den einzelnen Objekten ausgetauscht (beispielsweise die der Queues zum späteren Datenaustausch).
+
+### Hauptklassen:
+1. **main_labCom**:
+2. **main_boschCom**:
+3. **main_StoreD**:
+4. **main_mfcCtrl**:
+5. **main_valveStrl**:
+
+### Nebenklassen:
+1. **mfcCtrl**:
+2. **valveCtrl**:
+
+
+
+
+
+
+
+
+------------------------------ ALT ------------------------------
+ 
 # Projektpraktikum
 
 ## Hardware
