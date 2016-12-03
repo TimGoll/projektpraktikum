@@ -16,18 +16,23 @@
 #include "src/mfcCtrl.h"
 #include "src/valveCtrl.h"
 
+#include "src/serialCommunication.h"
+
 void setup() {
-    // DEBUG
-    Serial.begin(SERIAL_BAUDRATE);
+    // ERSTELLE SERIELLE VERBINDUNGEN
+    srl->setSerial(&Serial1, &Serial, &Serial2); //labview / debug / uart
   
     // ERSTELLE GEBRAUCHTE OBJEKTE
     communication::Main_LabCom *main_labCom = new communication::Main_LabCom();
     control::Main_MfcCtrl *main_mfcCtrl     = new control::Main_MfcCtrl();
+    control::Main_ValveCtrl *main_valveCtrl = new control::Main_ValveCtrl();
 
     // TAUSCHE DATEN ZWISCHEN THREADS AUS
     main_labCom->setMainMfcObjectPointer(main_mfcCtrl);
+    main_labCom->setMainValveObjectPointer(main_valveCtrl);
 
     // STARTE PSEUDOTHREADS
     main_thread_list -> add_thread(main_labCom);
     main_thread_list -> add_thread(main_mfcCtrl);
+    main_thread_list -> add_thread(main_valveCtrl);
 }

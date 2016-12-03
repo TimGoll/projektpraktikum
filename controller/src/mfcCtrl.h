@@ -6,18 +6,15 @@
 #include <mthread.h>
 #include <QueueList.h>
 
+#include "serialCommunication.h"
+#include "eventElement.h"
+
 namespace control {
-    typedef struct eventElementStruct {
-        int value;
-        unsigned long time;
-    } eventElement;
-
-
     // Dies ist die Klasse fuer die MFCs. Jeder MFC bekommt seine eigene Instanz
     // diser Klasse, da dies dann deutlich einfacher zu handhaben ist. Die Objekte
     // werden in LabCom(??) erstellt und nach VOLLSTAENDIGER Beendigung der Messung
     // auch wieder geloescht.
-    class MfcCtrl : public Thread {
+    class MfcCtrl {
     public:
         //Defaultconstructor
         MfcCtrl(int id);

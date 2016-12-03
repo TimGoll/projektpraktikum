@@ -10,45 +10,45 @@ namespace control {
 
         this->ready = false;
 
-        Serial.print("MFC ");
-        Serial.print(this->id);
-        Serial.println(" erstellt.");
+        srl->print('D', "MFC ");
+        srl->print('D', this->id);
+        srl->println('D', " erstellt.");
     }
     MfcCtrl::~MfcCtrl() {
-        Serial.print("MFC ");
-        Serial.print(this->id);
-        Serial.println(" geloescht.");
+        srl->print('D', "MFC ");
+        srl->print('D', this->id);
+        srl->println('D', " geloescht.");
     }
 
     void MfcCtrl::setType(char type[]) {
-        Serial.print("MFC ");
-        Serial.print(this->id);
-        Serial.print(" Typ: ");
-        Serial.println(type);
-
         strcpy(this->type, type);
+
+        srl->print('D', "MFC ");
+        srl->print('D', this->id);
+        srl->print('D', " Typ: ");
+        srl->println('D', this->type);
     }
 
     void MfcCtrl::setAdress(char adress[]) {
-        Serial.print("MFC ");
-        Serial.print(this->id);
-        Serial.print(" Adresse: ");
-        Serial.println(adress);
-
         strcpy(this->adress, adress);
+
+        srl->print('D', "MFC ");
+        srl->print('D', this->id);
+        srl->print('D', " Adresse: ");
+        srl->println('D', this->adress);
     }
 
     void MfcCtrl::setEvent(int value, unsigned long time) {
-        eventElement newEvent; //Erstelle neue Datenstruktur (Pointer)
+        eventElement newEvent; //Erstelle neue Datenstruktur
         newEvent.value = value;
         newEvent.time  = time;
 
-        Serial.print("MFC ");
-        Serial.print(this->id);
-        Serial.print(" Neues Event: ");
-        Serial.print(newEvent.value);
-        Serial.print(", ");
-        Serial.println(newEvent.time);
+        srl->print('D', "MFC ");
+        srl->print('D', this->id);
+        srl->print('D', " Neues Event: ");
+        srl->print('D', newEvent.value);
+        srl->print('D', ", ");
+        srl->println('D', newEvent.time);
 
         this->eventList.push(newEvent); //Speichere Datenstruktur in einer Liste
     }
@@ -61,18 +61,21 @@ namespace control {
     //HAUPTSCHLEIFE
     bool MfcCtrl::compute() {
         if (this->ready) {
-            if (this->nextEvent.time == -1) //lade erstes Event in nextEvent
+            if (this->nextEvent.time == -1) { //lade erstes Event in nextEvent
+                if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
+                    return false;
                 nextEvent = eventList.pop();
+            }
 
             if (millis() >= this->startTime + this->nextEvent.time) {
                 //TODO: set MFC to this->nextEvent->value
 
-                Serial.print("[Zeit: ");
-                Serial.print(millis());
-                Serial.print("] MFC ");
-                Serial.print(this->id);
-                Serial.print(" gesetzt auf: ");
-                Serial.println(this->nextEvent.value);
+                srl->print('D', "[Zeit: ");
+                srl->print('D', millis());
+                srl->print('D', "] MFC ");
+                srl->print('D', this->id);
+                srl->print('D', " gesetzt auf: ");
+                srl->println('D', this->nextEvent.value);
 
                 if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
                     return false;

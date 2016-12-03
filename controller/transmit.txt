@@ -2,15 +2,18 @@
 #Anfuehrungszeichen dienen hier der Darstellung von Strings
 #hinter jeder Zeile folgt ein '\n'
 
-<7,7> #Anzahl der MFCs, Anzahl der Ventile
-<'7H35C', '6GJ7G', ...> Adressen der MFCs
-<Buerkert, Buerkert, ...> Typen der MFCs
-<4,5,7,8, ...> #Pinnummern der Ventile
+<7,7>                       # Anzahl der MFCs, Anzahl der Ventile
+<'7H35C', '6GJ7G', ...>     # Adressen der MFCs
+<Buerkert, Buerkert, ...>   # Typen der MFCs
+<4,5,7,8, ...>              # Pinnummern der Ventile
+<10>                        # Messzeitabstand
 
-#Ab hier die Programmuebertragung
+#Ab hier die Programmuebertragung, jedes Objekt braucht eine geordnete Liste
 <'begin'>
-<'M', 1, 2300, 1000> #stelle MFC1 auf 2300 zum Zeitpunkt 1000
+<'M', 1, 2300, 1000>        # stelle MFC1 auf 2300 zum Zeitpunkt 1000
 ...
-<'V', 3, 1, 1500> #oeffne Wentil 3 zum Zeitpunkt 1500
+<'V', 3, 1, 1500>           # oeffne Wentil 3 zum Zeitpunkt 1500
 ...
 <'end'>
+
+<'start'>                   # sende Start zum Beginn der Messung, kann auch ueber externen Taster gestartet werden

@@ -5,8 +5,10 @@
 #include <newdel.h> //fügt new und delete hinzu, wird für "mthread" benötigt
 #include <mthread.h>
 
+#include "serialCommunication.h"
 #include "config.h"
 #include "main_mfcCtrl.h"
+#include "main_valveCtrl.h"
 
 namespace communication {
     // an die MFCs werden absolutwerte uerbtragen. Diese basieren auf der Zeit, die gespeichert
@@ -17,8 +19,11 @@ namespace communication {
         Main_LabCom();
         //Destructor
         ~Main_LabCom();
-        //Gebe Adresse des Hauptobjektes an LabCom, um zu kommunizieren
+        //Gebe Adresse des Hauptobjektes (MFC) an LabCom, um zu kommunizieren
         void setMainMfcObjectPointer(control::Main_MfcCtrl *main_mfcCtrl);
+
+        //Gebe Adresse des Hauptobjektes (Valve) an LabCom, um zu kommunizieren
+        void setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -32,9 +37,11 @@ namespace communication {
         int splitLine();
         //gibt Befehl zum Start der Threads von MFC und Ventil, uebergibt die Startzeit, welche als
         //Nullpunkt dient
-        void start(unsigned long startTime);
+        void start(); //TODO: evtl public machen, um von ausserhalb per Taster auszufuehren
 
+        //Adressen der Ventil und MFC Hauptobjekte zur Verteilung der Daten
         control::Main_MfcCtrl *main_mfcCtrl;
+        control::Main_ValveCtrl *main_valveCtrl;
 
         bool reading;
         bool sending;
