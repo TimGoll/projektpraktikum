@@ -6,7 +6,7 @@
 #include <mthread.h>
 #include <QueueList.h>
 
-#include "serialCommunication.h"
+#include "ownlibs/serialCommunication.h"
 #include "eventElement.h"
 
 namespace control {

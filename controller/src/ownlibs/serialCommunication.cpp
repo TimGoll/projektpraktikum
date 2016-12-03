@@ -109,5 +109,5 @@ void SerialCommunication::println(char type, double input) {
     this->getType(type)->println(input);
 }
 
-// Initialize the main ThreadList:
-SerialCommunication *srl = new SerialCommunication(); //TODO setze richtige Serial-Objekte rein
+// Initialisiere die Serielle Kommunikation
+SerialCommunication *srl = new SerialCommunication();

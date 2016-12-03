@@ -74,11 +74,13 @@ namespace communication {
 
                 if (this->inDataBuffer[currentCharIndex] == ',') { //Eintrag zu ende
                     this->inDataArray[arrayIndex][arrayCharIndex] = '\0';
+                    cmn::trim(this->inDataArray[arrayIndex]);
                     break;
                 }
 
                 if (currentCharIndex == endCharIndex) { //Zeilenende erreicht
                     this->inDataArray[arrayIndex][arrayCharIndex] = '\0';
+                    cmn::trim(this->inDataArray[arrayIndex]);
                     return arrayIndex +1; //Index und Groesse sind immer um 1 verschieden
                 }
 

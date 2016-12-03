@@ -16,7 +16,7 @@
 #include "src/mfcCtrl.h"
 #include "src/valveCtrl.h"
 
-#include "src/serialCommunication.h"
+#include "src/ownlibs/serialCommunication.h"
 
 void setup() {
     // ERSTELLE SERIELLE VERBINDUNGEN

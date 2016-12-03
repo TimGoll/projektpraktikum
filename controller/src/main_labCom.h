@@ -5,7 +5,9 @@
 #include <newdel.h> //fügt new und delete hinzu, wird für "mthread" benötigt
 #include <mthread.h>
 
-#include "serialCommunication.h"
+#include "ownlibs/common.h"
+
+#include "ownlibs/serialCommunication.h"
 #include "config.h"
 #include "main_mfcCtrl.h"
 #include "main_valveCtrl.h"

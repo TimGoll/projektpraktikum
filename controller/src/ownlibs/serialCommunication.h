@@ -2,7 +2,7 @@
 #define SERIALCOMMUNICATION_H
 
 #include <Arduino.h>
-#include "config.h"
+#include "../config.h"
 
 class SerialCommunication {
 public:
