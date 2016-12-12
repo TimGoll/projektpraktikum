@@ -65,6 +65,17 @@ srl->print('D', "Hallo Welt!"); //(Typ: L, D, U / Ausgabetext)
 srl->println('D', "Hallo Welt mit Zeilenende!"); //Natuerlich gibt es das ganze auch mit Linebreak
 ```
 Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei Typen: L, D und U für LabView, Debug und UART. Die Baudrate wird in der **config.h** eingestellt.
+
+## Display:
+Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden.
+
+Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gibt es:
+
+- **Unkritische Fehler**: Error Code Level 1000; Dies sind Fehler, die beispielsweise bei der Kommunikation auftreten, aber keinen Programmabbruch benötigen. Sie werden auf dem Display für 2 Sekunden angezeigt. Farbe: _gelb_
+- **Kritische Fehler**: Error Code Level 5000; Diese Fehler führen zu einem Absturz des Programms und werden auf dem Display angezeigt bis der Fehler behoben wurde. Farbe: _rot_
+
+Standardmäßig werden auf dem Display aktuelle Daten zum Programmstatus angezeigt.
+
 ## Programmaufbau:
 ### Hauptdatei:
 1. **Controller.ino**:
@@ -89,13 +100,16 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 ### Nebenklassen:
 1. **mfcCtrl** [[cpp]](../master/controller/src/mfcCtrl.cpp) [[h]](../master/controller/src/mfcCtrl.h):
 2. **valveCtrl** [[cpp]](../master/controller/src/valveCtrl.cpp) [[h]](../master/controller/src/valveCtrl.h):
-3. **serialCommunication** [[cpp]](../master/controller/src/serialCommunication.cpp) [[h]](../master/controller/src/serialCommunication.h):
+3. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h):
 
 ### Sonstige:
-1. **config** [[h]](../master/controller/src/config.h):
+1. **common** [[cpp]](../master/controller/src/ownlibs/common.cpp) [[h]](../master/controller/src/ownlibs/common.h):
+
+ Standardfunktionen, die Überall gebraucht werden (```trim()```, ...)
+2. **config** [[h]](../master/controller/src/config.h):
 
  Einstellmöglichkeiten diverster Parameter
-2. **eventElement** [[h]](../master/controller/src/eventElement.h):
+3. **eventElement** [[h]](../master/controller/src/eventElement.h):
 
  Event-Struct, welches von MFCs und Ventilen verwendet wird
 
