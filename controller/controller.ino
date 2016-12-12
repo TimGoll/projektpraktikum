@@ -13,6 +13,7 @@
 #include "src/main_valveCtrl.h"
 #include "src/main_boschCom.h"
 #include "src/main_StoreD.h"
+#include "src/main_display.h"
 #include "src/mfcCtrl.h"
 #include "src/valveCtrl.h"
 
@@ -26,13 +27,20 @@ void setup() {
     communication::Main_LabCom *main_labCom = new communication::Main_LabCom();
     control::Main_MfcCtrl *main_mfcCtrl     = new control::Main_MfcCtrl();
     control::Main_ValveCtrl *main_valveCtrl = new control::Main_ValveCtrl();
+    io::Main_Display *main_display          = new io::Main_Display();
 
     // TAUSCHE DATEN ZWISCHEN THREADS AUS
     main_labCom->setMainMfcObjectPointer(main_mfcCtrl);
     main_labCom->setMainValveObjectPointer(main_valveCtrl);
+    main_labCom->setMainDisplayObjectPointer(main_display);
+    main_mfcCtrl->setMainDisplayObjectPointer(main_display);
+    main_valveCtrl->setMainDisplayObjectPointer(main_display);
 
     // STARTE PSEUDOTHREADS
     main_thread_list -> add_thread(main_labCom);
     main_thread_list -> add_thread(main_mfcCtrl);
     main_thread_list -> add_thread(main_valveCtrl);
+    main_thread_list -> add_thread(main_display);
+
+    // ERSTELLE INTERRUPTS FUER TASTER
 }

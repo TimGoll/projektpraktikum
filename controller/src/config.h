@@ -1,5 +1,5 @@
-#ifndef config_h
-#define config_h
+#ifndef CONFIG_H
+#define CONFIG_H
 
 // In dieser Datei werden Hardgecodete Einstellungen vorgenommen
 
@@ -15,10 +15,16 @@
 #define MAX_AMOUNT_MFC 16
 #define MAX_AMOUNT_VALVE 16
 
-//ERORRORCOES
-#define ERR_SERIAL_READ_MAX_STRING_SIZE 1001
-#define ERR_SERIAL_READ_WRONG_LINE_BEGIN 1002
-#define ERR_SERIAL_READ_WRONG_LINE_ENDING 1003
-#define ERR_SERIAL_READ_TIMEOUT 1004
+#define DISPLAY_SIZE_WIDTH 20
+#define DISPLAY_SIZE_HEIGHT 4
+#define DISPLAY_REDRAW_INTERVALL 250 //Bestimmt Häufigkeit der Bildaktualisierung, Errros ausgenommen
+
+#define ERR_1000_TIME 1500
+
+//ERORRORCODES
+#define ERR_SERIAL_READ_MAX_STRING_SIZE 1000
+#define ERR_SERIAL_READ_WRONG_LINE_BEGIN 1001
+#define ERR_SERIAL_READ_WRONG_LINE_ENDING 1002
+#define ERR_SERIAL_READ_TIMEOUT 1003
 
 #endif

@@ -8,6 +8,7 @@
 
 #include "ownlibs/serialCommunication.h"
 #include "eventElement.h"
+#include "main_display.h"
 
 namespace control {
     class ValveCtrl {
@@ -23,6 +24,8 @@ namespace control {
         void setEvent(int value, unsigned long time);
         //sobald diese Funktion ausgefuehrt wird, beginnt das Programm mit der Ansteuerung
         void start(unsigned long startTime);
+        //Gebe Adresse des Displayobjektes an dieses Ventil, um zu kommunizieren
+        void setMainDisplayObjectPointer(io::Main_Display *main_display);
         //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool compute();
     private:
@@ -33,6 +36,8 @@ namespace control {
         unsigned long startTime;
 
         eventElement nextEvent;
+
+        io::Main_Display *main_display;
     };
 }
 

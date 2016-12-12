@@ -6,6 +6,7 @@ namespace control {
         int value;
         unsigned long time;
     } eventElement;
+
 }
 
 #endif

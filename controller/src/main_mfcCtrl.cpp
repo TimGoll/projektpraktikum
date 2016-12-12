@@ -38,6 +38,12 @@ namespace control {
         }
     }
 
+    void Main_MfcCtrl::setMainDisplayObjectPointer(io::Main_Display *main_display) {
+        for (int i = 0; i < this->amount_MFC; i++) {
+            this->mfc_list[i]->setMainDisplayObjectPointer(main_display);
+        }
+    }
+
     bool Main_MfcCtrl::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)

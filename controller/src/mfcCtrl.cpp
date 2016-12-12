@@ -58,6 +58,10 @@ namespace control {
         this->ready = true;
     }
 
+    void MfcCtrl::setMainDisplayObjectPointer(io::Main_Display *main_display) {
+        this->main_display = main_display;
+    }
+
     //HAUPTSCHLEIFE
     bool MfcCtrl::compute() {
         if (this->ready) {
@@ -72,10 +76,14 @@ namespace control {
 
                 srl->print('D', "[Zeit: ");
                 srl->print('D', millis());
+                srl->print('D', ", erwartet: ");
+                srl->print('D', this->startTime + this->nextEvent.time);
                 srl->print('D', "] MFC ");
                 srl->print('D', this->id);
                 srl->print('D', " gesetzt auf: ");
                 srl->println('D', this->nextEvent.value);
+
+                this->main_display->setLastEvent('M', this->id, this->nextEvent.value, this->nextEvent.time);
 
                 if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
                     return false;

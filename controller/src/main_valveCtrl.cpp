@@ -32,6 +32,12 @@ namespace control {
         }
     }
 
+    void Main_ValveCtrl::setMainDisplayObjectPointer(io::Main_Display *main_display) {
+        for (int i = 0; i < this->amount_valve; i++) {
+            this->valve_list[i]->setMainDisplayObjectPointer(main_display);
+        }
+    }
+
     bool Main_ValveCtrl::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)

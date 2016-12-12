@@ -21,6 +21,8 @@ namespace control {
     void ValveCtrl::setPin(int pin) {
         this->pin = pin;
 
+        pinMode(this->pin, OUTPUT);
+
         srl->print('D', "Ventil ");
         srl->print('D', this->id);
         srl->print('D', " Pin: ");
@@ -47,6 +49,10 @@ namespace control {
         this->ready = true;
     }
 
+    void ValveCtrl::setMainDisplayObjectPointer(io::Main_Display *main_display) {
+        this->main_display = main_display;
+    }
+
     bool ValveCtrl::compute() {
         if (this->ready) {
             if (this->nextEvent.time == -1) { //lade erstes Event in nextEvent
@@ -55,15 +61,21 @@ namespace control {
                 nextEvent = eventList.pop();
             }
 
+
             if (millis() >= this->startTime + this->nextEvent.time) {
-                //TODO: set Valve to this->nextEvent->value
+                //setze Ventil auf this->nextEvent.value
+                //digitalWrite(this->pin, this->nextEvent.value);
 
                 srl->print('D', "[Zeit: ");
                 srl->print('D', millis());
+                srl->print('D', ", erwartet: ");
+                srl->print('D', this->startTime + this->nextEvent.time);
                 srl->print('D', "] Ventil ");
                 srl->print('D', this->id);
                 srl->print('D', " gesetzt auf: ");
                 srl->println('D', this->nextEvent.value);
+
+                this->main_display->setLastEvent('V', this->id, this->nextEvent.value, this->nextEvent.time);
 
                 if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
                     return false;

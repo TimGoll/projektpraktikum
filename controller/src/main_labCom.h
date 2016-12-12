@@ -11,6 +11,7 @@
 #include "config.h"
 #include "main_mfcCtrl.h"
 #include "main_valveCtrl.h"
+#include "main_display.h"
 
 namespace communication {
     // an die MFCs werden absolutwerte uerbtragen. Diese basieren auf der Zeit, die gespeichert
@@ -26,6 +27,9 @@ namespace communication {
 
         //Gebe Adresse des Hauptobjektes (Valve) an LabCom, um zu kommunizieren
         void setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl);
+
+        //Gebe Adresse des Hauptobjektes (Valve) an LabCom, um zu kommunizieren
+        void setMainDisplayObjectPointer(io::Main_Display *main_display);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -41,9 +45,10 @@ namespace communication {
         //Nullpunkt dient
         void start(); //TODO: evtl public machen, um von ausserhalb per Taster auszufuehren
 
-        //Adressen der Ventil und MFC Hauptobjekte zur Verteilung der Daten
+        //Adressen der Ventil, MFC und Display Hauptobjekte zur Verteilung der Daten
         control::Main_MfcCtrl *main_mfcCtrl;
         control::Main_ValveCtrl *main_valveCtrl;
+        io::Main_Display *main_display;
 
         bool reading;
         bool sending;

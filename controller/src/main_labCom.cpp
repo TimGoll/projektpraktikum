@@ -8,6 +8,7 @@ namespace communication {
         this->headerLineCounter = 0;
 
         srl->println('D', "LabCom erstellt.");
+        srl->println('L', "ready"); //Sende Startbefehl an LabView
     }
     Main_LabCom::~Main_LabCom() {
 
@@ -19,6 +20,10 @@ namespace communication {
 
     void Main_LabCom::setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl) {
         this->main_valveCtrl = main_valveCtrl;
+    }
+
+    void Main_LabCom::setMainDisplayObjectPointer(io::Main_Display *main_display) {
+        this->main_display = main_display;
     }
 
     int Main_LabCom::readLine() { //TODO Serial.labview hier
@@ -102,6 +107,9 @@ namespace communication {
         //starte Ventile
         this->main_valveCtrl->start(startTime);
 
+        //starte Display
+        this->main_display->start(startTime);
+
         srl->print('D', "[Zeit: ");
         srl->print('D', startTime);
         srl->println('D', "] Messung gestartet.");
@@ -138,6 +146,9 @@ namespace communication {
                             //erstelle Ventil-Objekte in der main_valveCtrl
                             this->main_valveCtrl->createValve(this->amount_valve);
 
+                            //sage Display, dass Uebertragung gestartet wurde
+                            this->main_display->header_started(this->amount_MFC, this->amount_valve);
+
                             this->headerLineCounter = 1;
                             break; //Bei Switch-Case-Strukturen ist ein 'break' noetig um einen else-if-Effekt zu erhalten
                         case 1: //ZEILE 1: MFC-Adressen
@@ -165,6 +176,9 @@ namespace communication {
                             if (strcmp(this->inDataArray[0], "begin") == 0) {
                                 srl->println('D', "Header vollstaendig.");
 
+                                //Sage Display, dass Header vollstaendig und Events beginnen
+                                this->main_display->event_started();
+
                                 this->headerLineCounter = 6;
                             }
                             break;
@@ -186,6 +200,9 @@ namespace communication {
                             else if (strcmp(this->inDataArray[0], "end") == 0) { //Am ende wechselt labCom in den Sende-Modus
                                 srl->println('D', "Uebertragung abgeschlossen.");
 
+                                //Sage Display, dass Event-Uebertragung abgeschlossen ist
+                                this->main_display->event_finished();
+
                                 this->headerLineCounter = 7;
                             }
                             break;
@@ -196,7 +213,8 @@ namespace communication {
                             break;
                     }
                 } else {
-                    //TODO: ErrorCode muss verarbeitet werden (Displayanzeige?)
+                    //ErrorCode wird auf Display angezeigt
+                    this->main_display->throwError(errCode);
                 }
             }
         }

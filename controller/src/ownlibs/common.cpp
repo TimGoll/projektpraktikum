@@ -20,4 +20,21 @@ namespace cmn {
 
         strcpy(string, buffer); //schiebe neuen String in alten
     }
+
+    void getTimeString(unsigned long time, char timeString_out[]) {
+        int days    = time / 86400000;
+        time        = time % 86400000;
+
+        int hours   = time / 3600000;
+        time        = time % 3600000;
+
+        int minutes = time / 60000;
+        time        = time % 60000;
+
+        int seconds = time / 1000;
+
+        char timeString_temp[12];
+        sprintf(timeString_temp, "%02d:%02d:%02d:%02d\0", days, hours, minutes, seconds);
+        strcpy(timeString_out, timeString_temp);
+    }
 };

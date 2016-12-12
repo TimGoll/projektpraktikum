@@ -7,6 +7,7 @@
 
 #include "config.h"
 #include "mfcCtrl.h"
+#include "main_display.h"
 
 namespace control {
     // an die MFCs werden absolutwerte uerbtragen. Diese basieren auf der Zeit, die gespeichert
@@ -30,6 +31,8 @@ namespace control {
         void setEvent(int mfcID, int value, unsigned long time);
         //setzt die 'ready'-Variable der MFCs auf true. Außerdem wird der Nullpunkt der Steuerung gesetzt
         void start(unsigned long startTime);
+        //Gebe Adresse des Displayobjektes an die einzelnen MFCs, um zu kommunizieren
+        void setMainDisplayObjectPointer(io::Main_Display *main_display);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
