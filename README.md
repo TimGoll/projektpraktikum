@@ -80,6 +80,34 @@ Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gib
 
 Standardmäßig werden auf dem Display aktuelle Daten zum Programmstatus angezeigt.
 
+**Beispielanzeige**:
+```
+STANDARD:                      ERRORBEISPIEL:
++----------------------+       +----------------------+
+|            M:04 V:07 |       |      ERROR 1001      |
+|                      |       |                      |
+| LAUFZEIT:00:01:34:17 |       |       Falscher       |
+| V03-0001-00:01:16:22 |       |     Zeilenbeginn     |
++----------------------+       +----------------------+
+```
+- Standardanzeige:
+
+ Zeile 1: Anzahl MFCs und Anzahl Ventile
+
+ Zeile 2: xxx
+
+ Zeile 3: Laufzeit der Software, relativ zum Messstart
+
+ Zeile 4: Letztes Event, Typ_ID-Wert-Zeit
+
+- Erroranzeige:
+
+ Zeile 1: Error ID
+
+ Zeile 2: xxx
+
+ Zeile 3+4: Kurzbeschreibung des augetretenen Fehlers
+
 ## Errormeldungen:
 Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgeführt, es wird jedoch eine Wiederholung der entsprechenden Zeile erwartet, daher sind diese Codes LabView-Seitig abzufangen.
 
@@ -162,8 +190,9 @@ Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausg
 
 ## Sonstiges:
 1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
-2. **cloc-1.70.exe**
- Ein kleines Programm zur Ausführung in der Konsole, welches den Softwareumfang darstellt. Wird wie folgt benutzt: ```prompt> cloc-1.70.exe controller/src``` (Auszuführen im Basepath des Projektes)
+2. **cloc-1.70.exe** [[link]](https://github.com/AlDanial/cloc)
+
+ Ein kleines Programm zur Ausführung in der Konsole, welches den Softwareumfang darstellt. Wird wie folgt benutzt: ```prompt> cloc-1.70.exe controller/src``` (Auszuführen im Basepath des Projektes, dort liegt auch die exe)
 
  Ergibt folgendes:
  ```
@@ -176,7 +205,7 @@ Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausg
  -------------------------------------------------------------------------------
  Language                     files          blank        comment           code
  -------------------------------------------------------------------------------
- C                               11            185             50            665
+ C++                             11            185             50            665
  C/C++ Header                    13             72             88            307
  -------------------------------------------------------------------------------
  SUM:                            24            257            138            972
@@ -187,4 +216,4 @@ Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausg
 1. Send Email [[link]](http://playground.arduino.cc/Code/Email)
 2. Write to SD (kann bei diesem Board anders sein, Dokumentation lesen!) [[link]](https://www.arduino.cc/en/Tutorial/ReadWrite)
 3. LabView-Network [[link]](http://www.ni.com/white-paper/2710/de/)
-4. Arduino-Network-Communication [[link]](https://github.com/evothings/evothing
+4. Arduino-Network-Communication [[link]](https://github.com/evothings/evothing)
