@@ -31,15 +31,13 @@ namespace io {
         void start(unsigned long startTime);
         //setze letzt ausgefuehrtes Event zur Displayausgabe
         void setLastEvent(char type, int id, int value, unsigned int time);
+
+
+        void setLastEvent_id(int id);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
     private:
-        void Main_Display::setLastEvent_type (char type);
-        void Main_Display::setLastEvent_id (int id);
-        void Main_Display::setLastEvent_value (int value);
-        void Main_Display::setLastEvent_time (unsigned int time);
-
         unsigned long afterErrorTime;
         unsigned long lastPrint;
         unsigned long startTime;

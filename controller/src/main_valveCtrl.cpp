@@ -12,6 +12,7 @@ namespace control {
         this->amount_valve = amount;
         for (int i = 0; i < this->amount_valve; i++) {
             this->valve_list[i] = new control::ValveCtrl(i);
+            this->valve_list[i]->setMainDisplayObjectPointer(main_display);
             this->valve_continue_next_loop[i] = true;
         }
     }
@@ -33,9 +34,7 @@ namespace control {
     }
 
     void Main_ValveCtrl::setMainDisplayObjectPointer(io::Main_Display *main_display) {
-        for (int i = 0; i < this->amount_valve; i++) {
-            this->valve_list[i]->setMainDisplayObjectPointer(main_display);
-        }
+        this->main_display = main_display;
     }
 
     bool Main_ValveCtrl::loop() {

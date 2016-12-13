@@ -40,6 +40,8 @@ namespace control {
         int amount_MFC;
         control::MfcCtrl *mfc_list[MAX_AMOUNT_MFC]; //Hier werden die Adressen der MFC-Objekte gespeichert
         bool mfc_continue_next_loop[MAX_AMOUNT_MFC];
+
+        io::Main_Display *main_display;
     };
 }
 

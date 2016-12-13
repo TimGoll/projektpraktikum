@@ -12,9 +12,9 @@ namespace io {
         this->ready           = false;
 
         this->lastEvent_type  = 'x';
-        this->lastEvent_id    = 1;
-        this->lastEvent_value = 2;
-        this->lastEvent_time  = 3;
+        this->lastEvent_id    = 5;
+        this->lastEvent_value = 0;
+        this->lastEvent_time  = 0;
 
         //Zeige an, dass Objekt erzeugt wurde und Board bereit ist
         this->boardIsReady();
@@ -94,27 +94,17 @@ namespace io {
     }
 
     void Main_Display::setLastEvent (char type, int id, int value, unsigned int time) {
-        setLastEvent_type(type);
-        setLastEvent_id(id);
-        setLastEvent_value(value);
-        setLastEvent_time(time);
-    }
-
-    void Main_Display::setLastEvent_type (char type) {
         this->lastEvent_type  = type;
+        this->lastEvent_id    = id;
+        this->lastEvent_value = value;
+        this->lastEvent_time  = time;
     }
 
     void Main_Display::setLastEvent_id (int id) {
         this->lastEvent_id  = id;
     }
 
-    void Main_Display::setLastEvent_value (int value) {
-        this->lastEvent_value  = value;
-    }
 
-    void Main_Display::setLastEvent_time (unsigned int time) {
-        this->lastEvent_time  = time;
-    }
 
 
 
@@ -125,6 +115,9 @@ namespace io {
 
         if (millis() >= this->afterErrorTime) { //Errors haben Vorrang und blockieren Ausgabe
             if (this->ready && millis() >= this->lastPrint + DISPLAY_REDRAW_INTERVALL) {
+
+                //this->setLastEvent('B', 34, 567, 6587812);
+
                 //Erstelle String der letzten Event Zeit
                 char lastEventTime_string[12];
                 cmn::getTimeString(this->lastEvent_time, lastEventTime_string);

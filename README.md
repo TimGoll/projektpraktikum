@@ -1,5 +1,9 @@
-# Dokumentation
-## Aktuelle Demonstration:
+# Dokumentation des Projektpraktikums
+Projektpraktikum (Mikrokontrollerpraktikum + Messtechnikpraktikum) Wintersemester 2016/17 am LMT
+
+_Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
+
+## Aktuelles Demonstrationsvideo:
 [Link zu YouTube Video](https://www.youtube.com/watch?v=2sz4_vMzZEc)
 
 ## Verwendete Bibliotheken:
@@ -76,6 +80,21 @@ Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gib
 
 Standardmäßig werden auf dem Display aktuelle Daten zum Programmstatus angezeigt.
 
+## Errormeldungen:
+Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgeführt, es wird jedoch eine Wiederholung der entsprechenden Zeile erwartet, daher sind diese Codes LabView-Seitig abzufangen.
+
+### 1000:
+**Maximale Input-String-Länge überschritten.** In der _config.h_ wird eine Größe definiert, die pro Zeile gesendet werden darf. Diese Länge darf nicht überschritten werden.
+
+### 1001:
+**Falscher Zeilenbeginn.** Die Zeile muss mit einem öffenenden Tag ```<``` begonnen werden, damit sie als gültig akzeptiert wird. Dies dient zur Vollständigkeitsüberprüfung.
+
+### 1002:
+**Falsches Zeilenende.** Die Zeile muss mit einem schließenden Tag ```>``` beendet werden, damit sie als gültig akzeptiert wird. Dabei darf man jedoch nicht vergessen, dass die Stringeingabe mit einem Zeilenumbruch ```\n``` als Vollständig markiert wird. Dies dient zur Vollständigkeitsüberprüfung.
+
+### 1003:
+**Lese-Timeout überschritten.** In der _config.h_ wird eine maximale Lesezeit pro String definiert. Wird diese Zeit überschritten, wird das Lesen des Strings an dieser Stelle abgebrochen.
+
 ## Programmaufbau:
 ### Hauptdatei:
 1. **Controller.ino**:
@@ -87,7 +106,8 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 
 1. **main_labCom** [[cpp]](../master/controller/src/main_labCom.cpp) [[h]](../master/controller/src/main_labCom.h):
 
- Quasi Hauptklasse des Programms, Verwaltet IN/OUT mit LabView
+ Quasi Hauptklasse des Programms, verwaltet IN/OUT mit LabView
+
 2. **main_boschCom** [[cpp]](../master/controller/src/main_boschCom.cpp) [[h]](../master/controller/src/main_boschCom.h):
 3. **main_StoreD** [[cpp]](../master/controller/src/main_StoreD.cpp) [[h]](../master/controller/src/main_StoreD.h):
 4. **main_mfcCtrl** [[cpp]](../master/controller/src/main_mfcCtrl.cpp) [[h]](../master/controller/src/main_mfcCtrl.h):
@@ -97,6 +117,8 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 
  Verwaltet alle Ventil Objekte
 
+6. **main_display** [[cpp]](../master/controller/src/main_display.cpp) [[h]](../master/controller/src/main_display.h):
+
 ### Nebenklassen:
 1. **mfcCtrl** [[cpp]](../master/controller/src/mfcCtrl.cpp) [[h]](../master/controller/src/mfcCtrl.h):
 2. **valveCtrl** [[cpp]](../master/controller/src/valveCtrl.cpp) [[h]](../master/controller/src/valveCtrl.h):
@@ -105,13 +127,28 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 ### Sonstige:
 1. **common** [[cpp]](../master/controller/src/ownlibs/common.cpp) [[h]](../master/controller/src/ownlibs/common.h):
 
- Standardfunktionen, die Überall gebraucht werden (```trim()```, ...)
+ Standardfunktionen, die Überall gebraucht werden (```trim()```, ```getTimeString(time, timeString)```, ...)
+
 2. **config** [[h]](../master/controller/src/config.h):
 
- Einstellmöglichkeiten diverster Parameter
+ Einstellmöglichkeiten diverster Parameter.
+
 3. **eventElement** [[h]](../master/controller/src/eventElement.h):
 
- Event-Struct, welches von MFCs und Ventilen verwendet wird
+ Event-Struct, welches von MFCs und Ventilen verwendet wird.
+
+3. **errors** [[cpp]](../master/controller/src/errors.cpp) [[h]](../master/controller/src/errors.h):
+
+ CharArray, in welchem die Displayausgaben der einzelnen Errormeldungen gespeichert sind.
+
+## Testskript [[py]](../master/serial_connector_script/serial_connection.py)
+Derzeit gibt es ein kleines Testskript zum Test der Steuerungssoftware auf dem Board. Bei der Ausführung ist zu beachten, dass keine andere Serielle Verbindung geöffnet sein darf (Arduino-Debug-Monitor, ...).
+
+Zur Ausführung müssen ```Python 2.7``` und ```pySerial``` installiert sein und bestenfalls die PATH-Variable für die Konsole gesetzt sein. Da das Programm hardgecoded ist, muss der Port in Zeile 10 angepasst werden. Der Port ist beispielsweise in der Arduino IDE sehr einfach einzusehen.
+
+Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausgeführt, insofern man sich im Verzeichnis dieser Datei befindet. In der Datei kann in einem Array die Übertragung definiert werden.
+
+[[Einrichtung von Python (Windows)]] (https://learn.adafruit.com/arduino-lesson-17-email-sending-movement-detector/installing-python-and-pyserial)
 
 ## LabView:
 
@@ -125,35 +162,29 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 
 ## Sonstiges:
 1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+2. **cloc-1.70.exe**
+ Ein kleines Programm zur Ausführung in der Konsole, welches den Softwareumfang darstellt. Wird wie folgt benutzt: ```prompt> cloc-1.70.exe controller/src``` (Auszuführen im Basepath des Projektes)
 
----
+ Ergibt folgendes:
+ ```
+ prompt> cloc-1.70.exe controller/src
+       24 text files.
+       24 unique files.
+        2 files ignored.
 
-ALT (zu überprüfen und zu entfernen)
+ https://github.com/AlDanial/cloc v 1.70  T=0.50 s (48.0 files/s, 2734.0 lines/s)
+ -------------------------------------------------------------------------------
+ Language                     files          blank        comment           code
+ -------------------------------------------------------------------------------
+ C                               11            185             50            665
+ C/C++ Header                    13             72             88            307
+ -------------------------------------------------------------------------------
+ SUM:                            24            257            138            972
+ -------------------------------------------------------------------------------
+ ```
 
----
-
-# Projektpraktikum
-
-## Hardware
-1. **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/)
-  * Vorderseite [[link]](http://www.pjrc.com/teensy/beta/card9a_rev1_print.pdf)
-  * Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
-2. SD Karte
-3. Optokoppler
-4. Pegelwandler
-5. BME 280
-
-## Nützliche Links
-1. ThreadSafe-Queues [[link]](https://www.justsoftwaresolutions.co.uk/threading/implementing-a-thread-safe-queue-using-condition-variables.html)
-2. Send Email [[link]](http://playground.arduino.cc/Code/Email)
-3. Write to SD (kann bei diesem Board anders sein, Dokumentation lesen!) [[link]](https://www.arduino.cc/en/Tutorial/ReadWrite)
-4. LabView-Network [[link]](http://www.ni.com/white-paper/2710/de/)
-5. Arduino-Network-Communication [[link]](https://github.com/evothings/evothings-examples/blob/master/examples/arduino-led-onoff-tcp/arduinoethernet/arduinoethernet/arduinoethernet.ino)
-
-Arduino kann kein Multithreading. Wie sieht es mit dem Teensy Board aus? Ansonsten: http://www.kwartzlab.ca/2010/09/arduino-multi-threading-librar/
-
-Klassiche Struktur in einem Arduino Programm: http://arduino.stackexchange.com/questions/13178/classes-and-objects-how-many-and-which-file-types-do-i-actually-need-to-use-the/13182#13182
-
-Interruptsteuerung: http://playground.arduino.cc/Code/FrequencyTimer2
-
-Queue-List (nicht Threadsafe, aber hier egal): http://playground.arduino.cc/Code/QueueList
+## gesammeltes (zu sortieren):
+1. Send Email [[link]](http://playground.arduino.cc/Code/Email)
+2. Write to SD (kann bei diesem Board anders sein, Dokumentation lesen!) [[link]](https://www.arduino.cc/en/Tutorial/ReadWrite)
+3. LabView-Network [[link]](http://www.ni.com/white-paper/2710/de/)
+4. Arduino-Network-Communication [[link]](https://github.com/evothings/evothing

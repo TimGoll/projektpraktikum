@@ -12,6 +12,7 @@ namespace control {
         this->amount_MFC = amount;
         for (int i = 0; i < this->amount_MFC; i++) {
             this->mfc_list[i] = new control::MfcCtrl(i);
+            this->mfc_list[i]->setMainDisplayObjectPointer(main_display);
             this->mfc_continue_next_loop[i] = true;
         }
     }
@@ -39,9 +40,7 @@ namespace control {
     }
 
     void Main_MfcCtrl::setMainDisplayObjectPointer(io::Main_Display *main_display) {
-        for (int i = 0; i < this->amount_MFC; i++) {
-            this->mfc_list[i]->setMainDisplayObjectPointer(main_display);
-        }
+        this->main_display = main_display;
     }
 
     bool Main_MfcCtrl::loop() {

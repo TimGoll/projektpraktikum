@@ -50,6 +50,8 @@ namespace control {
     }
 
     void ValveCtrl::setMainDisplayObjectPointer(io::Main_Display *main_display) {
+        srl->println('D', "called pointer V.");
+        //main_display->setLastEvent('B', 34, 567, 6587812);
         this->main_display = main_display;
     }
 

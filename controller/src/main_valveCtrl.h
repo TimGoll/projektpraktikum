@@ -37,6 +37,8 @@ namespace control {
         int amount_valve;
         control::ValveCtrl *valve_list[MAX_AMOUNT_VALVE]; //Hier werden die Adressen der Valve-Objekte gespeichert
         bool valve_continue_next_loop[MAX_AMOUNT_VALVE];
+
+        io::Main_Display *main_display;
     };
 }
 
