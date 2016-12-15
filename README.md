@@ -7,18 +7,14 @@ _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
 [Link zu YouTube Video](https://www.youtube.com/watch?v=2sz4_vMzZEc)
 
 ## Verwendete Bibliotheken:
-1. [**mThread**](http://www.kwartzlab.ca/2010/09/arduino-multi-threading-librar/):
-
- Erstellt Pseudothreads auf dem Board, die nacheinander ausgeführt werden. Jeder Thread hat seine eigene ```loop()```.
-
+1. [**mThread**](http://www.kwartzlab.ca/2010/09/arduino-multi-threading-librar/): <br>
+ Erstellt Pseudothreads auf dem Board, die nacheinander ausgeführt werden. Jeder Thread hat seine eigene ```loop()```. <br>
  Threads werden hinzugefügt mittels ```main_thread_list -> add_thread(CLASSNAME)```, anschließend laufen sie unbegrenzt weiter. **Hinweis:** Es sind scheinbar maximal nur 10 Threads möglich.
 
-2. [**newdel**](https://github.com/jlamothe/newdel):
-
+2. [**newdel**](https://github.com/jlamothe/newdel): <br>
  Fügt die Keywörter ```new``` und ```delete``` hinzu. Wird für mThread benötigt und musste leicht angepasst werden, damit sie auf neueren Arduino-Boards funktioniert.
 
-3. [**QueueList**](http://playground.arduino.cc/Code/QueueList):
-
+3. [**QueueList**](http://playground.arduino.cc/Code/QueueList): <br>
  Fügt verkettete Listen hinzu, welche beliebige Datentypen speichern können. **Hinweis:** es ist nicht möglich Pointer in ihnen zu speichern.
 
 ## Übertragungsprotokoll (LabView -> Microcontroller):
@@ -71,8 +67,7 @@ srl->println('D', "Hallo Welt mit Zeilenende!"); //Natuerlich gibt es das ganze 
 Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei Typen: L, D und U für LabView, Debug und UART. Die Baudrate wird in der **config.h** eingestellt.
 
 ## Display:
-Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden.
-
+Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden. <br>
 Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gibt es:
 
 - **Unkritische Fehler**: Error Code Level 1000; Dies sind Fehler, die beispielsweise bei der Kommunikation auftreten, aber keinen Programmabbruch benötigen. Sie werden auf dem Display für 2 Sekunden angezeigt. Farbe: _gelb_
@@ -90,22 +85,15 @@ STANDARD:                      ERRORBEISPIEL:
 | V03-0001-00:01:16:22 |       |     Zeilenbeginn     |
 +----------------------+       +----------------------+
 ```
-- Standardanzeige:
 
- Zeile 1: Anzahl MFCs und Anzahl Ventile
-
- Zeile 2: xxx
-
- Zeile 3: Laufzeit der Software, relativ zum Messstart
-
+- **Standardanzeige:** <br>
+ Zeile 1: Anzahl MFCs und Anzahl Ventile <br>
+ Zeile 2: xxx <br>
+ Zeile 3: Laufzeit der Software, relativ zum Messstart <br>
  Zeile 4: Letztes Event, Typ_ID-Wert-Zeit
-
-- Erroranzeige:
-
- Zeile 1: Error ID
-
- Zeile 2: xxx
-
+- **Erroranzeige:** <br>
+ Zeile 1: Error ID <br>
+ Zeile 2: xxx <br>
  Zeile 3+4: Kurzbeschreibung des augetretenen Fehlers
 
 ## Errormeldungen:
@@ -125,15 +113,13 @@ Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgefü
 
 ## Programmaufbau:
 ### Hauptdatei:
-1. **Controller.ino**:
-
+1. **Controller.ino**: [[ino]](../master/controller/controller.ino) <br>
  Hier werden die Hauptobjekte erstellt und verwaltet. Außerdem werden an dieser Stellte die Threads gestartet und später auch wieder gestoppt. Vor dem Start der Threads werden noch Adressen zwischen den einzelnen Objekten ausgetauscht (beispielsweise die der Queues zum späteren Datenaustausch).
 
 ### Hauptklassen:
 Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgeleitet. Außerdem besitzen sie eine ```loop()```-Funktion, da die Klasse in Pseudothreads ausgeführt wird.
 
-1. **main_labCom** [[cpp]](../master/controller/src/main_labCom.cpp) [[h]](../master/controller/src/main_labCom.h):
-
+1. **main_labCom** [[cpp]](../master/controller/src/main_labCom.cpp) [[h]](../master/controller/src/main_labCom.h): <br>
  Quasi Hauptklasse des Programms, verwaltet IN/OUT mit LabView
 
 2. **main_boschCom** [[cpp]](../master/controller/src/main_boschCom.cpp) [[h]](../master/controller/src/main_boschCom.h):
@@ -141,8 +127,7 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 4. **main_mfcCtrl** [[cpp]](../master/controller/src/main_mfcCtrl.cpp) [[h]](../master/controller/src/main_mfcCtrl.h):
 
  Verwaltet alle MFC Objekte
-5. **main_valveCtrl** [[cpp]](../master/controller/src/main_valveCtrl.cpp) [[h]](../master/controller/src/main_valveCtrl.h):
-
+5. **main_valveCtrl** [[cpp]](../master/controller/src/main_valveCtrl.cpp) [[h]](../master/controller/src/main_valveCtrl.h): <br>
  Verwaltet alle Ventil Objekte
 
 6. **main_display** [[cpp]](../master/controller/src/main_display.cpp) [[h]](../master/controller/src/main_display.h):
@@ -153,20 +138,16 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 3. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h):
 
 ### Sonstige:
-1. **common** [[cpp]](../master/controller/src/ownlibs/common.cpp) [[h]](../master/controller/src/ownlibs/common.h):
-
+1. **common** [[cpp]](../master/controller/src/ownlibs/common.cpp) [[h]](../master/controller/src/ownlibs/common.h): <br>
  Standardfunktionen, die Überall gebraucht werden (```trim()```, ```getTimeString(time, timeString)```, ...)
 
-2. **config** [[h]](../master/controller/src/config.h):
-
+2. **config** [[h]](../master/controller/src/config.h): <br>
  Einstellmöglichkeiten diverster Parameter.
 
-3. **eventElement** [[h]](../master/controller/src/eventElement.h):
-
+3. **eventElement** [[h]](../master/controller/src/eventElement.h): <br>
  Event-Struct, welches von MFCs und Ventilen verwendet wird.
 
-3. **errors** [[cpp]](../master/controller/src/errors.cpp) [[h]](../master/controller/src/errors.h):
-
+3. **errors** [[cpp]](../master/controller/src/errors.cpp) [[h]](../master/controller/src/errors.h): <br>
  CharArray, in welchem die Displayausgaben der einzelnen Errormeldungen gespeichert sind.
 
 ## Testskript [[py]](../master/serial_connector_script/serial_connection.py)
@@ -181,12 +162,16 @@ Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausg
 ## LabView:
 
 ## Hardware:
-1. **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/)
- * Vorderseite [[link]](http://www.pjrc.com/teensy/beta/card9a_rev1_print.pdf)
- * Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
-2. **20x4 LCD Display (I2C, Buntes Backlight)** [[link]](https://www.adafruit.com/product/499)
+### Hauptboard
+1. Schaltkizze: [[link]](../master/electronic/Schalplan.pdf)
+2. Verwendete Bauteile auf dem Haupboard:
+ * **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/) <br>
+  Vorderseite [[link]](http://www.pjrc.com/teensy/beta/card9a_rev1_print.pdf) <br>
+  Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
+ * **20x4 LCD Display (Buntes Backlight)** [[link]](https://www.adafruit.com/product/499) <br>
+  RGB-LCD Pin Header [[link]](https://cdn-shop.adafruit.com/datasheets/WH2004A-CFH-JT%23.pdf) <br>
+  I2C-Chip für Display (PCF8574) [[link]](http://www.sunfounder.com/wiki/images/1/18/PCF8574T_datasheet.pdf)
 
-[[**Schaltskizze als PDF**]](../master/electronic/Schalplan.pdf)
 
 ## Sonstiges:
 1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
