@@ -66,6 +66,8 @@ srl->println('D', "Hallo Welt mit Zeilenende!"); //Natuerlich gibt es das ganze 
 ```
 Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei Typen: L, D und U für LabView, Debug und UART. Die Baudrate wird in der **config.h** eingestellt.
 
+Über den LabView Port wird nach Erfolgreicher Initialisierung des Boards ein "ready" gesendet. Wurde Ein Befehl korrekt erkannt und erfolgreich verarbeitet wird ein "ok" gesendet, ansonsten kommt ein Errorcode.
+
 ## Display:
 Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden. <br>
 Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gibt es:
@@ -111,6 +113,9 @@ Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgefü
 ### 1003:
 **Lese-Timeout überschritten.** In der _config.h_ wird eine maximale Lesezeit pro String definiert. Wird diese Zeit überschritten, wird das Lesen des Strings an dieser Stelle abgebrochen.
 
+### 5000:
+**Zufriff auf nicht definierte MFC/Ventil ID.** Trifft dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.
+
 ## Programmaufbau:
 ### Hauptdatei:
 1. **Controller.ino**: [[ino]](../master/controller/controller.ino) <br>
@@ -124,9 +129,9 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 
 2. **main_boschCom** [[cpp]](../master/controller/src/main_boschCom.cpp) [[h]](../master/controller/src/main_boschCom.h):
 3. **main_StoreD** [[cpp]](../master/controller/src/main_StoreD.cpp) [[h]](../master/controller/src/main_StoreD.h):
-4. **main_mfcCtrl** [[cpp]](../master/controller/src/main_mfcCtrl.cpp) [[h]](../master/controller/src/main_mfcCtrl.h):
-
+4. **main_mfcCtrl** [[cpp]](../master/controller/src/main_mfcCtrl.cpp) [[h]](../master/controller/src/main_mfcCtrl.h): <br>
  Verwaltet alle MFC Objekte
+
 5. **main_valveCtrl** [[cpp]](../master/controller/src/main_valveCtrl.cpp) [[h]](../master/controller/src/main_valveCtrl.h): <br>
  Verwaltet alle Ventil Objekte
 

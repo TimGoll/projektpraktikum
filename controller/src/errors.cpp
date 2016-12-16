@@ -27,4 +27,13 @@ namespace io {
             "      Timeout       "
         }
     };
+
+    char error_5000[][DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1] = {
+        {
+            "     ERROR 5000     ",
+            "                    ",
+            "     Zugriff auf    ",
+            "   undefinierte ID  "
+        }
+    };
 }

@@ -38,7 +38,15 @@ namespace communication {
                 //UEBERPRUEFUNG
                 if (this->bufferCharIndex == 0) {
                     if (this->inDataBuffer[this->bufferCharIndex] != '<') { //erstes Zeichen muss oeffnender Tag sein
+                        if (this->inDataBuffer[this->bufferCharIndex] == '\n') //Sortiere Strings ohne Inhalt aus
+                            return -1;
+
                         srl->println('D', "ERROR - Falscher Zeilenbeginn");
+                        //lese String dennoch bis Zum Ende um mehrfache "Falscher Beginn" Meldung zu verhindern
+                        char searchForEnd = ' ';
+                        while (searchForEnd != '\n') {
+                            searchForEnd = Serial.read();
+                        }
                         return ERR_SERIAL_READ_WRONG_LINE_BEGIN;
                     }
                 }
@@ -134,6 +142,8 @@ namespace communication {
                     //der die erwartete Zeile speichert
                     int arraySize = this->splitLine();
 
+                    srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
+
                     //TODO In jedem Schritt Ueberpruefungen, ob das Erwartete eingetroffen ist
                     switch (this->headerLineCounter) {
                         case 0: //ZEILE 0: MFC+Ventilanzahl
@@ -184,17 +194,27 @@ namespace communication {
                             break;
                         case 6: //ZEILE 6: Eventliste
                             if (strcmp(this->inDataArray[0], "M") == 0) { //MFC
-                                this->main_mfcCtrl->setEvent(
-                                    atoi(this->inDataArray[1]), //MFC-ID
-                                    atoi(this->inDataArray[2]), //value //TODO: verschiedene Werte je nach mfc-typ
-                                    strtoul(this->inDataArray[3], NULL, 0) //time (unsigned long)
-                                );
+                                if (atoi(this->inDataArray[1]) < this->amount_MFC) {
+                                    this->main_mfcCtrl->setEvent(
+                                        atoi(this->inDataArray[1]), //MFC-ID
+                                        atoi(this->inDataArray[2]), //value
+                                        strtoul(this->inDataArray[3], NULL, 0) //time (unsigned long)
+                                    );
+                                } else {
+                                    this->main_display->throwError(ERR_SERIAL_UNDEFINED_INDEX);
+                                    srl->println('L', ERR_SERIAL_UNDEFINED_INDEX); //Sende Errorcode an LabView
+                                }
                             } else if (strcmp(this->inDataArray[0], "V") == 0) { //Ventil
-                                this->main_valveCtrl->setEvent(
-                                    atoi(this->inDataArray[1]), //Ventil-ID
-                                    atoi(this->inDataArray[2]), //value
-                                    strtoul(this->inDataArray[3], NULL, 0) //time (unsigned long)
-                                );
+                                if (atoi(this->inDataArray[1]) < this->amount_valve) {
+                                    this->main_valveCtrl->setEvent(
+                                        atoi(this->inDataArray[1]), //Ventil-ID
+                                        atoi(this->inDataArray[2]), //value
+                                        strtoul(this->inDataArray[3], NULL, 0) //time (unsigned long)
+                                    );
+                                } else {
+                                    this->main_display->throwError(ERR_SERIAL_UNDEFINED_INDEX);
+                                    srl->println('L', ERR_SERIAL_UNDEFINED_INDEX); //Sende Errorcode an LabView
+                                }
                             }
 
                             else if (strcmp(this->inDataArray[0], "end") == 0) { //Am ende wechselt labCom in den Sende-Modus
@@ -212,10 +232,11 @@ namespace communication {
                             }
                             break;
                     }
-                } else {
+                } else if (errCode > 1) {
                     //ErrorCode wird auf Display angezeigt
                     this->main_display->throwError(errCode);
-                }
+                    srl->println('L', errCode); //Sende Errorcode an LabView
+                } //else -1: Keine Eingabe vorhanden (leerer String)
             }
         }
 

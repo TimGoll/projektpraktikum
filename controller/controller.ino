@@ -4,7 +4,10 @@
 // INCLUDES
 #include <newdel.h> //fügt new und delete hinzu, wird für "mthread" benötigt
 #include <mthread.h>
-#include <QueueList.h> //vielleicht hier nicht gebraucht
+#include <QueueList.h>
+#include <Wire.h>
+
+
 
 //Klassen aus Includes mit einem "main" im Namen werden in dieser Datei erstellt
 //und haben einen Thread

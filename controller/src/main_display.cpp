@@ -16,6 +16,12 @@ namespace io {
         this->lastEvent_value = 0;
         this->lastEvent_time  = 0;
 
+        this->display         = new LCD_I2C(0x00, 10, 9, 8, 4, 20);
+
+
+        this->display->clear();
+        this->display->backlight_setColor(255,255,255);
+
         //Zeige an, dass Objekt erzeugt wurde und Board bereit ist
         this->boardIsReady();
     }
@@ -26,16 +32,32 @@ namespace io {
     void Main_Display::throwError(int errorNumber) {
         if (errorNumber >= 1000 && errorNumber < 2000) {
             int arrayIndex = errorNumber % 1000; //hole Index der Arrays, indem 1000er "entfernt" wird
+            this->display->backlight_setColor(255,180,0);
             //this->lcd_print(error_1000[arrayIndex][0]);
 
             srl->println('D', "--------------------");
-            srl->println('D', io::error_1000[arrayIndex][0]);
-            srl->println('D', io::error_1000[arrayIndex][1]);
-            srl->println('D', io::error_1000[arrayIndex][2]);
-            srl->println('D', io::error_1000[arrayIndex][3]);
+            srl->println('D', error_1000[arrayIndex][0]);
+            srl->println('D', error_1000[arrayIndex][1]);
+            srl->println('D', error_1000[arrayIndex][2]);
+            srl->println('D', error_1000[arrayIndex][3]);
             srl->println('D', "--------------------");
 
             this->afterErrorTime = millis() + ERR_1000_TIME;
+        } else
+
+        if (errorNumber >= 5000 && errorNumber < 6000) {
+            int arrayIndex = errorNumber % 5000; //hole Index der Arrays, indem 1000er "entfernt" wird
+            this->display->backlight_setColor(255,0,0);
+            //this->lcd_print(error_1000[arrayIndex][0]);
+
+            srl->println('D', "--------------------");
+            srl->println('D', io::error_5000[arrayIndex][0]);
+            srl->println('D', io::error_5000[arrayIndex][1]);
+            srl->println('D', io::error_5000[arrayIndex][2]);
+            srl->println('D', io::error_5000[arrayIndex][3]);
+            srl->println('D', "--------------------");
+
+            this->afterErrorTime = millis() + ERR_5000_TIME;
         }
     }
 
@@ -114,10 +136,9 @@ namespace io {
             return false;
 
         if (millis() >= this->afterErrorTime) { //Errors haben Vorrang und blockieren Ausgabe
+            this->display->backlight_setColor(255,255,255);
+
             if (this->ready && millis() >= this->lastPrint + DISPLAY_REDRAW_INTERVALL) {
-
-                //this->setLastEvent('B', 34, 567, 6587812);
-
                 //Erstelle String der letzten Event Zeit
                 char lastEventTime_string[12];
                 cmn::getTimeString(this->lastEvent_time, lastEventTime_string);

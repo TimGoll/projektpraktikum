@@ -5,6 +5,7 @@
 #include <newdel.h> //fügt new und delete hinzu, wird für "mthread" benötigt
 #include <mthread.h>
 
+#include "ownlibs/lcd_I2C.h"
 #include "ownlibs/serialCommunication.h"
 #include "ownlibs/common.h"
 #include "config.h"
@@ -50,6 +51,8 @@ namespace io {
         int lastEvent_id;
         int lastEvent_value;
         unsigned long lastEvent_time;
+
+        LCD_I2C *display; //LCD-Write-Class
     };
 }
 
