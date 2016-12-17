@@ -16,9 +16,9 @@ namespace io {
         this->lastEvent_value = 0;
         this->lastEvent_time  = 0;
 
-        this->display         = new LCD_I2C(0x00, 10, 9, 8, 4, 20);
+        this->display         = new LiquidCrystal_I2C(0x38, 10, 9, 8, 4, 20);
 
-
+        this->display->init();
         this->display->clear();
         this->display->backlight_setColor(255,255,255);
 
@@ -33,14 +33,13 @@ namespace io {
         if (errorNumber >= 1000 && errorNumber < 2000) {
             int arrayIndex = errorNumber % 1000; //hole Index der Arrays, indem 1000er "entfernt" wird
             this->display->backlight_setColor(255,180,0);
-            //this->lcd_print(error_1000[arrayIndex][0]);
 
-            srl->println('D', "--------------------");
-            srl->println('D', error_1000[arrayIndex][0]);
-            srl->println('D', error_1000[arrayIndex][1]);
-            srl->println('D', error_1000[arrayIndex][2]);
-            srl->println('D', error_1000[arrayIndex][3]);
-            srl->println('D', "--------------------");
+            this->display->updateDisplayMatrix(
+                error_1000[arrayIndex][0],
+                error_1000[arrayIndex][1],
+                error_1000[arrayIndex][2],
+                error_1000[arrayIndex][3]
+            );
 
             this->afterErrorTime = millis() + ERR_1000_TIME;
         } else
@@ -48,71 +47,70 @@ namespace io {
         if (errorNumber >= 5000 && errorNumber < 6000) {
             int arrayIndex = errorNumber % 5000; //hole Index der Arrays, indem 1000er "entfernt" wird
             this->display->backlight_setColor(255,0,0);
-            //this->lcd_print(error_1000[arrayIndex][0]);
 
-            srl->println('D', "--------------------");
-            srl->println('D', io::error_5000[arrayIndex][0]);
-            srl->println('D', io::error_5000[arrayIndex][1]);
-            srl->println('D', io::error_5000[arrayIndex][2]);
-            srl->println('D', io::error_5000[arrayIndex][3]);
-            srl->println('D', "--------------------");
+            this->display->updateDisplayMatrix(
+                error_5000[arrayIndex][0],
+                error_5000[arrayIndex][1],
+                error_5000[arrayIndex][2],
+                error_5000[arrayIndex][3]
+            );
 
             this->afterErrorTime = millis() + ERR_5000_TIME;
         }
     }
 
     void Main_Display::boardIsReady() {
-        srl->println('D', "--------------------");
-        srl->println('D', "    BOARD BEREIT    ");
-        srl->println('D', "                    ");
-        srl->println('D', "      Warte auf     ");
-        srl->println('D', "    Uebertragung    ");
-        srl->println('D', "--------------------");
+        this->display->updateDisplayMatrix(
+            "    BOARD BEREIT    ",
+            "                    ",
+            "      Warte auf     ",
+            "    Uebertragung    "
+        );
     }
 
     void Main_Display::header_started(int amountMFC, int amountValve) {
         this->amountMFC   = amountMFC;
         this->amountValve = amountValve;
 
-        srl->println('D', "--------------------");
-        srl->println('D', "   DATEN GESTARTET  ");
-        srl->println('D', "                    ");
-        srl->println('D', "     Uebertrage     ");
-        srl->println('D', "       Header       ");
-        srl->println('D', "--------------------");
+        this->display->updateDisplayMatrix(
+            "   DATEN GESTARTET  ",
+            "                    ",
+            "     Uebertrage     ",
+            "       Header       "
+        );
     }
 
     void Main_Display::event_started() {
-        srl->println('D', "--------------------");
-        srl->println('D', "   HEADER KOMPLETT  ");
-        srl->println('D', "                    ");
-        srl->println('D', "     Uebertrage     ");
-        srl->println('D', "     Eventliste     ");
-        srl->println('D', "--------------------");
+        this->display->updateDisplayMatrix(
+            "   HEADER KOMPLETT  ",
+            "                    ",
+            "     Uebertrage     ",
+            "     Eventliste     "
+        );
     }
 
     void Main_Display::event_finished() {
-        srl->println('D', "--------------------");
-        srl->println('D', " EVENTLISTE KOMPLETT");
-        srl->println('D', "                    ");
-        srl->println('D', "   Warte auf Start  ");
-        srl->println('D', "     der Messung    ");
-        srl->println('D', "--------------------");
+        this->display->updateDisplayMatrix(
+            " EVENTLISTE KOMPLETT",
+            "                    ",
+            "   Warte auf Start  ",
+            "     der Messung    "
+        );
     }
 
     void Main_Display::start(unsigned long startTime) {
         this->startTime = startTime;
         this->ready     = true;
 
-        srl->println('D', "--------------------");
-        srl->println('D', "                    ");
-        srl->println('D', " MESSUNG  GESTARTET ");
-        srl->println('D', "                    ");
-        srl->println('D', "                    ");
-        srl->println('D', "--------------------");
+        this->display->updateDisplayMatrix(
+            "                    ",
+            " MESSUNG  GESTARTET ",
+            "                    ",
+            "                    "
+        );
 
         //setze diese Meldung als Error, um Displayuasgabe fuer Zeit zu sperren
-        this->afterErrorTime = millis() + ERR_1000_TIME;
+        this->afterErrorTime = millis() + 500;
     }
 
     void Main_Display::setLastEvent (char type, int id, int value, unsigned int time) {
@@ -154,12 +152,12 @@ namespace io {
                 sprintf(displayText[2], "LAUFZEIT:%s", currentTime_string);
                 sprintf(displayText[3], "%c%02d-%04d-%s", this->lastEvent_type, this->lastEvent_id, this->lastEvent_value, lastEventTime_string);
 
-                srl->println('D', "--------------------");
-                srl->println('D', displayText[0]);
-                srl->println('D', displayText[1]);
-                srl->println('D', displayText[2]);
-                srl->println('D', displayText[3]);
-                srl->println('D', "--------------------");
+                this->display->updateDisplayMatrix(
+                    displayText[0],
+                    displayText[1],
+                    displayText[2],
+                    displayText[3]
+                );
 
                 this->lastPrint = millis();
             }

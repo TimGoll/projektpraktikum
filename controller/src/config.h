@@ -17,7 +17,7 @@
 
 #define DISPLAY_SIZE_WIDTH 20
 #define DISPLAY_SIZE_HEIGHT 4
-#define DISPLAY_REDRAW_INTERVALL 250 //Bestimmt Häufigkeit der Bildaktualisierung, Errors ausgenommen
+#define DISPLAY_REDRAW_INTERVALL 100 //Bestimmt Häufigkeit der Bildaktualisierung, Errors ausgenommen
 
 #define ERR_1000_TIME 1500
 #define ERR_5000_TIME 604800000 //1 Woche

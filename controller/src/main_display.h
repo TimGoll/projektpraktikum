@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <newdel.h> //fügt new und delete hinzu, wird für "mthread" benötigt
 #include <mthread.h>
+#include <Wire.h>
 
 #include "ownlibs/lcd_I2C.h"
 #include "ownlibs/serialCommunication.h"
@@ -52,7 +53,7 @@ namespace io {
         int lastEvent_value;
         unsigned long lastEvent_time;
 
-        LCD_I2C *display; //LCD-Write-Class
+        LiquidCrystal_I2C *display; //LCD-Write-Class
     };
 }
 

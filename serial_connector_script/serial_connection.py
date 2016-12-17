@@ -7,7 +7,7 @@ toWrite = False
 i = 0
 counter = 0
 
-port = "/dev/cu.usbmodem1421" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
+port = "COM4" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
 
 data = [
     '<3,1>',
@@ -16,6 +16,7 @@ data = [
     '<2>',
     '<25>',
     '<begin>',
+    '<V,0,0,0>',
     '<M,0,120,1000>',
     '<M,0,220,2000>',
     '<M,0,20,7500>',
@@ -30,6 +31,7 @@ data = [
     '<M,1,225,1450>',
     '<M,1,250,6450>',
     '<M,2,0,11000>',
+    '<V,0,1,15000>',
     '<end>',
     '<start>'
 ]
@@ -59,10 +61,10 @@ try:
             in_data = str(serialConnection.readline())
             print (in_data, end="")
 
-        if (counter == 100):
+        if (counter == 50):
             toWrite = True
 
-        sleep(0.01)
+        sleep(0.05)
         counter+=1
 
 except KeyboardInterrupt:
