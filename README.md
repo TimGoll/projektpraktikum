@@ -81,7 +81,7 @@ Standardmäßig werden auf dem Display aktuelle Daten zum Programmstatus angezei
 ```
 STANDARD:                      ERRORBEISPIEL:
 +----------------------+       +----------------------+
-|            M:04 V:07 |       |      ERROR 1001      |
+|          #M:04 #V:07 |       |      ERROR 1001      |
 |                      |       |                      |
 | LAUFZEIT:00:01:34:17 |       |       Falscher       |
 | V03-0001-00:01:16:22 |       |     Zeilenbeginn     |

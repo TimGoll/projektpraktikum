@@ -1,10 +1,6 @@
 // LiquidCrystal_I2C V2.0
 
 #include "lcd_I2C.h"
-#include <inttypes.h>
-#include "Wire.h"
-#include "Arduino.h"
-
 
 // When the display powers up, it is configured as follows:
 //
@@ -41,6 +37,11 @@ LiquidCrystal_I2C::LiquidCrystal_I2C(uint8_t lcd_Addr, const int i_red_pin, cons
   pinMode(red_pin, OUTPUT);
   pinMode(green_pin, OUTPUT);
   pinMode(blue_pin, OUTPUT);
+
+  strcpy(last_dm0, "                    ");
+  strcpy(last_dm1, "                    ");
+  strcpy(last_dm2, "                    ");
+  strcpy(last_dm3, "                    ");
 }
 
 void LiquidCrystal_I2C::init(){
@@ -152,12 +153,28 @@ void LiquidCrystal_I2C::backlight_setColor(int r, int g, int b) {
 	}
 }
 
+/*
+ * Neue Methode zum Update der gesamten Bildmatrix. Diese vergleicht ausserdem den neuen Text mit
+ * dem Alten, um nur die Zeichen zu uebertragen, die sich geaendert haben.
+ */
 void LiquidCrystal_I2C::updateDisplayMatrix(char dm0[21], char dm1[21], char dm2[21], char dm3[21]) {
-    setCursor(0,0);
-    print(dm0);
-    print(dm2); //TODO: Wieso muessen diese beiden Zeilen vertauscht sein?!
-    print(dm1);
-    print(dm3);
+    changeSingleChars(dm0, last_dm0, 0);
+    changeSingleChars(dm1, last_dm1, 1);
+    changeSingleChars(dm2, last_dm2, 2);
+    changeSingleChars(dm3, last_dm3, 3);
+}
+
+//privat
+void LiquidCrystal_I2C::changeSingleChars(char new_dm[21], char last_dm[21], int line) {
+    if (strcmp(new_dm, last_dm) != 0) {
+        for (int i = 0; i < 21; i++) {
+            if (new_dm[i] != last_dm[i]) {
+                setCursor(i, line);
+                print(new_dm[i]);
+            }
+        }
+        strcpy(last_dm, new_dm);
+    }
 }
 
 // Ergaenzungen Ende

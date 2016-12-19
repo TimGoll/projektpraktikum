@@ -107,7 +107,8 @@ namespace communication {
         this->reading = false;
         this->sending = true;
 
-        unsigned long startTime = millis();
+        //Fuege 250ms zum Start hinzu, um Verzoegerungen durch die Startanzeige zu vermindern
+        unsigned long startTime = millis() + 1000;
 
         //starte MFCs
         this->main_mfcCtrl->start(startTime);

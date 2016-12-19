@@ -64,16 +64,23 @@ namespace control {
 
             if (millis() >= this->startTime + this->nextEvent.time) {
                 //setze Ventil auf this->nextEvent.value
-                //digitalWrite(this->pin, this->nextEvent.value);
+                digitalWrite(this->pin, this->nextEvent.value);
+                
+                unsigned long currentTime = millis();
 
-                srl->print('D', "[Zeit: ");
-                srl->print('D', millis());
-                srl->print('D', ", erwartet: ");
-                srl->print('D', this->startTime + this->nextEvent.time);
-                srl->print('D', "] Ventil ");
+                srl->print('D', "Ventil\t");
                 srl->print('D', this->id);
                 srl->print('D', " gesetzt auf: ");
-                srl->println('D', this->nextEvent.value);
+                srl->print('D', this->nextEvent.value);
+                srl->print('D', "\t\tSchaltzeit:\t");
+                srl->print('D', currentTime);
+                srl->print('D', "\terwartet:\t");
+                srl->print('D', this->startTime + this->nextEvent.time);
+                srl->print('D', "\t( Rel.Zeit: ");
+                srl->print('D', this->nextEvent.time);
+                srl->print('D', " )\t( ");
+                srl->print('D', currentTime - (this->startTime + this->nextEvent.time));
+                srl->println('D', "\tms Verzoegerung )");
 
                 this->main_display->setLastEvent('V', this->id, this->nextEvent.value, this->nextEvent.time);
 

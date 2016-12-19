@@ -5,7 +5,8 @@
 
 #include <inttypes.h>
 #include "Print.h"
-#include <Wire.h>
+#include "Wire.h"
+#include "Arduino.h"
 
 // commands
 #define LCD_CLEARDISPLAY 0x01
@@ -117,6 +118,9 @@ private:
     void write4bits(uint8_t);
     void expanderWrite(uint8_t);
     void pulseEnable(uint8_t);
+
+    void changeSingleChars(char new_dm[21], char last_dm[21], int line);
+
     uint8_t _Addr;
     uint8_t _displayfunction;
     uint8_t _displaycontrol;
@@ -131,6 +135,11 @@ private:
     int blue_pin;
     int brightness;
     bool backlight;
+
+    char last_dm0[21];
+    char last_dm1[21];
+    char last_dm2[21];
+    char last_dm3[21];
 };
 
 #endif

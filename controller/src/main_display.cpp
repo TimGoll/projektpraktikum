@@ -147,7 +147,7 @@ namespace io {
 
                 //Baue Anzeigetext
                 char displayText [DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //TODO: Eins groesser, da '\0'
-                sprintf(displayText[0], "           M:%02d V:%02d\0", this->amountMFC, this->amountValve);
+                sprintf(displayText[0], "         #M:%02d #V:%02d\0", this->amountMFC, this->amountValve);
                 sprintf(displayText[1], "                    \0");
                 sprintf(displayText[2], "LAUFZEIT:%s", currentTime_string);
                 sprintf(displayText[3], "%c%02d-%04d-%s", this->lastEvent_type, this->lastEvent_id, this->lastEvent_value, lastEventTime_string);

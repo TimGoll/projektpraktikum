@@ -27,10 +27,10 @@ void setup() {
     srl->setSerial(&Serial1, &Serial, &Serial2); //labview / debug / uart
   
     // ERSTELLE GEBRAUCHTE OBJEKTE
+    io::Main_Display *main_display          = new io::Main_Display();
     communication::Main_LabCom *main_labCom = new communication::Main_LabCom();
     control::Main_MfcCtrl *main_mfcCtrl     = new control::Main_MfcCtrl();
     control::Main_ValveCtrl *main_valveCtrl = new control::Main_ValveCtrl();
-    io::Main_Display *main_display          = new io::Main_Display();
 
     // TAUSCHE DATEN ZWISCHEN THREADS AUS
     main_labCom->setMainMfcObjectPointer(main_mfcCtrl);
