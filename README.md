@@ -68,6 +68,12 @@ Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei
 
 Über den LabView Port wird nach Erfolgreicher Initialisierung des Boards ein "ready" gesendet. Wurde Ein Befehl korrekt erkannt und erfolgreich verarbeitet wird ein "ok" gesendet, ansonsten kommt ein Errorcode.
 
+## Serielle Hardware
+Die Verbindung zwischen dem Teensy und dem PC über Serielle Verbindung ist daher etwas schwer, da das Board keine eigene Möglichkeit der Kommunikation bietet. Abhilfe schafft jedoch der **Prolific PL2303HX** IC, welcher ein Uart Signal zu einem USB-Signal wandelt und dem PC ein USB-Device simuliert. Dieser Chip ist stanndardmäßig nicht mit Windowsversionen neuer als Windows 8 kompatibel, doch ein [inofizieller Treiber](http://www.ifamilysoftware.com/news37.html) schafft Abhilfe. <br>
+Wieso wir diesen Chip dennoch genommen haben? - Ganz einfach, er wird in den meisten käuflich erhältlichen USB<->Uart bauteilen verwendet und somit gibt es auch am meisten Informationen zu diesem.
+
+Die Treiber befinden sich auch in diesem GitHub Repository.
+
 ## Display:
 Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden. <br>
 Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gibt es:
