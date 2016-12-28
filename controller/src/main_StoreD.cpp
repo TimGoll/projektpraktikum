@@ -22,7 +22,6 @@ namespace storage {
       }
     }
 
-
     bool Main_StoreD::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
