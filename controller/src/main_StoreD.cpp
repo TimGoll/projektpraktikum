@@ -1,9 +1,5 @@
 #include "main_StoreD.h"
 
-SDFat SD;
-File myFile;
-filenumber = 1;
-
 namespace storage {
     Main_StoreD::Main_StoreD() {
 
@@ -12,9 +8,11 @@ namespace storage {
 
     }
 
+    filenumber = 1;
     SD.begin();
-    filename = std::string("file") + filenumber + ".txt";
+    filename[10 + (filenumber % 10)] = "file" + filenumber + ".txt";
 
+    //TODO: soll nur zu Beginn des Speicherns einmal ausgeführt werden -> in welche loop soll ich das packen?
     //falls neue Messung gestartet wird und Dateien von voriger Messung auf SD, starte bei chronologisch logischer filenumber
     if (filenumber != 1) {
       while (SD.exists(filename)) {
@@ -38,7 +36,7 @@ namespace storage {
           else {
             myFile.close();
             filenumber++;
-            filename = std::string("file") + filenumber + ".txt";
+            filename[] = "file" + filenumber + ".txt";
             myFile = SD.open(filename, FILE_WRITE);
             myFile.println(/*hier Daten*/);
           }
