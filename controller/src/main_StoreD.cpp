@@ -7,23 +7,31 @@ namespace storage {
     Main_StoreD::~Main_StoreD() {
 
     }
-
-    filenumber = 1;
-    SD.begin();
-    filename[10 + (filenumber % 10)] = "file" + filenumber + ".txt";
-
-    //TODO: soll nur zu Beginn des Speicherns einmal ausgeführt werden -> in welche loop soll ich das packen?
-    //falls neue Messung gestartet wird und Dateien von voriger Messung auf SD, starte bei chronologisch logischer filenumber
-    if (filenumber != 1) {
-      while (SD.exists(filename)) {
-        filenumber++;
+    void Main_StoreD::detFilenumber(int filenumber, char filename){
+      filenumber = 1;
+      if (filenumber != 1) {
+        while (SD.exists(filename)) {
+          filenumber++;
+        }
       }
     }
 
-    bool Main_StoreD::loop() {
+    void Main_StoreD::detDecplaces(int decplaces, int decplaceshelp){
+      decplaces = 1;
+      decplaceshelp = filenumber;
+      while (decplaceshelp > 10) {
+        decplaceshelp = decplaceshelp % 10;
+        decplaces++;
+      }
+      filename[9 + decplaces] = "file";// + filenumber + ".txt";
+    }
+
+    bool Main_StoreD::loop(bool button,char filename, int filenumber, int decplaces, File myFile){
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;
+
+        SD.begin();
 
         if (button) { //TODO: setzen von button durch Tastendruck
           //TODO: auf Display anzeigen, dass gespeichert wird
@@ -36,7 +44,7 @@ namespace storage {
           else {
             myFile.close();
             filenumber++;
-            filename[] = "file" + filenumber + ".txt";
+            filename[] = "file";// + filenumber + ".txt";
             myFile = SD.open(filename, FILE_WRITE);
             myFile.println(/*hier Daten*/);
           }

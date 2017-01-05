@@ -13,15 +13,21 @@ namespace storage {
         Main_StoreD();
         //Destructor
         ~Main_StoreD();
+        //falls neue Messung gestartet wird und Dateien von voriger Messung auf SD, starte bei chronologisch logischer filenumber
+        void detFilenumber(int filenumber, char filename);
+        //bestimme Dezimalstellen von filenumber
+        void detDecplaces(int decplaces, int decplaceshelp);
+    protected:
+        //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
+        bool loop(bool button,char filename, int filenumber, int decplaces, File myFile);
+    private:
         bool button;
         //bool button_before;
         char filename;
         int filenumber;
+        int decplaces;
+        int decplaceshelp;
         File myFile;
-    protected:
-        //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
-        bool loop();
-    private:
     };
 }
 
