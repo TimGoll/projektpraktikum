@@ -1,0 +1,29 @@
+#12.01.17_1.txt
+
+Messung am 12.01.17
+Messintervall: 25
+Anzahl MFC: 3
+Anzahl Ventile: 4
+
+MFC1: Buerkert, MFC2: djfhgsdf, ...
+
+Time:       MFC1    MFC2    MFC3    Ven1    Ven2    Ven3    Ven4    Bosch
+1200        679     567     56      0       1       1       0       670
+1225        120     589     145     1       1       0       0       690
+...
+
+\t
+
+void Main_StoreD::setAmountMFC(int amountMFC) {
+    this->amountMFC = amountMFC;
+}
+
+void Main_StoreD::start(unsigned long startTime) {
+    //baue header
+    //oeffne Datei
+    //speichere header
+}
+
+void Main_StoreD::newLine(char newLine) {
+    file.println(newLine);
+}

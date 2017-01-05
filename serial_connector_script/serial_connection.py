@@ -7,7 +7,7 @@ toWrite = True
 i = 0
 counter = 0
 
-port = "COM4" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
+port = "/dev/cu.usbmodem1421" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
 
 data = [
     '<4,7>',
@@ -105,12 +105,11 @@ def end_program():
 
 try:
     # INIT PROGRAM
-    serialConnection = serial.Serial(port=port, baudrate=250000, stopbits=serial.STOPBITS_ONE, parity=serial.PARITY_NONE)
+    serialConnection = serial.Serial(port=port, baudrate=115200, stopbits=serial.STOPBITS_ONE, parity=serial.PARITY_NONE)
     serialConnection.flushInput()
 
     read.setDaemon(True) #Daemon - thread stops after exiting main-thread
     read.start()
-
     # MAINLOOP
     while (True):
         if (toWrite == True):
