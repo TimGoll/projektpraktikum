@@ -15,6 +15,8 @@
 #define MAX_AMOUNT_MFC 16
 #define MAX_AMOUNT_VALVE 16
 
+#define MAX_SD_FILE_SIZE 52428800 //bytes, entspricht 50 MB
+
 #define DISPLAY_SIZE_WIDTH 20
 #define DISPLAY_SIZE_HEIGHT 4
 #define DISPLAY_REDRAW_INTERVALL 50 //Bestimmt Häufigkeit der Bildaktualisierung, Errors ausgenommen
