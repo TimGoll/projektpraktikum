@@ -134,7 +134,9 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
  Quasi Hauptklasse des Programms, verwaltet IN/OUT mit LabView
 
 2. **main_boschCom** [[cpp]](../master/controller/src/main_boschCom.cpp) [[h]](../master/controller/src/main_boschCom.h):
-3. **main_StoreD** [[cpp]](../master/controller/src/main_StoreD.cpp) [[h]](../master/controller/src/main_StoreD.h):
+3. **main_stringBuilder** [[cpp]](../master/controller/src/main_stringBuilder.cpp) [[h]](../master/controller/src/main_stringBuilder.h):
+ Diese Klasse sammelt sich per Abfragen alle Daten zusammen und baut im Messtakt daraus Strings, welche an LabCom und StoreD weiter gegeben werden.
+
 4. **main_mfcCtrl** [[cpp]](../master/controller/src/main_mfcCtrl.cpp) [[h]](../master/controller/src/main_mfcCtrl.h): <br>
  Verwaltet alle MFC Objekte
 
@@ -146,7 +148,8 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 ### Nebenklassen:
 1. **mfcCtrl** [[cpp]](../master/controller/src/mfcCtrl.cpp) [[h]](../master/controller/src/mfcCtrl.h):
 2. **valveCtrl** [[cpp]](../master/controller/src/valveCtrl.cpp) [[h]](../master/controller/src/valveCtrl.h):
-3. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h):
+3. **main_StoreD** [[cpp]](../master/controller/src/StoreD.cpp) [[h]](../master/controller/src/StoreD.h):
+4. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h):
 
 ### Sonstige:
 1. **common** [[cpp]](../master/controller/src/ownlibs/common.cpp) [[h]](../master/controller/src/ownlibs/common.h): <br>

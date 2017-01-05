@@ -6,8 +6,10 @@
 #include <mthread.h>
 #include <SD.h>
 
+#include "config.h"
+
 namespace storage {
-    class Main_StoreD : public Thread {
+    class Main_StoreD {
     public:
         //Defaultconstructor
         Main_StoreD();
@@ -17,9 +19,6 @@ namespace storage {
         void detFilenumber(int filenumber, char filename);
         //bestimme Dezimalstellen von filenumber
         void detDecplaces(int decplaces, int decplaceshelp);
-    protected:
-        //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
-        bool loop(bool button,char filename, int filenumber, int decplaces, File myFile);
     private:
         bool button;
         //bool button_before;

@@ -1,4 +1,4 @@
-#include "main_StoreD.h"
+#include "StoreD.h"
 
 namespace storage {
     Main_StoreD::Main_StoreD() {
@@ -26,7 +26,7 @@ namespace storage {
       filename[9 + decplaces] = "file";// + filenumber + ".txt";
     }
 
-    bool Main_StoreD::loop(bool button,char filename, int filenumber, int decplaces, File myFile){
+/*    bool Main_StoreD::loop(bool button,char filename, int filenumber, int decplaces, File myFile){
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;
@@ -39,14 +39,14 @@ namespace storage {
             myFile = SD.open(filename, FILE_WRITE);
           }
           if ((MAX_SD_FILE_SIZE - myFile.size() > SERIAL_READ_MAX_LINE_SIZE)) {
-            myFile.println(/*hier Daten*/) ;
+            myFile.println(hier Daten) ;
           }
           else {
             myFile.close();
             filenumber++;
             filename[] = "file";// + filenumber + ".txt";
             myFile = SD.open(filename, FILE_WRITE);
-            myFile.println(/*hier Daten*/);
+            myFile.println(hier Daten);
           }
         }
         else {
@@ -59,5 +59,5 @@ namespace storage {
 
         //Serial.println("loop called");
         return true;
-    }
+    }*/
 }
