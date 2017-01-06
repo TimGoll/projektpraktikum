@@ -9,12 +9,12 @@
 #include "config.h"
 
 namespace storage {
-    class Main_StoreD {
+    class StoreD {
     public:
         //Defaultconstructor
-        Main_StoreD();
+        StoreD();
         //Destructor
-        ~Main_StoreD();
+        ~StoreD();
         //falls neue Messung gestartet wird und Dateien von voriger Messung auf SD, starte bei chronologisch logischer filenumber
         void detFilenumber(int filenumber, char filename);
         //bestimme Dezimalstellen von filenumber

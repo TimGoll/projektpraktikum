@@ -12,6 +12,8 @@
 #include "main_mfcCtrl.h"
 #include "main_valveCtrl.h"
 #include "main_display.h"
+#include "main_boschCom.h"
+#include "main_stringBuilder.h"
 
 namespace communication {
     // an die MFCs werden absolutwerte uerbtragen. Diese basieren auf der Zeit, die gespeichert
@@ -28,8 +30,14 @@ namespace communication {
         //Gebe Adresse des Hauptobjektes (Valve) an LabCom, um zu kommunizieren
         void setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl);
 
+        //Gebe Adresse des Boschsensor-Objektes weiter
+        void setMainBoschObjectPointer(communication::Main_BoschCom *main_boschCom);
+
         //Gebe Adresse des Hauptobjektes (Valve) an LabCom, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
+
+        //Gebe Adresse des Stringbuilders an LabCom
+        void setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -48,7 +56,9 @@ namespace communication {
         //Adressen der Ventil, MFC und Display Hauptobjekte zur Verteilung der Daten
         control::Main_MfcCtrl *main_mfcCtrl;
         control::Main_ValveCtrl *main_valveCtrl;
+        communication::Main_BoschCom *main_boschCom;
         io::Main_Display *main_display;
+        communication::Main_StringBuilder *main_stringBuilder;
 
         bool reading;
         bool sending;

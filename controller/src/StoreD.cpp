@@ -1,32 +1,33 @@
 #include "StoreD.h"
 
 namespace storage {
-    Main_StoreD::Main_StoreD() {
+    StoreD::StoreD() {
 
     }
-    Main_StoreD::~Main_StoreD() {
+    StoreD::~StoreD() {
 
     }
-    void Main_StoreD::detFilenumber(int filenumber, char filename){
-      filenumber = 1;
+    void StoreD::detFilenumber(int filenumber, char filename){
+      /*filenumber = 1;
       if (filenumber != 1) {
         while (SD.exists(filename)) {
           filenumber++;
         }
-      }
+    }*/
     }
 
-    void Main_StoreD::detDecplaces(int decplaces, int decplaceshelp){
-      decplaces = 1;
+    void StoreD::detDecplaces(int decplaces, int decplaceshelp){
+      /*decplaces = 1;
       decplaceshelp = filenumber;
       while (decplaceshelp > 10) {
         decplaceshelp = decplaceshelp % 10;
         decplaces++;
       }
-      filename[9 + decplaces] = "file";// + filenumber + ".txt";
+      filename[9 + decplaces] = "file";// + filenumber + ".txt";*/
     }
 
-/*    bool Main_StoreD::loop(bool button,char filename, int filenumber, int decplaces, File myFile){
+// LOOP EXISTIERT HIER NICHT MEHR !
+/*    bool StoreD::loop(bool button,char filename, int filenumber, int decplaces, File myFile){
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;

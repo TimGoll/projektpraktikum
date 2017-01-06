@@ -22,8 +22,17 @@ namespace communication {
         this->main_valveCtrl = main_valveCtrl;
     }
 
+    void Main_LabCom::setMainBoschObjectPointer(communication::Main_BoschCom *main_boschCom) {
+        this->main_boschCom = main_boschCom;
+    }
+
+
     void Main_LabCom::setMainDisplayObjectPointer(io::Main_Display *main_display) {
         this->main_display = main_display;
+    }
+
+    void Main_LabCom::setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder) {
+        this->main_stringBuilder = main_stringBuilder;
     }
 
     int Main_LabCom::readLine() { //TODO Serial.labview hier
@@ -107,7 +116,7 @@ namespace communication {
         this->reading = false;
         this->sending = true;
 
-        //Fuege 250ms zum Start hinzu, um Verzoegerungen durch die Startanzeige zu vermindern
+        //Fuege 1000ms zum Start hinzu, um Verzoegerungen durch die Startanzeige zu vermindern
         unsigned long startTime = millis() + 1000;
 
         //starte MFCs
@@ -116,8 +125,14 @@ namespace communication {
         //starte Ventile
         this->main_valveCtrl->start(startTime);
 
+        //starte Boschsensor
+        this->main_boschCom->start(startTime);
+
         //starte Display
         this->main_display->start(startTime);
+
+        //starte Stringbuilder (und damit SD)
+        this->main_stringBuilder->start(startTime);
 
         srl->print('D', "[Zeit: ");
         srl->print('D', startTime);
@@ -178,8 +193,10 @@ namespace communication {
                             this->headerLineCounter = 4;
                             break;
                         case 4: //ZEILE 4: Messaufloesung wird gesetzt
-                            //TODO Messaufloesung
-                            srl->println('D', "PLATZHALTER - Messaufloesung gesetzt.");
+                            //StringBuilder, sowie BoschCom arbeiten mit dem selben Intervall
+                            //Ersterer ist jedoch um eine halbe Periode in der Zeit verschoben
+                            this->main_boschCom->setIntervall(atoi(this->inDataArray[0]));
+                            this->main_stringBuilder->setIntervall(atoi(this->inDataArray[0]));
 
                             this->headerLineCounter = 5;
                             break;
