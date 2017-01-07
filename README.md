@@ -18,10 +18,10 @@ _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
  Fügt verkettete Listen hinzu, welche beliebige Datentypen speichern können. **Hinweis:** es ist nicht möglich Pointer in ihnen zu speichern.
 
 ## Programmablauf:
-1. Programm startet nach Öffnen der Seriellen Verbindung (Reset erfolgt automatisch auf dem Arduino; zu schauen, wie dies auf dem Arduino zu erreichen ist, eventuell Reset-Pin vom USB<->UART-Chip abgreifen?)
-2. Programm empfängt Daten (werden überprüft) und startet nach einem tasterdruck/"start"-Befehl
-3. Arbeitet Eventlisten ab, gibt Debug-Informationen aus, sofern aktiviert
-4. Im Idle-Modus nach Vollständiger Abarbeitung aller Events, es wäre möglich eine LED leuchten zu lassen, wenn Programm fertig ist
+1. Programm startet nach Öffnen der Seriellen Verbindung (Reset erfolgt automatisch auf dem Arduino; zu schauen, wie dies auf dem Teensy zu erreichen ist, eventuell Reset-Pin vom USB<->UART-Chip abgreifen (sofern vorhanden)?)
+2. Programm empfängt Daten (werden überprüft) und startet nach einem Tasterdruck/"start"-Befehl
+3. Arbeitet Eventlisten ab, gibt Debug-Informationen aus, sofern über Schalter aktiviert, während der Laufzeit Einstellbar
+4. Im Idle-Modus nach Vollständiger Abarbeitung aller Events; es wäre möglich eine LED leuchten zu lassen, wenn das Programm fertig ist
 
 ## Übertragungsprotokoll (LabView -> Microcontroller):
 Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren Format. Als Anfangs und Endzeichen dienen zur Überprüfung der Vollständigkeit jeweils ein öffnender und schließender Tag. Alle Zeitangaben sind in Millisekunden, es gibt nur ganzzahliger Integerwerte. Die IDs beginnen bei 0.
