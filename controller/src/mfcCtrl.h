@@ -32,6 +32,8 @@ namespace control {
         void start(unsigned long startTime);
         //Gebe Adresse des Displayobjektes an diesen MFC, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
+        //Gibt den aktuellen Soll-Wert des MFCs zurueck
+        int getCurrentValue();
         //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool compute();
     private:
@@ -41,6 +43,7 @@ namespace control {
         QueueList <eventElement> eventList;
         bool ready;
         unsigned long startTime;
+        int currentValue;
 
         eventElement nextEvent;
 

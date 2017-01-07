@@ -2,7 +2,8 @@
 
 namespace control {
     Main_ValveCtrl::Main_ValveCtrl() {
-        this->amount_valve = 0;
+        this->amount_valve = -1;
+        this->amount_of_finished_valves = 0;
     }
     Main_ValveCtrl::~Main_ValveCtrl() {
 
@@ -37,18 +38,36 @@ namespace control {
         this->main_display = main_display;
     }
 
+    void Main_ValveCtrl::getValveValueList(int *valveValueList[]) {
+        for (int i = 0; i < this->amount_valve; i++) {
+            valveValueList[i] = this->valve_list[i]->getCurrentValue();
+        }
+    }
+
     bool Main_ValveCtrl::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;
 
-        //TODO Aufrufen der MFC.compute() Funktionen. Kann immer getan werden, hat erst Wirkung nach demsie mit MFC.start() aktiviert werden.
+        //Aufrufen der Valve.compute() Funktionen. Kann immer getan werden, hat erst Wirkung nach demsie mit Valve.start() aktiviert werden.
         for (int i = 0; i < this->amount_valve; i++) {
-            if (this->valve_continue_next_loop[i])
+            if (this->valve_continue_next_loop[i]) {
                 this->valve_continue_next_loop[i] = this->valve_list[i]->compute();
+
+                if (!this->valve_continue_next_loop[i]) {
+                    this->amount_of_finished_valves++;
+                    srl->print('D', "Eventliste von Ventil ");
+                    srl->print('D', i);
+                    srl->println('D', " abgearbeitet.");
+                }
+            }
         }
 
-        //TODO: Ueberpruefe, ob alle MFC Objekte abgeschlossen sind
+        //Beenden des Threads, wenn alle Events abgearbeitet sind
+        if (this->amount_valve != -1 && this->amount_of_finished_valves >= this->amount_valve) {
+            srl->println('D', "Alle Ventile abgearbeitet.");
+            return false;
+        }
 
         return true;
     }

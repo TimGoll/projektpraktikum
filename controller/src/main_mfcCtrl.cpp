@@ -2,7 +2,8 @@
 
 namespace control {
     Main_MfcCtrl::Main_MfcCtrl() {
-        this->amount_MFC = 0;
+        this->amount_MFC = -1;
+        this->amount_of_finished_mfcs = 0;
     }
     Main_MfcCtrl::~Main_MfcCtrl() {
 
@@ -43,18 +44,37 @@ namespace control {
         this->main_display = main_display;
     }
 
+    void Main_MfcCtrl::getMfcValueList(int *mfcValueList[]) {
+        for (int i = 0; i < this->amount_MFC; i++) {
+            mfcValueList[i] = this->mfc_list[i]->getCurrentValue();
+        }
+    }
+
     bool Main_MfcCtrl::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;
 
-        //TODO Aufrufen der MFC.compute() Funktionen. Kann immer getan werden, hat erst Wirkung nach demsie mit MFC.start() aktiviert werden.
+        //Aufrufen der MFC.compute() Funktionen. Kann immer getan werden, hat erst Wirkung nach demsie mit MFC.start() aktiviert werden.
         for (int i = 0; i < this->amount_MFC; i++) {
-            if (this->mfc_continue_next_loop[i])
+            if (this->mfc_continue_next_loop[i]) {
                 this->mfc_continue_next_loop[i] = this->mfc_list[i]->compute();
+
+                if (!this->mfc_continue_next_loop[i]) {
+                    this->amount_of_finished_mfcs++;
+                    srl->print('D', "Eventliste von MFC ");
+                    srl->print('D', i);
+                    srl->println('D', " abgearbeitet.");
+                }
+            }
         }
 
-        //TODO: Ueberpruefe, ob alle MFC Objekte abgeschlossen sind
+        //Beenden des Threads, wenn alle Events abgearbeitet sind
+        if (this->amount_MFC != -1 && this->amount_of_finished_mfcs >= this->amount_MFC) {
+            srl->println('D', "Alle MFCs abgearbeitet.");
+            return false;
+        }
+
 
         return true;
     }

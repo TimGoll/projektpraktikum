@@ -14,8 +14,12 @@ namespace communication {
         Main_BoschCom();
         //Destructor
         ~Main_BoschCom();
+        //setzt Messintervall
         void setIntervall(int intervall);
+        //aktiviert den Sensor, startet Messung
         void start(unsigned long time);
+        //gibt aktuellen Messwert des Sensors zurueck
+        int getCurrentValue();
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -23,6 +27,8 @@ namespace communication {
         int intervall;
         bool ready;
         unsigned long lastTime;
+
+        int currentValue;
     };
 }
 

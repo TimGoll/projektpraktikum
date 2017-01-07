@@ -30,6 +30,10 @@ namespace control {
         void start(unsigned long startTime);
         //Gebe Adresse des Displayobjektes an die einzelnen Ventile, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
+        //Diese Funktion wird vom StringBuilder aufgerufen und sammelt die Daten der Ventile
+        //um sie in den Ausgabestring zu schreiben
+        //Die Funktion fragt die einzelnen Ventile nach ihren Werten ab
+        void getValveValueList(int *valveValueList[]);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -37,6 +41,7 @@ namespace control {
         int amount_valve;
         control::ValveCtrl *valve_list[MAX_AMOUNT_VALVE]; //Hier werden die Adressen der Valve-Objekte gespeichert
         bool valve_continue_next_loop[MAX_AMOUNT_VALVE];
+        int amount_of_finished_valves;
 
         io::Main_Display *main_display;
     };

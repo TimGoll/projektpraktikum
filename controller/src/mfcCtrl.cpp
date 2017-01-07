@@ -10,6 +10,8 @@ namespace control {
 
         this->ready = false;
 
+        this->currentValue = 0;
+
         srl->print('D', "MFC ");
         srl->print('D', this->id);
         srl->println('D', " erstellt.");
@@ -62,6 +64,10 @@ namespace control {
         this->main_display = main_display;
     }
 
+    int MfcCtrl::getCurrentValue() {
+        return this->currentValue;
+    }
+
     //HAUPTSCHLEIFE
     bool MfcCtrl::compute() {
         if (this->ready) {
@@ -91,13 +97,13 @@ namespace control {
                 srl->println('D', "\tms Verzoegerung )");
 
                 this->main_display->setLastEvent('M', this->id, this->nextEvent.value, this->nextEvent.time);
+                this->currentValue = this->nextEvent.value;
 
                 if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
                     return false;
                 nextEvent = eventList.pop();
             }
         }
-
         return true;
     }
 }

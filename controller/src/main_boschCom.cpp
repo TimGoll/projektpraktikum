@@ -3,6 +3,7 @@
 namespace communication {
     Main_BoschCom::Main_BoschCom() {
         this->ready = false;
+        this->currentValue = 0;
     }
     Main_BoschCom::~Main_BoschCom() {
 
@@ -20,19 +21,25 @@ namespace communication {
         this->lastTime = time;
     }
 
+    int Main_BoschCom::getCurrentValue() {
+        return this->currentValue;
+    }
+
 
     bool Main_BoschCom::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
             return false;
 
-        if (millis() >= this->lastTime) {
-            //Lese Sensor aus
-            //srl->print('D', millis());
-            //srl->println('D', " Messe Boschsensor ...");
+        if (this->ready) {
+            if (millis() >= this->lastTime) {
+                //Lese Sensor aus, speichere in this->currentValue;
+                //srl->print('D', millis());
+                //srl->println('D', " Messe Boschsensor ...");
 
 
-            this->lastTime += this->intervall;
+                this->lastTime += this->intervall;
+            }
         }
 
         return true;

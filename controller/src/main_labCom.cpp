@@ -139,6 +139,10 @@ namespace communication {
         srl->println('D', "] Messung gestartet.");
     }
 
+    void Main_LabCom::setNewLine(char newLine[]) {
+        //TODO!
+    }
+
     //////////////////// MAINLOOP ////////////////////
 
     bool Main_LabCom::loop() {

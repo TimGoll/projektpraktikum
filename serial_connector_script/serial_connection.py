@@ -7,13 +7,13 @@ toWrite = True
 i = 0
 counter = 0
 
-port = "/dev/cu.usbmodem1421" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
+port = "COM4" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
 
 data = [
     '<4,7>',
     '<adresse0,adresse1,adresse2,adresse3>',
     '<buerkert,buerkert,buerkert,buerkert>',
-    '<25,28,30,32,34,36,38>',
+    '<26,28,30,32,34,36,38>',
     '<25>',
     '<begin>',
     '<V,0,0,0>',
@@ -88,16 +88,19 @@ data = [
     '<start>'
 ]
 
+readline_running = True
 class readline (threading.Thread):
     def run (self):
-        while (True):
+        while (readline_running):
             in_data = str(serialConnection.readline())
             print (in_data, end="")
 
 read = readline()
 
 def end_program():
-    global serialConnection
+    global serialConnection, running
+
+    readline_running = False #stop readline Thread
 
     if (serialConnection != None): #close serial connection
         serialConnection.close()

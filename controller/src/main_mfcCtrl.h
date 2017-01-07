@@ -33,6 +33,10 @@ namespace control {
         void start(unsigned long startTime);
         //Gebe Adresse des Displayobjektes an die einzelnen MFCs, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
+        //Diese Funktion wird vom StringBuilder aufgerufen und sammelt die Daten der MFCs
+        //um sie in den Ausgabestring zu schreiben
+        //Die Funktion fragt die einzelnen MFCs nach ihren Werten ab
+        void getMfcValueList(int *mfcValueList[]);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -40,6 +44,7 @@ namespace control {
         int amount_MFC;
         control::MfcCtrl *mfc_list[MAX_AMOUNT_MFC]; //Hier werden die Adressen der MFC-Objekte gespeichert
         bool mfc_continue_next_loop[MAX_AMOUNT_MFC];
+        int amount_of_finished_mfcs;
 
         io::Main_Display *main_display;
     };

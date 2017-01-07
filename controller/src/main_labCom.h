@@ -38,6 +38,9 @@ namespace communication {
 
         //Gebe Adresse des Stringbuilders an LabCom
         void setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder);
+
+        //setze neue Zeile zur Uebertragung an LabView
+        void setNewLine(char newLine[]);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();

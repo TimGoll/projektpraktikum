@@ -46,10 +46,10 @@ namespace communication {
 
                 // TODO
                 // baue String (frage Werte von MFCs, Ventilen und Boschsensor ab, nutze
-                // folgende noch nocht existierenden Funktionen:
-                // this->main_mfcCtrl->getMfcValueList(); //int[]
-                // this->main_valveCtrl->getValveValueList(); //int[]
-                // this->main_boschCom->getSensorValue(); //int
+                // folgende Funktionen:
+                // this->main_mfcCtrl->getMfcValueList(&mfcValueList); //int[]     ; du kennst die Anzahl der Eintraege und kannst durch das Array durchiterieren
+                // this->main_valveCtrl->getValveValueList(&valveValueList); //int[] ; Funktion muss Pointer des Zielarrays uebergeben bekommen
+                // this->main_boschCom->getCurrentValue(); //int
                 // )
                 // Sende String an SD
                 // sende String an LabCom
