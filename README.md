@@ -1,4 +1,4 @@
-# Dokumentation des Projektpraktikums
+﻿# Dokumentation des Projektpraktikums
 Projektpraktikum (Mikrokontrollerpraktikum + Messtechnikpraktikum) Wintersemester 2016/17 am LMT
 
 _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
@@ -181,6 +181,57 @@ Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausg
 [[Einrichtung von Python (Windows)]] (https://learn.adafruit.com/arduino-lesson-17-email-sending-movement-detector/installing-python-and-pyserial)
 
 ## LabView:
+## Elektronik:
+###Schematic
+1. Ventilsteuerung (links unten)
+Jedes Ventil wird einzeln über einen digitalen Pin vom Mikorcontroller angesteuert. Zum schalten werden zur Zeit BS170 Transistoren verwendet.
+Die Versorungsspannung der Ventile liegt bei 24V. 
+PINS 21 bis 36
+2. USB Anschlüsse (links oben)
+Aktuell sind die USB Anschlüsse noch über Pegelwandler am Board angeschlossen. Später wird noch jeweils ein Chip benltigt um die Kommunikation zu ermöglichen.
+USB1: TX1 PIN 0, RX1 PIN1
+USB2: TX3 PIN 7, RX3 PIN8
+3. LED Anzeigen (rechts unten)
+Eine LED um eine laufende Messung anzuzeigen. Schalter auf PIN 38, LED auf PIN 40
+Eine LED um eine Debugging Session anzuzeigen. Schalter auf PIN 37, LED auf PIN 39
+4. Display (rechts oben)
+PIN 		Belegung
+1		GND
+2		5V VCC
+3		Poti(Dimmer)
+4		PCF8547 Setup
+5		PCF8547 Setup
+6		PCF8547 Setup
+7		nicht angeschlossen
+8		nicht angeschlossen
+9		nicht angeschlossen
+10		nicht angeschlossen
+11		PCF8547 Data
+12		PCF8547 Data
+13		PCF8547 Data
+14		PCF8547 Data
+15		5V LED-VCC
+16		PWM Teensy 4
+17		PWM Teensy 3
+18		PWM Teensy 2
+5.PCF8547 (mitte rechts vom Teensy)
+https://github.com/ControlEverythingCommunity/PCF8574
+http://www.ti.com/lit/ds/symlink/pcf8574.pdf -> Schaltplan
+Vom Teensy kommen über einen SDA und eine SCL PIN Daten, werden in einem Schieberegister abgelegt
+und nach erhalt von 8 Bits werden diese über die Ports P0 bis P7 weitergereicht (in diesem Fall an
+die Dispaly Ports 4,5,6 und 11,12,13,14. (Einer zu wenig?)  
+
+
+###Layout
+1.Version 0.1 steht auf GitHub. Akutelles Schematic muss noch als Layout erzeugt werden. 
+
+###ToDo
+1.Pegelwandler von 24V auf 5V und 3.3V
+2.Spannungsquellen zusammenschließen
+3.I/O nach I²C(?) Chip verkabelung überprüfen
+4.USB Chip fehlt
+
+
 
 ## Hardware:
 ### Hauptboard
