@@ -44,6 +44,10 @@ namespace control {
         }
     }
 
+    void Main_ValveCtrl::getAmount_valve(int *amount_valve){
+      amount_valve = this->amount_valve;
+    }
+
     bool Main_ValveCtrl::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)

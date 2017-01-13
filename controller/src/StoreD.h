@@ -15,19 +15,25 @@ namespace storage {
         StoreD();
         //Destructor
         ~StoreD();
+        //Gebe Adresse des Stringbuilders an LabCom
+        //void setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder);
         //falls neue Messung gestartet wird und Dateien von voriger Messung auf SD, starte bei chronologisch logischer filenumber
-        void detFilenumber();
+        void detFilenumber(int filenumber, char filename[]);
         //Dateiname erstellen
         void setFilename();
         void start(unsigned long startTime);
+        void finish(unsigned long startTime);
+        void setNewLine(char newLine[]);
     private:
-        bool button;
-        //bool button_before;
         char filename[16];
         int filenumber;
         int decplaces;
         int decplaceshelp;
         File myFile;
+        //Programm gestartet -> Messung gestartet -> Messung gestoppt -> Messung gestartet -> restart = true
+        bool restart = false;
+
+        //communication::Main_StringBuilder *main_stringBuilder;
     };
 }
 

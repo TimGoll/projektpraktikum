@@ -4,59 +4,57 @@ namespace storage {
     StoreD::StoreD() {
 
     }
+
     StoreD::~StoreD() {
 
     }
-    void StoreD::detFilenumber(int filenumber, char filename){
-      filenumber = 1;
-      if (filenumber != 1) {
-        while (SD.exists(filename)) {
-          filenumber++;
-        }
-      }
+
+    /*
+    void Main_LabCom::setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder) {
+        this->main_stringBuilder = main_stringBuilder;
     }
+    */
 
     void StoreD::setFilename(){
       sprintf(filename, "file%04d.txt\0",filenumber);
     }
 
+    void StoreD::detFilenumber(int filenumber, char filename[]){
+      filenumber = 1;
+      setFilename();
+      while (SD.exists(filename)) {
+        filenumber++;
+      }
+    }
 
-    bool StoreD::start(){
-        /*//Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
-        if (kill_flag)
-            return false;
-        */
-
+    void StoreD::start(unsigned long startTime){
+        //TODO: auf Display anzeigen, dass gespeichert wird
         SD.begin();
+        if (restart==false) {
+          detFilenumber(filenumber, filename);
+          setFilename();
+        }
+        myFile = SD.open(filename, FILE_WRITE);
+    }
 
-        if (button) { //TODO: setzen von button durch Tastendruck
+    void StoreD::finish(unsigned long startTime){
+          myFile.close();
+          filenumber++;
+          setFilename();
+          restart = true;
+    }
 
-            //TODO: auf Display anzeigen, dass gespeichert wird
-
-            if (!SD.exists(filename)) {
-              myFile = SD.open(filename, FILE_WRITE);
-            }
-
-            if ((MAX_SD_FILE_SIZE - myFile.size() > SERIAL_READ_MAX_LINE_SIZE)) {
-              myFile.println(hier Daten) ;
-            }
-            else {
-              myFile.close();
-              filenumber++;
-              sprintf(filename, "file%04d.txt\0",filenumber);
-              myFile = SD.open(filename, FILE_WRITE);
-              myFile.println(hier Daten);
-            }
-          }
-          else {
-            if (SD.exists(filename)) { //wenn gespeichert wurde und jetzt nicht mehr, soll die geöffnete Datei geschlossen werden
-              myFile.close();
-              filenumber++; //auch wenn MAX_SD_FILE_SIZE noch nicht erreicht, beginne neue Datei beim erneuten Starten
-            }
-            //else: keine laufende Messung && keine geöffnete Datei -> mache nichts
-          }
-
-          /*//Serial.println("loop called");
-          return true;*/
+    void StoreD::setNewLine(char newLine[]){
+        //Sofern neue Zeile Dateigröße übersteigern würde, beginne neue Datei
+        if ((MAX_SD_FILE_SIZE - myFile.size() > SERIAL_READ_MAX_LINE_SIZE)) {
+          myFile.println(/*hier Daten, communication::Main_StringBuilder *newLine[] ?? */) ;
+        }
+        else {
+          myFile.close();
+          filenumber++;
+          setFilename();
+          myFile = SD.open(filename, FILE_WRITE);
+          myFile.println(/*hier Daten, communication::Main_StringBuilder *newLine[] ?? */);
+        }
     }
 }

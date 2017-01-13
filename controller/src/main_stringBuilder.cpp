@@ -47,10 +47,33 @@ namespace communication {
                 // TODO
                 // baue String (frage Werte von MFCs, Ventilen und Boschsensor ab, nutze
                 // folgende Funktionen:
+
+                //Zeit hinzufügen
+                //strccat(newLine,
+
                 // this->main_mfcCtrl->getMfcValueList(&mfcValueList); //int[]     ; du kennst die Anzahl der Eintraege und kannst durch das Array durchiterieren
+                control::Main_MfcCtrl::getMfcValueList(&mfcValueList[MAX_AMOUNT_MFC]);
+                control::Main_MfcCtrl::getAmount_MFC(&amount_MFC);
+                for (int i = 0; i < amount_MFC; i++) {
+                    sprintf(currentMfcValue, "%d", mfcValueList[i]);
+                    strcat(newLine, currentMfcValue);
+                    strcat(newLine, SEPERATIONCHAR);
+                }
+
                 // this->main_valveCtrl->getValveValueList(&valveValueList); //int[] ; Funktion muss Pointer des Zielarrays uebergeben bekommen
+                control::Main_ValveCtrl::getValveValueList(&valveValueList[MAX_AMOUNT_VALVE]);
+                control::Main_ValveCtrl::getAmount_valve(&amount_valve);
+                for (int i = 0; i < amount_valve; i++) {
+                    sprintf(currentValveValue, "%d", valveValueList[i]);
+                    strcat(newLine, currentValveValue);
+                    strcat(newLine, SEPERATIONCHAR);
+                }
+
                 // this->main_boschCom->getCurrentValue(); //int
-                // )
+                communication::Main_BoschCom::getCurrentValue(&currentIntBoschValue);
+                sprintf(currentBoschValue, "%d", currentIntBoschValue);
+                strcat(newLine, currentBoschValue);
+
                 // Sende String an SD
                 // sende String an LabCom
                 // (Bei SD die Funktion aufrufen, die deine Loop ersetzt (this->storeD->...) // bei lab com this->main_labCom->setNewLine(string))

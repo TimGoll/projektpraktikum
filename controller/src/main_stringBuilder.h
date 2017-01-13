@@ -11,6 +11,8 @@
 #include "main_mfcCtrl.h"
 #include "main_boschCom.h"
 
+#include "config.h"
+
 #include "ownlibs/serialCommunication.h"
 
 namespace communication {
@@ -37,6 +39,16 @@ namespace communication {
         bool ready;
         unsigned long lastTime;
         int intervall;
+        char newLine[SERIAL_READ_MAX_LINE_SIZE];
+        int mfcValueList[MAX_AMOUNT_MFC];
+        int valveValueList[MAX_AMOUNT_VALVE];
+        char currentValveValue[16];
+        char currentMfcValue[16];
+        int currentIntBoschValue;
+        char currentBoschValue[16];
+        int amount_valve;
+        int amount_MFC;
+
 
         storage::StoreD *storeD; //Hier wird das StoreD-Objekt gespeichert
         control::Main_ValveCtrl *main_valveCtrl;

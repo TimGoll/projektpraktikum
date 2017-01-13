@@ -16,6 +16,7 @@
 #define MAX_AMOUNT_VALVE 16
 
 #define MAX_SD_FILE_SIZE 52428800 //bytes, entspricht 50 MB
+#define SEPERATIONCHAR ";"
 
 #define DISPLAY_SIZE_WIDTH 20
 #define DISPLAY_SIZE_HEIGHT 4

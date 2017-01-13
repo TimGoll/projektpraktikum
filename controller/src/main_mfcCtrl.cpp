@@ -50,6 +50,11 @@ namespace control {
         }
     }
 
+    void Main_MfcCtrl::getAmount_MFC(int *amount_MFC){
+      amount_MFC = this->amount_MFC;
+    }
+
+
     bool Main_MfcCtrl::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)

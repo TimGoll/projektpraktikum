@@ -37,6 +37,7 @@ namespace control {
         //um sie in den Ausgabestring zu schreiben
         //Die Funktion fragt die einzelnen MFCs nach ihren Werten ab
         void getMfcValueList(int *mfcValueList[]);
+        void getAmount_MFC(int *amount_MFC);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
