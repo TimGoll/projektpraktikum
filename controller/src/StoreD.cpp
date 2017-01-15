@@ -35,6 +35,21 @@ namespace storage {
           setFilename();
         }
         myFile = SD.open(filename, FILE_WRITE);
+        /*
+        myFile.print("Messung am "); myFile.println(/*getDate);
+        myFile.print("Messintervall: "); myFile.println(/*getIntervall);
+        control::Main_MfcCtrl MMC;
+        myFile.print("Anzahl MFCs: "); myFile.println(/*inttochar(MMC.getAmount_MFC));
+        control::Main_ValveCtrl MVC;
+        myFile.print("Anzahl Ventile: "); myFile.println(/*inttochar(MVC.getAmount_valve));
+        for (int i = 0; i < MMC.getAmount_MFC(); i++) {
+            myFile.print("MFC%d: ", i); myFile.print(/*getType_MFC);
+            if i < (MMC.getAmount_MFC()-1){
+              myFile.print(" ,");
+            }
+        }
+        myFile.println("");
+        */
     }
 
     void StoreD::finish(unsigned long startTime){

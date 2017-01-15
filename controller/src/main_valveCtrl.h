@@ -34,7 +34,7 @@ namespace control {
         //um sie in den Ausgabestring zu schreiben
         //Die Funktion fragt die einzelnen Ventile nach ihren Werten ab
         void getValveValueList(int *valveValueList[]);
-        void getAmount_valve(int *amount_valve);
+        int getAmount_valve();
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();

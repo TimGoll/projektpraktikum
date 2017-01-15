@@ -40,14 +40,11 @@ namespace communication {
         unsigned long lastTime;
         int intervall;
         char newLine[SERIAL_READ_MAX_LINE_SIZE];
-        int mfcValueList[MAX_AMOUNT_MFC];
-        int valveValueList[MAX_AMOUNT_VALVE];
+        int mfcValueList[];
+        int valveValueList[];
         char currentValveValue[16];
         char currentMfcValue[16];
-        int currentIntBoschValue;
         char currentBoschValue[16];
-        int amount_valve;
-        int amount_MFC;
 
 
         storage::StoreD *storeD; //Hier wird das StoreD-Objekt gespeichert

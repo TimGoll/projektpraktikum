@@ -52,26 +52,26 @@ namespace communication {
                 //strccat(newLine,
 
                 // this->main_mfcCtrl->getMfcValueList(&mfcValueList); //int[]     ; du kennst die Anzahl der Eintraege und kannst durch das Array durchiterieren
-                control::Main_MfcCtrl::getMfcValueList(&mfcValueList[MAX_AMOUNT_MFC]);
-                control::Main_MfcCtrl::getAmount_MFC(&amount_MFC);
-                for (int i = 0; i < amount_MFC; i++) {
+                control::Main_MfcCtrl MMC;
+                MMC.getMfcValueList(&mfcValueList);
+                for (int i = 0; i < MMC.getAmount_MFC(); i++) {
                     sprintf(currentMfcValue, "%d", mfcValueList[i]);
                     strcat(newLine, currentMfcValue);
                     strcat(newLine, SEPERATIONCHAR);
                 }
 
                 // this->main_valveCtrl->getValveValueList(&valveValueList); //int[] ; Funktion muss Pointer des Zielarrays uebergeben bekommen
-                control::Main_ValveCtrl::getValveValueList(&valveValueList[MAX_AMOUNT_VALVE]);
-                control::Main_ValveCtrl::getAmount_valve(&amount_valve);
-                for (int i = 0; i < amount_valve; i++) {
+                control::Main_ValveCtrl MVC;
+                MVC.getValveValueList(&valveValueList);
+                for (int i = 0; i < MVC.getAmount_valve(); i++) {
                     sprintf(currentValveValue, "%d", valveValueList[i]);
                     strcat(newLine, currentValveValue);
                     strcat(newLine, SEPERATIONCHAR);
                 }
 
                 // this->main_boschCom->getCurrentValue(); //int
-                communication::Main_BoschCom::getCurrentValue(&currentIntBoschValue);
-                sprintf(currentBoschValue, "%d", currentIntBoschValue);
+                communication::Main_BoschCom MBC;
+                sprintf(currentBoschValue, "%d", MBC.getCurrentValue());
                 strcat(newLine, currentBoschValue);
 
                 // Sende String an SD

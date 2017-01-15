@@ -50,8 +50,8 @@ namespace control {
         }
     }
 
-    void Main_MfcCtrl::getAmount_MFC(int *amount_MFC){
-      amount_MFC = this->amount_MFC;
+    int Main_MfcCtrl::getAmount_MFC(){
+      return this->amount_MFC;
     }
 
 

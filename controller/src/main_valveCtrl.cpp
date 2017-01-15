@@ -44,8 +44,8 @@ namespace control {
         }
     }
 
-    void Main_ValveCtrl::getAmount_valve(int *amount_valve){
-      amount_valve = this->amount_valve;
+    int Main_ValveCtrl::getAmount_valve(){
+      return this->amount_valve;
     }
 
     bool Main_ValveCtrl::loop() {

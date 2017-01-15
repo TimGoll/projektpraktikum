@@ -6,6 +6,9 @@
 #include <mthread.h>
 #include <SD.h>
 
+#include "main_valveCtrl.h" //Objekte zum Speichern der Objektpointer
+#include "main_mfcCtrl.h"
+
 #include "config.h"
 
 namespace storage {
@@ -33,6 +36,8 @@ namespace storage {
         //Programm gestartet -> Messung gestartet -> Messung gestoppt -> Messung gestartet -> restart = true
         bool restart = false;
 
+        control::Main_ValveCtrl *main_valveCtrl;
+        control::Main_MfcCtrl *main_mfcCtrl;
         //communication::Main_StringBuilder *main_stringBuilder;
     };
 }
