@@ -36,7 +36,7 @@ namespace control {
         //Diese Funktion wird vom StringBuilder aufgerufen und sammelt die Daten der MFCs
         //um sie in den Ausgabestring zu schreiben
         //Die Funktion fragt die einzelnen MFCs nach ihren Werten ab
-        void getMfcValueList(int *mfcValueList[]);
+        void getMfcValueList(int mfcValueList[]);
         int getAmount_MFC();
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt

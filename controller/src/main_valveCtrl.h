@@ -33,7 +33,7 @@ namespace control {
         //Diese Funktion wird vom StringBuilder aufgerufen und sammelt die Daten der Ventile
         //um sie in den Ausgabestring zu schreiben
         //Die Funktion fragt die einzelnen Ventile nach ihren Werten ab
-        void getValveValueList(int *valveValueList[]);
+        void getValveValueList(int valveValueList[]);
         int getAmount_valve();
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt

@@ -51,18 +51,18 @@ namespace communication {
                 //Zeit hinzufügen
                 //strccat(newLine,
 
-                // this->main_mfcCtrl->getMfcValueList(&mfcValueList); //int[]     ; du kennst die Anzahl der Eintraege und kannst durch das Array durchiterieren
+                // this->main_mfcCtrl->getMfcValueList(mfcValueList); //int[]     ; du kennst die Anzahl der Eintraege und kannst durch das Array durchiterieren
                 control::Main_MfcCtrl MMC;
-                MMC.getMfcValueList(&mfcValueList);
+                this->main_mfcCtrl->getMfcValueList(mfcValueList);
                 for (int i = 0; i < MMC.getAmount_MFC(); i++) {
                     sprintf(currentMfcValue, "%d", mfcValueList[i]);
                     strcat(newLine, currentMfcValue);
                     strcat(newLine, SEPERATIONCHAR);
                 }
 
-                // this->main_valveCtrl->getValveValueList(&valveValueList); //int[] ; Funktion muss Pointer des Zielarrays uebergeben bekommen
+                // this->main_valveCtrl->getValveValueList(valveValueList); //int[] ; Funktion muss Pointer des Zielarrays uebergeben bekommen
                 control::Main_ValveCtrl MVC;
-                MVC.getValveValueList(&valveValueList);
+                this->main_valveCtrl->getValveValueList(valveValueList);
                 for (int i = 0; i < MVC.getAmount_valve(); i++) {
                     sprintf(currentValveValue, "%d", valveValueList[i]);
                     strcat(newLine, currentValveValue);

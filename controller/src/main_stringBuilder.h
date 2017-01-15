@@ -40,8 +40,8 @@ namespace communication {
         unsigned long lastTime;
         int intervall;
         char newLine[SERIAL_READ_MAX_LINE_SIZE];
-        int mfcValueList[];
-        int valveValueList[];
+        int mfcValueList[MAX_AMOUNT_MFC];
+        int valveValueList[MAX_AMOUNT_VALVE];
         char currentValveValue[16];
         char currentMfcValue[16];
         char currentBoschValue[16];

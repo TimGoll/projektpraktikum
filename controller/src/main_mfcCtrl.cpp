@@ -44,7 +44,7 @@ namespace control {
         this->main_display = main_display;
     }
 
-    void Main_MfcCtrl::getMfcValueList(int *mfcValueList[]) {
+    void Main_MfcCtrl::getMfcValueList(int mfcValueList[]) {
         for (int i = 0; i < this->amount_MFC; i++) {
             mfcValueList[i] = this->mfc_list[i]->getCurrentValue();
         }

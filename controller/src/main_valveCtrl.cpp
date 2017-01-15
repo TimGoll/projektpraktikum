@@ -38,7 +38,7 @@ namespace control {
         this->main_display = main_display;
     }
 
-    void Main_ValveCtrl::getValveValueList(int *valveValueList[]) {
+    void Main_ValveCtrl::getValveValueList(int valveValueList[]) {
         for (int i = 0; i < this->amount_valve; i++) {
             valveValueList[i] = this->valve_list[i]->getCurrentValue();
         }
