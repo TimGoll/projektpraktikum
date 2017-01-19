@@ -47,6 +47,12 @@ namespace communication {
         char currentMfcValue[16];
         char currentBoschValue[16];
 
+        /*
+        char output[MAX_ROW_BYTES];
+        int power;
+        int xi;
+        */
+
 
         storage::StoreD *storeD; //Hier wird das StoreD-Objekt gespeichert
         control::Main_ValveCtrl *main_valveCtrl;

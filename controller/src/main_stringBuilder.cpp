@@ -34,15 +34,17 @@ namespace communication {
         this->main_boschCom = main_boschCom;
     }
 
-    int itpb(int value){
-      char output[MAX_ROW_BYTE];
+    int Main_StringBuilder::itpb(int value){
+      char output[MAX_ROW_BYTES];
       int power;
       int xi;
+      // was not declared in this scope
+
       value*=MAX_AMOUNT_DEC_PLACES;
       for (int i=0; i < MAX_ROW_BYTES; i++){
         power=1;
         for (int k=0; k < MAX_ROW_BYTES - i -1; k++){ //enspricht power = power^(MAX_ROW_BYTES-i-1) -> für i=0 ist power=255^(3-0-1)=255^2, i=1 ist power=255^(3-1-1)=255, i=0 ist power=255^(3-2-1)=255^0=1
-          power*=255
+          power*=255;
         }
         xi=value % power; //x_i = value mod (255^î)
         value=value - xi*power;
