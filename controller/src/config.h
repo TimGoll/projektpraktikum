@@ -16,6 +16,8 @@
 #define MAX_AMOUNT_VALVE 16
 
 #define MAX_SD_FILE_SIZE 52428800 //bytes, entspricht 50 MB
+#define MAX_ROW_BYTES 3 // mit value = x_2*255^2 + x_1*255 + x_0    wobei 0 <= x_i <= 255 und 0 <= value <= (255^3 - 1) lässt sich value mit den ASCII-Zeichen ascii[x_2],ascii[x_1],ascii[x_0] darstellen
+#define MAX_AMOUNT_DEC_PLACES 2
 #define SEPERATIONCHAR ";"
 
 #define DISPLAY_SIZE_WIDTH 20

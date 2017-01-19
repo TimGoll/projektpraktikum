@@ -34,6 +34,23 @@ namespace communication {
         this->main_boschCom = main_boschCom;
     }
 
+    int itpb(int value){
+      char output[MAX_ROW_BYTE];
+      int power;
+      int xi;
+      value*=MAX_AMOUNT_DEC_PLACES;
+      for (int i=0; i < MAX_ROW_BYTES; i++){
+        power=1;
+        for (int k=0; k < MAX_ROW_BYTES - i -1; k++){ //enspricht power = power^(MAX_ROW_BYTES-i-1) -> für i=0 ist power=255^(3-0-1)=255^2, i=1 ist power=255^(3-1-1)=255, i=0 ist power=255^(3-2-1)=255^0=1
+          power*=255
+        }
+        xi=value % power; //x_i = value mod (255^î)
+        value=value - xi*power;
+        output[i]=xi; //Schreibt ASCII-Zeichen mit dem ASCII-Wert xi als Char-Zeichen in output
+      }
+      return output;
+    }
+
     bool Main_StringBuilder::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
@@ -55,24 +72,33 @@ namespace communication {
                 control::Main_MfcCtrl MMC;
                 this->main_mfcCtrl->getMfcValueList(mfcValueList);
                 for (int i = 0; i < MMC.getAmount_MFC(); i++) {
+                    strcat(newLine, itpb(mfcValueList[i]));
+                    /*
                     sprintf(currentMfcValue, "%d", mfcValueList[i]);
                     strcat(newLine, currentMfcValue);
                     strcat(newLine, SEPERATIONCHAR);
+                    */
                 }
 
                 // this->main_valveCtrl->getValveValueList(valveValueList); //int[] ; Funktion muss Pointer des Zielarrays uebergeben bekommen
                 control::Main_ValveCtrl MVC;
                 this->main_valveCtrl->getValveValueList(valveValueList);
                 for (int i = 0; i < MVC.getAmount_valve(); i++) {
+                    strcat(newLine, itpb(valveValueList[i]));
+                    /*
                     sprintf(currentValveValue, "%d", valveValueList[i]);
                     strcat(newLine, currentValveValue);
                     strcat(newLine, SEPERATIONCHAR);
+                    */
                 }
 
                 // this->main_boschCom->getCurrentValue(); //int
                 communication::Main_BoschCom MBC;
+                strcat(newLine, itpb(MBC.getCurrentValue()));
+                /*
                 sprintf(currentBoschValue, "%d", MBC.getCurrentValue());
                 strcat(newLine, currentBoschValue);
+                */
 
                 // Sende String an SD
                 // sende String an LabCom

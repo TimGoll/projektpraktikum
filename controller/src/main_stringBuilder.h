@@ -32,6 +32,7 @@ namespace communication {
         void setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl);
         void setMainMfcObjectPointer(control::Main_MfcCtrl *main_mfcCtrl);
         void setMainBoschObjectPointer(communication::Main_BoschCom *main_boschCom);
+        int itpb(int value); //oder unsigned long?
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
