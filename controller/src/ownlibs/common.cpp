@@ -37,4 +37,23 @@ namespace cmn {
         sprintf(timeString_temp, "%02d:%02d:%02d:%02d\0", days, hours, minutes, seconds);
         strcpy(timeString_out, timeString_temp);
     }
+
+    //TODO setze \0 an Ende des outputstrings
+    char* integerToByte(unsigned long value, int bytesize, char output[]) {
+      int power; //Potenz??
+      int xi;
+
+      //value*=MAX_AMOUNT_DEC_PLACES; //aktuell eh nicht brauchbar, da int kein Komma unterstuetzt
+
+      for (int i=0; i < bytesize; i++){
+        power = 1;
+        for (int k=0; k < bytesize - i -1; k++){ //enspricht power = power^(MAX_ROW_BYTES-i-1) -> für i=0 ist power=255^(3-0-1)=255^2, i=1 ist power=255^(3-1-1)=255, i=0 ist power=255^(3-2-1)=255^0=1
+          power *= 255;
+        }
+        xi        = value % power; //x_i = value mod (255^î)
+        value     = value - xi*power;
+        output[i] = xi; //Schreibt ASCII-Zeichen mit dem ASCII-Wert xi als Char-Zeichen in output
+      }
+      return output;
+    }
 };

@@ -80,6 +80,13 @@ Wieso wir diesen Chip dennoch genommen haben? - Ganz einfach, er wird in den mei
 
 Die Treiber befinden sich auch in diesem GitHub Repository.
 
+## StoreD und die Übertragung an LabView
+TODO @Markus
+- Dateien werden Pseudobytemäßig Beschrieben, Header ist Klartext
+- Es muss im Header auch definiert sein, wie groß (Bytesize) einzelne Einträge sind
+- Es wird ohne Leerzeichen gespeichert, nur neue Zeilen nach einem Datensatz
+- Daten können nachher wieder anhand der Bytesize zerlegt werden
+
 ## Display:
 Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden. <br>
 Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gibt es:
@@ -186,7 +193,7 @@ Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausg
 
 #### Ventilsteuerung (links unten)
 Jedes Ventil wird einzeln über einen digitalen Pin vom Mikorcontroller angesteuert. Zum schalten werden zur Zeit BS170 Transistoren verwendet.
-Die Versorungsspannung der Ventile liegt bei 24V. 
+Die Versorungsspannung der Ventile liegt bei 24V.
 PINS 21 bis 36
 
 #### USB Anschlüsse (links oben)
@@ -227,7 +234,7 @@ die Dispaly Ports 4,5,6 und 11,12,13,14. (Einer zu wenig?)
 
 
 ### Layout
-1.Version 0.1 steht auf GitHub. Akutelles Schematic muss noch als Layout erzeugt werden. 
+1.Version 0.1 steht auf GitHub. Akutelles Schematic muss noch als Layout erzeugt werden.
 
 ### ToDo
 1. Spannungswandler von 24V auf 5V und 3.3V

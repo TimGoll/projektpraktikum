@@ -13,7 +13,7 @@ namespace control {
         this->amount_MFC = amount;
         for (int i = 0; i < this->amount_MFC; i++) {
             this->mfc_list[i] = new control::MfcCtrl(i);
-            this->mfc_list[i]->setMainDisplayObjectPointer(main_display);
+            this->mfc_list[i]->setMainDisplayObjectPointer(this->main_display);
             this->mfc_continue_next_loop[i] = true;
         }
     }
@@ -77,6 +77,7 @@ namespace control {
         //Beenden des Threads, wenn alle Events abgearbeitet sind
         if (this->amount_MFC != -1 && this->amount_of_finished_mfcs >= this->amount_MFC) {
             srl->println('D', "Alle MFCs abgearbeitet.");
+            this->main_display->queueFinished();
             return false;
         }
 

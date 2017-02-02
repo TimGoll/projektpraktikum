@@ -13,6 +13,7 @@
 
 #include "config.h"
 
+#include "ownlibs/common.h"
 #include "ownlibs/serialCommunication.h"
 
 namespace communication {
@@ -32,13 +33,13 @@ namespace communication {
         void setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl);
         void setMainMfcObjectPointer(control::Main_MfcCtrl *main_mfcCtrl);
         void setMainBoschObjectPointer(communication::Main_BoschCom *main_boschCom);
-        int itpb(int value); //oder unsigned long?
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
     private:
         bool ready;
         unsigned long lastTime;
+        unsigned long startTime;
         int intervall;
         char newLine[SERIAL_READ_MAX_LINE_SIZE];
         int mfcValueList[MAX_AMOUNT_MFC];

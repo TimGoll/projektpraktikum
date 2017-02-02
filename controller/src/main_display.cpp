@@ -16,6 +16,8 @@ namespace io {
         this->lastEvent_value = 0;
         this->lastEvent_time  = 0;
 
+        this->amount_queueFinished = 0;
+
         this->display         = new LiquidCrystal_I2C(0x38, 10, 9, 8, 4, 20);
 
         this->display->init();
@@ -124,6 +126,35 @@ namespace io {
         this->lastEvent_id  = id;
     }
 
+    void Main_Display::queueFinished () {
+        this->amount_queueFinished++;
+        if (this->amount_queueFinished >= 2) {
+            //MFC und Ventil Eventlisten sind vollstaendig abgearbeitet
+            srl->println('D', "Alle Eventlisten abgearbeitet. Programm endet hier.");
+
+            this->display->backlight_setColor(0,255,0);
+
+            char endTime_string[12];
+            cmn::getTimeString(millis() - this->startTime, endTime_string);
+
+            //Baue Anzeigetext
+            char displayText [DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //TODO: Eins groesser, da '\0'
+            sprintf(displayText[0], "         #M:%02d #V:%02d\0", this->amountMFC, this->amountValve);
+            sprintf(displayText[1], "                    \0");
+            sprintf(displayText[2], "   ABGESCHLOSSEN    \0");
+            sprintf(displayText[3], "    %s     \0", endTime_string);
+
+            this->display->updateDisplayMatrix(
+                displayText[0],
+                displayText[1],
+                displayText[2],
+                displayText[3]
+            );
+
+            this->afterErrorTime = 4294967295; //maximale Zeit in u_int32
+        }
+    }
+
 
 
 
@@ -149,8 +180,8 @@ namespace io {
                 char displayText [DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //TODO: Eins groesser, da '\0'
                 sprintf(displayText[0], "         #M:%02d #V:%02d\0", this->amountMFC, this->amountValve);
                 sprintf(displayText[1], "                    \0");
-                sprintf(displayText[2], "LAUFZEIT:%s", currentTime_string);
-                sprintf(displayText[3], "%c%02d-%04d-%s", this->lastEvent_type, this->lastEvent_id, this->lastEvent_value, lastEventTime_string);
+                sprintf(displayText[2], "LAUFZEIT:%s\0", currentTime_string);
+                sprintf(displayText[3], "%c%02d-%04d-%s\0", this->lastEvent_type, this->lastEvent_id, this->lastEvent_value, lastEventTime_string);
 
                 this->display->updateDisplayMatrix(
                     displayText[0],

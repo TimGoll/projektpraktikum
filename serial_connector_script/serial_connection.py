@@ -7,7 +7,7 @@ toWrite = True
 i = 0
 counter = 0
 
-port = "COM4" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
+port = "/dev/cu.usbmodem1421" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
 
 data = [
     '<4,7>',

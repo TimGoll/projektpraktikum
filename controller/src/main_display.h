@@ -34,6 +34,8 @@ namespace io {
         //setze letzt ausgefuehrtes Event zur Displayausgabe
         void setLastEvent(char type, int id, int value, unsigned int time);
 
+        void queueFinished ();
+
 
         void setLastEvent_id(int id);
     protected:
@@ -46,6 +48,7 @@ namespace io {
         int amountMFC;
         int amountValve;
         bool ready;
+        int amount_queueFinished;
 
         //lastEvent-Variablen
         char lastEvent_type;

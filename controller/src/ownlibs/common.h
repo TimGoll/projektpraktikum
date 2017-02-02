@@ -8,6 +8,8 @@ namespace cmn {
     void trim (char string[]);
     //Gibt eine gegebene Zeit (millisekunden) als DD:HH:MM:SS char[] zurueck
     void getTimeString(unsigned long time, char timeString_out[]);
+    //bekommt ein x <= 256^n und gibt n Byte großen String zurueck
+    char* integerToByte(unsigned long value, int bytesize, char output[]);
 };
 
 #endif

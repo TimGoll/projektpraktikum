@@ -13,7 +13,7 @@ namespace control {
         this->amount_valve = amount;
         for (int i = 0; i < this->amount_valve; i++) {
             this->valve_list[i] = new control::ValveCtrl(i);
-            this->valve_list[i]->setMainDisplayObjectPointer(main_display);
+            this->valve_list[i]->setMainDisplayObjectPointer(this->main_display);
             this->valve_continue_next_loop[i] = true;
         }
     }
@@ -70,6 +70,7 @@ namespace control {
         //Beenden des Threads, wenn alle Events abgearbeitet sind
         if (this->amount_valve != -1 && this->amount_of_finished_valves >= this->amount_valve) {
             srl->println('D', "Alle Ventile abgearbeitet.");
+            this->main_display->queueFinished();
             return false;
         }
 
