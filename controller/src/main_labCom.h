@@ -26,19 +26,14 @@ namespace communication {
         ~Main_LabCom();
         //Gebe Adresse des Hauptobjektes (MFC) an LabCom, um zu kommunizieren
         void setMainMfcObjectPointer(control::Main_MfcCtrl *main_mfcCtrl);
-
         //Gebe Adresse des Hauptobjektes (Valve) an LabCom, um zu kommunizieren
         void setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl);
-
         //Gebe Adresse des Boschsensor-Objektes weiter
         void setMainBoschObjectPointer(communication::Main_BoschCom *main_boschCom);
-
         //Gebe Adresse des Hauptobjektes (Valve) an LabCom, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
-
         //Gebe Adresse des Stringbuilders an LabCom
         void setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder);
-
         //setze neue Zeile zur Uebertragung an LabView
         void setNewLine(char newLine[]);
     protected:
@@ -65,6 +60,7 @@ namespace communication {
 
         bool reading;
         bool sending;
+        int amount_queueFinished;
 
         char inDataBuffer[SERIAL_READ_MAX_LINE_SIZE];
         int bufferCharIndex;

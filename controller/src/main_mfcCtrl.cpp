@@ -4,6 +4,8 @@ namespace control {
     Main_MfcCtrl::Main_MfcCtrl() {
         this->amount_MFC = -1;
         this->amount_of_finished_mfcs = 0;
+
+        this->queueFinished = false;
     }
     Main_MfcCtrl::~Main_MfcCtrl() {
 
@@ -54,6 +56,10 @@ namespace control {
       return this->amount_MFC;
     }
 
+    bool Main_MfcCtrl::getQueueFinished() {
+        return this->queueFinished;
+    }
+
 
     bool Main_MfcCtrl::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
@@ -77,7 +83,7 @@ namespace control {
         //Beenden des Threads, wenn alle Events abgearbeitet sind
         if (this->amount_MFC != -1 && this->amount_of_finished_mfcs >= this->amount_MFC) {
             srl->println('D', "Alle MFCs abgearbeitet.");
-            this->main_display->queueFinished();
+            this->queueFinished = true; //setze 'finished'
             return false;
         }
 

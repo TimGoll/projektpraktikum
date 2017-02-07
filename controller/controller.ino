@@ -25,7 +25,7 @@
 
 void setup() {
     // ERSTELLE SERIELLE VERBINDUNGEN
-    srl->setSerial(&Serial, &Serial1, &Serial2); //labview / debug / uart
+    srl->setSerial(&Serial1, &Serial, &Serial2); //labview / debug / uart
 
     // ERSTELLE GEBRAUCHTE OBJEKTE
     io::Main_Display *main_display                        = new io::Main_Display();

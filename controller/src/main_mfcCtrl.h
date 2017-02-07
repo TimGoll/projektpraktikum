@@ -38,6 +38,8 @@ namespace control {
         //Die Funktion fragt die einzelnen MFCs nach ihren Werten ab
         void getMfcValueList(int mfcValueList[]);
         int getAmount_MFC();
+        //wird von Main_LabCom kontinuierlich abgefragt, ob die queue abgeschlossen ist.
+        bool getQueueFinished();
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -46,6 +48,7 @@ namespace control {
         control::MfcCtrl *mfc_list[MAX_AMOUNT_MFC]; //Hier werden die Adressen der MFC-Objekte gespeichert
         bool mfc_continue_next_loop[MAX_AMOUNT_MFC];
         int amount_of_finished_mfcs;
+        bool queueFinished;
 
         io::Main_Display *main_display;
     };

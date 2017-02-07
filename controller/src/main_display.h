@@ -33,8 +33,9 @@ namespace io {
         void start(unsigned long startTime);
         //setze letzt ausgefuehrtes Event zur Displayausgabe
         void setLastEvent(char type, int id, int value, unsigned int time);
-
-        void queueFinished ();
+        //LabCom meldet, dass beide Queues abgearbeitet sind, Meldung wird auf dem Display
+        //angezeigt
+        void bothQueuesFinished ();
 
 
         void setLastEvent_id(int id);

@@ -23,6 +23,16 @@ namespace communication {
         this->lastTime = time + this->intervall / 2; //addiere halbes Intervall um versetzt zur Messung zu speichern
     }
 
+    void Main_StringBuilder::bothQueuesFinished() {
+        //beide Queues sind abgearbeitet, sage Datei, dass sie nun geschlossen werden kann.
+        this->storeD->closeFile();
+    }
+
+    void Main_StringBuilder::setDateString(char dateString[]) {
+        strcpy(this->dateString, dateString);
+    }
+
+
     void Main_StringBuilder::setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl) {
         this->main_valveCtrl = main_valveCtrl;
     }
@@ -44,6 +54,11 @@ namespace communication {
             if (millis() >= this->lastTime) {
                 //temporary
                 char output[] = "    "; //4 Byte + \0 !! Wichtig fpr strcat()
+
+                //HEADER
+                // - nur zu Beginn einmal Funktion ausfuehren
+                // - this->dateString entaelt Datum als String (fuer Dateiname, Headerinfo)
+                // ...
 
                 // Zeit in millis()
                 // Passe currentTime so an, dass sie die relative Zeit zum Start anzeigt (rechne Schreibeverschiebnung wieder raus)
@@ -69,7 +84,7 @@ namespace communication {
                 // Sende String an SD
                 // sende String an LabCom
                 // (Bei SD die Funktion aufrufen, die deine Loop ersetzt (this->storeD->...) // bei lab com this->main_labCom->setNewLine(string))
-                // setze String zurueck fuer neuen String
+                // setze String zurueck fuer neuen String!
 
                 //addiere intervall zur letzten Zeit und NICHT zur aktuellen Zeit, um
                 //Zeitungenauigkeiten durch Verzoegerungen vorzubeugen

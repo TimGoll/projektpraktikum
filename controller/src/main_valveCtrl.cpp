@@ -4,6 +4,8 @@ namespace control {
     Main_ValveCtrl::Main_ValveCtrl() {
         this->amount_valve = -1;
         this->amount_of_finished_valves = 0;
+
+        this->queueFinished = false;
     }
     Main_ValveCtrl::~Main_ValveCtrl() {
 
@@ -48,6 +50,10 @@ namespace control {
       return this->amount_valve;
     }
 
+    bool Main_ValveCtrl::getQueueFinished() {
+        return this->queueFinished;
+    }
+
     bool Main_ValveCtrl::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft
         if (kill_flag)
@@ -70,7 +76,7 @@ namespace control {
         //Beenden des Threads, wenn alle Events abgearbeitet sind
         if (this->amount_valve != -1 && this->amount_of_finished_valves >= this->amount_valve) {
             srl->println('D', "Alle Ventile abgearbeitet.");
-            this->main_display->queueFinished();
+            this->queueFinished = true; //setze 'finished'
             return false;
         }
 

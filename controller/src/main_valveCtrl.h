@@ -35,6 +35,8 @@ namespace control {
         //Die Funktion fragt die einzelnen Ventile nach ihren Werten ab
         void getValveValueList(int valveValueList[]);
         int getAmount_valve();
+        //wird von Main_LabCom kontinuierlich abgefragt, ob die queue abgeschlossen ist.
+        bool getQueueFinished();
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -43,6 +45,7 @@ namespace control {
         control::ValveCtrl *valve_list[MAX_AMOUNT_VALVE]; //Hier werden die Adressen der Valve-Objekte gespeichert
         bool valve_continue_next_loop[MAX_AMOUNT_VALVE];
         int amount_of_finished_valves;
+        bool queueFinished;
 
         io::Main_Display *main_display;
     };

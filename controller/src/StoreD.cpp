@@ -9,12 +9,6 @@ namespace storage {
 
     }
 
-    /*
-    void Main_LabCom::setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder) {
-        this->main_stringBuilder = main_stringBuilder;
-    }
-    */
-
     void StoreD::setFilename(){
       sprintf(filename, "file%04d.txt\0",filenumber);
     }
@@ -27,7 +21,7 @@ namespace storage {
       }
     }
 
-    void StoreD::start(unsigned long startTime){
+    void StoreD::openFile(){
         //TODO: auf Display anzeigen, dass gespeichert wird
         SD.begin();
         if (restart==false) {
@@ -52,14 +46,14 @@ namespace storage {
         */
     }
 
-    void StoreD::finish(unsigned long startTime){
+    void StoreD::closeFile(){
           myFile.close();
           filenumber++;
           setFilename();
           restart = true;
     }
 
-    void StoreD::setNewLine(char newLine[]){
+    void StoreD::writeNewLine(char newLine[]){
         //Sofern neue Zeile Dateigröße übersteigern würde, beginne neue Datei
         if ((MAX_SD_FILE_SIZE - myFile.size() > SERIAL_READ_MAX_LINE_SIZE)) {
           myFile.println(/*hier Daten, communication::Main_StringBuilder *newLine[] ?? */) ;

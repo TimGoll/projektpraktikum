@@ -28,6 +28,11 @@ namespace communication {
         void setIntervall(int intervall);
         //aktiviere Klasse von LabCom aus, setzt die erste Intervallzeit
         void start(unsigned long time);
+        //LabCom meldet, dass beide Queues abgearbeitet sind, Meldung wird auf dem Display
+        //angezeigt
+        void bothQueuesFinished ();
+        //speichere Datumstring
+        void setDateString(char dateString[]);
 
         //Uebergebe Objektpointer
         void setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl);
@@ -41,19 +46,16 @@ namespace communication {
         unsigned long lastTime;
         unsigned long startTime;
         int intervall;
-        char newLine[SERIAL_READ_MAX_LINE_SIZE];
+        char dateString[16];
+
         int mfcValueList[MAX_AMOUNT_MFC];
         int valveValueList[MAX_AMOUNT_VALVE];
+
         char currentValveValue[16];
         char currentMfcValue[16];
         char currentBoschValue[16];
 
-        /*
-        char output[MAX_ROW_BYTES];
-        int power;
-        int xi;
-        */
-
+        char newLine[SERIAL_READ_MAX_LINE_SIZE];
 
         storage::StoreD *storeD; //Hier wird das StoreD-Objekt gespeichert
         control::Main_ValveCtrl *main_valveCtrl;

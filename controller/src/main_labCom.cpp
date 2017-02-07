@@ -7,6 +7,8 @@ namespace communication {
 
         this->headerLineCounter = 0;
 
+        this->amount_queueFinished = 0;
+
         srl->println('D', "LabCom erstellt.");
         srl->println('L', "ready"); //Sende Startbefehl an LabView
     }
@@ -140,6 +142,7 @@ namespace communication {
     }
 
     void Main_LabCom::setNewLine(char newLine[]) {
+        //Prinzte neue Zeile an LabView
         //TODO!
     }
 
@@ -204,17 +207,22 @@ namespace communication {
 
                             this->headerLineCounter = 5;
                             break;
-                        case 5: //ZEILE 5: Letzte Zeile, hier wird ein 'begin' erwartet
+                        case 5: //ZEILE 5: DateString wird gesetzt
+                            this->main_stringBuilder->setDateString(this->inDataArray[0]);
+
+                            this->headerLineCounter = 6;
+                            break;
+                        case 6: //ZEILE 5: Letzte Zeile, hier wird ein 'begin' erwartet
                             if (strcmp(this->inDataArray[0], "begin") == 0) {
                                 srl->println('D', "Header vollstaendig.");
 
                                 //Sage Display, dass Header vollstaendig und Events beginnen
                                 this->main_display->event_started();
 
-                                this->headerLineCounter = 6;
+                                this->headerLineCounter = 7;
                             }
                             break;
-                        case 6: //ZEILE 6: Eventliste
+                        case 7: //ZEILE 6: Eventliste
                             if (strcmp(this->inDataArray[0], "M") == 0) { //MFC
                                 if (atoi(this->inDataArray[1]) < this->amount_MFC) {
                                     this->main_mfcCtrl->setEvent(
@@ -245,10 +253,10 @@ namespace communication {
                                 //Sage Display, dass Event-Uebertragung abgeschlossen ist
                                 this->main_display->event_finished();
 
-                                this->headerLineCounter = 7;
+                                this->headerLineCounter = 8;
                             }
                             break;
-                        case 7: //ZEILE 7: Warte auf Start (kann auch durch Button aufgerufen werden)
+                        case 8: //ZEILE 7: Warte auf Start (kann auch durch Button aufgerufen werden)
                             if (strcmp(this->inDataArray[0], "start") == 0) {
                                 this->start();
                             }
@@ -263,7 +271,11 @@ namespace communication {
         }
 
         if (this->sending) { //Sende Messwerte parallel zur Messung
-
+            //ueberpruefe kontinuierlich, ob Eventliste noch Inhalt hat
+            if (this->main_mfcCtrl->getQueueFinished() && this->main_valveCtrl->getQueueFinished()) {
+                this->main_display->bothQueuesFinished();
+                this->main_stringBuilder->bothQueuesFinished();
+            }
         }
 
         return true;
