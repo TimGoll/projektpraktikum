@@ -193,9 +193,36 @@ Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausg
 [[Einrichtung von Python (Windows)]] (https://learn.adafruit.com/arduino-lesson-17-email-sending-movement-detector/installing-python-and-pyserial)
 
 ## LabView:
-## Elektronik:
-### Schematic
+@Matthias Baltes: TODO!
 
+
+## Elektronik:
+### Hardware
+1. Schaltkizze: [[link]](../master/electronic/Schalplan.pdf)
+2. Verwendete Bauteile auf dem Haupboard:
+ * **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/) <br>
+  Vorderseite [[link]](http://www.pjrc.com/teensy/beta/card9a_rev1_print.pdf) <br>
+  Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
+ * **20x4 LCD Display (Buntes Backlight)** [[link]](https://www.adafruit.com/product/499) <br>
+  RGB-LCD Pin Header [[link]](https://cdn-shop.adafruit.com/datasheets/WH2004A-CFH-JT%23.pdf) <br>
+  I2C-Chip für Display (PCF8574) [[link]](http://www.sunfounder.com/wiki/images/1/18/PCF8574T_datasheet.pdf)
+3. Weitere Dinge:
+ * **Wandlung "TTL" (3V3) auf RS-232** (Teensy auf RS232 für die MFCs) [[link]](http://www.ti.com/lit/ds/symlink/max232.pdf) <br>
+  Dazu ist beispielsweise der MAX232 nötig, da dieser sich selber seine +/- 12V erzeugt <br>
+  Außerdem ist ein 3V3 auf 5V Pegelwandler zwischen Teensy und MAX232 zu schalten
+ * **Anschließen der Ventile** [[link]](http://www.nxp.com/documents/data_sheet/PCA9539A.pdf) <br>
+  Werden über I2C angesteuert (16bit I2C GPIO-Expander dient als Erweiterung) <br>
+  Mithilfe dessen ist es möglich mehrere dieser "x16-Ventile"-Boards anzuschließen (mit diesem IC 4, da er 4 verschiedene Adresskombinationen unterstützt)<br>
+  Dieser IC läuft auch auf 3V3, lässt sich also OHNE Pegelwandler betreiben<br>
+  Hängt mit allen anderen I2C Geräten an Bus 0
+ * **Ventilansteuerung** [[link]](http://www.infineon.com/dgdl/Infineon-BTS555-DS-v01_00-en.pdf?fileId=db3a30432ba3fa6f012bd3dfdd0b3b65) <br>
+  Die Ventile brauchen 24V, 2A. Um dies zu schalten, nutzen wir diese PROFETs (Haben Kurzschluss und Überspannungsschutz eingebaut, sowie eine Schutzdiode)<br>
+  Brauchen eine Inverterschaltung mit Pull-Up Widerstand davor (die PROFETs sind active Low), hier nutzen wir den BC546 (Bipolar)<br>
+  Die x16 Platine wird an 24V, 3V3, GND, SDA und SCL angeschlossen und lässt sich mit weiteren parallel schalten.
+ * **UART <-> USB** <br>
+  Hier ist noch eine bessere Lösung, als dies aktuell der Fall ist, zu finden
+
+### Schematic
 #### Ventilsteuerung (links unten)
 Jedes Ventil wird einzeln über einen digitalen Pin vom Mikorcontroller angesteuert. Zum schalten werden zur Zeit BS170 Transistoren verwendet.
 Die Versorungsspannung der Ventile liegt bei 24V.
@@ -235,31 +262,7 @@ PIN 		Belegung
 #### PCF8547 (mitte rechts vom Teensy)
 Vom Teensy kommen über einen SDA und eine SCL PIN Daten, werden in einem Schieberegister abgelegt
 und nach erhalt von 8 Bits werden diese über die Ports P0 bis P7 weitergereicht (in diesem Fall an
-die Dispaly Ports 4,5,6 und 11,12,13,14. (Einer zu wenig?)  
-
-
-### Layout
-1.Version 0.1 steht auf GitHub. Akutelles Schematic muss noch als Layout erzeugt werden.
-
-### ToDo
-1. Spannungswandler von 24V auf 5V und 3.3V
-2. Spannungsquellen zusammenschließen
-3. I/O nach I²C Chip verkabelung überprüfen
-4. Uart<->USB Chip fehlt
-
-
-
-## Hardware:
-### Hauptboard
-1. Schaltkizze: [[link]](../master/electronic/Schalplan.pdf)
-2. Verwendete Bauteile auf dem Haupboard:
- * **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/) <br>
-  Vorderseite [[link]](http://www.pjrc.com/teensy/beta/card9a_rev1_print.pdf) <br>
-  Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
- * **20x4 LCD Display (Buntes Backlight)** [[link]](https://www.adafruit.com/product/499) <br>
-  RGB-LCD Pin Header [[link]](https://cdn-shop.adafruit.com/datasheets/WH2004A-CFH-JT%23.pdf) <br>
-  I2C-Chip für Display (PCF8574) [[link]](http://www.sunfounder.com/wiki/images/1/18/PCF8574T_datasheet.pdf)
-
+die Dispaly Ports 4,5,6 und 11,12,13,14. (Einer zu wenig?)
 
 ## Sonstiges:
 1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
@@ -284,9 +287,3 @@ die Dispaly Ports 4,5,6 und 11,12,13,14. (Einer zu wenig?)
  SUM:                            24            257            138            972
  -------------------------------------------------------------------------------
  ```
-
-## gesammeltes (zu sortieren):
-1. Send Email [[link]](http://playground.arduino.cc/Code/Email)
-2. Write to SD (kann bei diesem Board anders sein, Dokumentation lesen!) [[link]](https://www.arduino.cc/en/Tutorial/ReadWrite)
-3. LabView-Network [[link]](http://www.ni.com/white-paper/2710/de/)
-4. Arduino-Network-Communication [[link]](https://github.com/evothings/evothing)
