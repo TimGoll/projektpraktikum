@@ -166,7 +166,7 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 ### Nebenklassen:
 1. **mfcCtrl** [[cpp]](../master/controller/src/mfcCtrl.cpp) [[h]](../master/controller/src/mfcCtrl.h):
 2. **valveCtrl** [[cpp]](../master/controller/src/valveCtrl.cpp) [[h]](../master/controller/src/valveCtrl.h):
-3. **main_StoreD** [[cpp]](../master/controller/src/StoreD.cpp) [[h]](../master/controller/src/StoreD.h): <br>
+3. **StoreD** [[cpp]](../master/controller/src/StoreD.cpp) [[h]](../master/controller/src/StoreD.h): <br>
  Wird in main_stringBuilder erstellt und verwaltet, sorgt dafür, dass Daten auf der SD Karte gespeichert werden.
 4. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h):
 

@@ -23,6 +23,17 @@
 
 #include "src/ownlibs/serialCommunication.h"
 
+bool debugStatus = false;
+void debug() {
+    debugStatus = !debugStatus;
+    //set debug-status to srl
+}
+
+communication::Main_LabCom *main_labCom_tmp;
+void start() {
+    main_labCom_tmp->start();
+}
+
 void setup() {
     // ERSTELLE SERIELLE VERBINDUNGEN
     srl->setSerial(&Serial1, &Serial, &Serial2); //labview / debug / uart
@@ -59,7 +70,10 @@ void setup() {
     main_thread_list -> add_thread(main_valveCtrl);
 
     // ERSTELLE INTERRUPTS FUER TASTER
+    attachInterrupt(PIN_DEBUGSWITCH, debug, CHANGE);
+    attachInterrupt(PIN_STARTBUTTON, start, RISING);
 
-    //Taster start
-    //Schalter Debug
+    // INIT SWITCH
+    debugStatus = digitalRead(PIN_DEBUGSWITCH);
+    main_labCom_tmp = main_labCom; //speichere in globaler Variable
 }

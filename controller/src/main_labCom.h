@@ -36,6 +36,9 @@ namespace communication {
         void setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder);
         //setze neue Zeile zur Uebertragung an LabView
         void setNewLine(char newLine[]);
+        //gibt Befehl zum Start der Threads von MFC und Ventil, uebergibt die Startzeit, welche als
+        //Nullpunkt dient
+        void start();
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -47,9 +50,6 @@ namespace communication {
         //Eingetroffene und vollstaendige Zeile wird an Kommata zerlegt und in Array gespeichert.
         //Gibt nach vollstaendiger Durchfuehrung die Anzahl an Eintraegen im Array zurueck.
         int splitLine();
-        //gibt Befehl zum Start der Threads von MFC und Ventil, uebergibt die Startzeit, welche als
-        //Nullpunkt dient
-        void start(); //TODO: evtl public machen, um von ausserhalb per Taster auszufuehren
 
         //Adressen der Ventil, MFC und Display Hauptobjekte zur Verteilung der Daten
         control::Main_MfcCtrl *main_mfcCtrl;
