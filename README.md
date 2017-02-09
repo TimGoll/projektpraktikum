@@ -33,10 +33,11 @@ Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren F
 3. ```<Typ MFC 0, Typ MFC 1, ...>```
 4. ```<Ventil-Pin-0, Ventil-Pin-1, ...>```
 5. ```<Messintervall>```
-6. ```<begin>``` Ende des Headers, Beginn mit der Eventübertragung
-7. ```<MFC oder Ventil, ID, Wert, Zeit>``` Setze Events. Hierbei müssen die Events je MFC/Ventil zeitlich sortiert sein, um eine einfachere Verarbeitung zu gewährleisten. Untereinander dürfen die Events jedoch vertauscht sein. (Zeit von MFC2 darf vor MFC1 sein, auch bei späterer Übertragung. Jedoch darf Zeit von MFC1 nicht vor der Zeit von MFC1 sein)
-8. ```<end>``` Ende der Eventübertragung, warte auf Start der Messung
-9. ```<start>``` Nicht zwigend notwendig, kann auch händisch per Taster gestartet werden
+6. ```<Datum + Zeit>``` Aktuelles Datum & Uhrzeit. Wird im Header der Messung gespeichert, relativ dazu wird gemessen
+7. ```<begin>``` Ende des Headers, Beginn mit der Eventübertragung
+8. ```<MFC oder Ventil, ID, Wert, Zeit>``` Setze Events. Hierbei müssen die Events je MFC/Ventil zeitlich sortiert sein, um eine einfachere Verarbeitung zu gewährleisten. Untereinander dürfen die Events jedoch vertauscht sein. (Zeit von MFC2 darf vor MFC1 sein, auch bei späterer Übertragung. Jedoch darf Zeit von MFC1 nicht vor der Zeit von MFC1 sein)
+9. ```<end>``` Ende der Eventübertragung, warte auf Start der Messung
+10. ```<start>``` Nicht zwigend notwendig, kann auch händisch per Taster gestartet werden
 
 **Beispiel**:
 
@@ -46,6 +47,7 @@ Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren F
 <typ0,typ1,typ2,typ3,typ4,typ5>
 <2,3,4,5,6,7,8,9,10>
 <10>
+<08.02.2017 13:03:29>
 <begin>
 <M,0,120,1000>
 <M,0,240,1500>
@@ -98,13 +100,14 @@ Standardmäßig werden auf dem Display aktuelle Daten zum Programmstatus angezei
 
 **Beispielanzeige**:
 ```
-STANDARD:                      ERRORBEISPIEL:
-+----------------------+       +----------------------+
-|          #M:04 #V:07 |       |      ERROR 1001      |
-|                      |       |                      |
-| LAUFZEIT:00:01:34:17 |       |       Falscher       |
-| V03-0001-00:01:16:22 |       |     Zeilenbeginn     |
-+----------------------+       +----------------------+
+STANDARD:                      ERRORBEISPIEL:                 ENDANZEIGE:
++----------------------+       +----------------------+       +----------------------+
+|          #M:04 #V:07 |       |      ERROR 1001      |       |          #M:04 #V:07 |
+|                      |       |                      |       |                      |
+| LAUFZEIT:00:01:34:17 |       |       Falscher       |       |    ABGESCHLOSSEN     |
+| V03-0001-00:01:16:22 |       |     Zeilenbeginn     |       |     02:05:24:34      |
++----------------------+       +----------------------+       +----------------------+
+Hintergrund: weiß              Hintergrund: organge/rot       Hintergrund: grün
 ```
 
 - **Standardanzeige:** <br>
@@ -116,6 +119,8 @@ STANDARD:                      ERRORBEISPIEL:
  Zeile 1: Error ID <br>
  Zeile 2: xxx <br>
  Zeile 3+4: Kurzbeschreibung des augetretenen Fehlers
+- **Endanzeige:** <br>
+ Zeigt durchgängig diesen Text an, lässt sich nur zurücksetzen durch Reset des Boards
 
 ## Errormeldungen:
 Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgeführt, es wird jedoch eine Wiederholung der entsprechenden Zeile erwartet, daher sind diese Codes LabView-Seitig abzufangen.

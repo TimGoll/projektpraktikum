@@ -46,7 +46,7 @@ namespace communication {
         unsigned long lastTime;
         unsigned long startTime;
         int intervall;
-        char dateString[16];
+        char dateString[32];
 
         int mfcValueList[MAX_AMOUNT_MFC];
         int valveValueList[MAX_AMOUNT_VALVE];

@@ -212,7 +212,7 @@ namespace communication {
 
                             this->headerLineCounter = 6;
                             break;
-                        case 6: //ZEILE 5: Letzte Zeile, hier wird ein 'begin' erwartet
+                        case 6: //ZEILE 6: Letzte Zeile, hier wird ein 'begin' erwartet
                             if (strcmp(this->inDataArray[0], "begin") == 0) {
                                 srl->println('D', "Header vollstaendig.");
 
@@ -222,7 +222,7 @@ namespace communication {
                                 this->headerLineCounter = 7;
                             }
                             break;
-                        case 7: //ZEILE 6: Eventliste
+                        case 7: //ZEILE 7: Eventliste
                             if (strcmp(this->inDataArray[0], "M") == 0) { //MFC
                                 if (atoi(this->inDataArray[1]) < this->amount_MFC) {
                                     this->main_mfcCtrl->setEvent(
@@ -256,7 +256,7 @@ namespace communication {
                                 this->headerLineCounter = 8;
                             }
                             break;
-                        case 8: //ZEILE 7: Warte auf Start (kann auch durch Button aufgerufen werden)
+                        case 8: //ZEILE 8: Warte auf Start (kann auch durch Button aufgerufen werden)
                             if (strcmp(this->inDataArray[0], "start") == 0) {
                                 this->start();
                             }
