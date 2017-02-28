@@ -1,4 +1,4 @@
-﻿# Dokumentation des Projektpraktikums
+# Dokumentation des Projektpraktikums
 Projektpraktikum (Mikrokontrollerpraktikum + Messtechnikpraktikum) Wintersemester 2016/17 am LMT
 
 _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
@@ -77,10 +77,14 @@ Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei
 Über den LabView Port wird nach Erfolgreicher Initialisierung des Boards ein "ready" gesendet. Wurde Ein Befehl korrekt erkannt und erfolgreich verarbeitet wird ein "ok" gesendet, ansonsten kommt ein Errorcode.
 
 ## Serielle Hardware
+Die Verbindung zwischen dem Teensy und dem PC über Serielle Verbindung wird mittels dem IC **CH340G** realisiert. Dieser funktioniert Plug and Play unter Windows (Windows 10 getestet) und lässt sich auch [mit einfachen Treibern](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) unter MacOS zum Laufen bringen.
+
+**--- ALT ---**<br>
 Die Verbindung zwischen dem Teensy und dem PC über Serielle Verbindung ist daher etwas schwer, da das Board keine eigene Möglichkeit der Kommunikation bietet. Abhilfe schafft jedoch der **Prolific PL2303HX** IC, welcher ein Uart Signal zu einem USB-Signal wandelt und dem PC ein USB-Device simuliert. Dieser Chip ist stanndardmäßig nicht mit Windowsversionen neuer als Windows 8 kompatibel, doch ein [inofizieller Treiber](http://www.ifamilysoftware.com/news37.html) schafft Abhilfe. <br>
 Wieso wir diesen Chip dennoch genommen haben? - Ganz einfach, er wird in den meisten käuflich erhältlichen USB<->Uart bauteilen verwendet und somit gibt es auch am meisten Informationen zu diesem.
 
-Die Treiber befinden sich auch in diesem GitHub Repository.
+Die Treiber befinden sich auch in diesem GitHub Repository.<br>
+**--- ALT ENDE ---**
 
 ## StoreD und die Übertragung an LabView
 TODO @Markus
