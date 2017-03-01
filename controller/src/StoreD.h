@@ -9,8 +9,7 @@
 
 #include "main_valveCtrl.h" //Objekte zum Speichern der Objektpointer
 #include "main_mfcCtrl.h"
-#include "main_stringBuilder.h"
-#include "main_boschCom.h"
+//#include "main_stringBuilder.h"
 
 #include "config.h"
 
@@ -27,9 +26,15 @@ namespace storage {
         void setFilename();
         void openFile();
         void closeFile();
-        void writeNewLine(char newLine[]);
+        void writeNewLine();
+        void setNewLine(char newLine[]);
+        void setDate(char dateString[]);
+        void setIntervall(int intervall);
     private:
-        char filename[16];
+        char newLine[2000]; //MAX_LINE_SIZE?? SERIAL_READ_MAX_LINE_SIZE??
+        char dateString[16];
+        int intervall;
+        char filename[50];
         int filenumber;
         int decplaces;
         int decplaceshelp;

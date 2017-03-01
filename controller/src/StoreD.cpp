@@ -9,8 +9,18 @@ namespace storage {
 
     }
 
+    void StoreD::setNewLine(char newLine[]){
+      strcpy(newLine, this->newLine);
+    }
+    void StoreD::setDate(char dateString[]){
+       strcpy(dateString, this->dateString);
+    }
+    void StoreD::setIntervall(int intervall){
+      this->intervall = intervall;
+    }
+
     void StoreD::setFilename(){
-      //??? sprintf(filename, "Messung_%s_#%04d.txt\0", this->dateString, filenumber); //-> "Messung_01.01.17_#1.txt"
+      sprintf(filename, "Messung_%s_#%04d.txt\0", dateString, filenumber); //-> "Messung_01.01.17_#1.txt"
     }
 
     void StoreD::detFilenumber(int filenumber, char filename[]){
@@ -31,13 +41,11 @@ namespace storage {
         }
         myFile = SD.open(filename, FILE_WRITE);
 
-        /*
-        //HEADER schreiben
-          myFile.print("Messung am "); myFile.println(this->dateString);
 
-          //hier "besser/lieber" überall this->main_something->intervall/getAmount_MFC()/getAmount_valve() ???
-          communication::Main_StringBuilder MSB;
-          sprintf(buffer, "%d", MSB.intervall);
+        //HEADER schreiben
+          myFile.print("Messung am "); myFile.println(dateString);
+
+          sprintf(buffer, "%d", intervall);
           myFile.print("Messintervall: "); myFile.println(buffer);
 
           control::Main_MfcCtrl MMC;
@@ -45,18 +53,17 @@ namespace storage {
           myFile.print("Anzahl MFCs: "); myFile.println(buffer);
 
           control::Main_ValveCtrl MVC;
-          sprintf(buffer, "%d", MVC.getAmount_valve()));
+          sprintf(buffer, "%d", MVC.getAmount_valve());
           myFile.print("Anzahl Ventile: "); myFile.println(buffer);
 
-          //MFC-Typen bisher nicht zugreifbar, da noch nicht existent (???)
-          /*
+
           for (int i = 0; i < MMC.getAmount_MFC(); i++) {
-              myFile.print("MFC%d: ", i); myFile.print(???.getType_MFC);
-              if i < (MMC.getAmount_MFC()-1){
+              sprintf(buffer, "MFC%d: ", i);
+              myFile.print(buffer); //myFile.print(???.getType_MFC); //MFC-Typen bisher nicht zugreifbar, da noch nicht existent (???)
+              if (i < (MMC.getAmount_MFC()-1)){
                 myFile.print(" ,");
               }
           }
-          */
           myFile.println(""); //leere Zeile Abstand
     }
 
@@ -67,18 +74,15 @@ namespace storage {
           restart = true;
     }
 
-    void StoreD::writeNewLine(char newLine[]){
-      /*
-        communication::Main_StringBuilder MSB; //zweites MSB deklarieren ???
+    void StoreD::writeNewLine(){
         //Sofern neue Zeile Dateigröße übersteigern würde, beginne neue Datei
         if ((MAX_SD_FILE_SIZE - myFile.size() > SERIAL_READ_MAX_LINE_SIZE)) {
-          myFile.println(MSB.newLine[]);
+          myFile.println(newLine);
         }
         else {
           myFile.close();
           openFile(); //neue Datei wird geöffnet, dabei wird Dateiname bestimmt und der Header der Datei geschrieben; danach werden wieder die Messwerte abgespeichert
-          myFile.println(MSB.newLine[]);
+          myFile.println(newLine);
         }
-      */
     }
 }

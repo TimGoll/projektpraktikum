@@ -79,6 +79,11 @@ namespace communication {
                 //Boschsensor
                 strcat(this->newLine, cmn::integerToByte(this->main_boschCom->getCurrentValue(), 3, output)); //TODO richtige Bytesize
 
+
+                this->storeD->setNewLine(this->newLine);
+                this->storeD->setDate(this->dateString);
+                this->storeD->setIntervall(this->intervall);
+
                 // Sende String an SD
                 // sende String an LabCom
                 // Wie genau kann ich den Begriff "Senden" verstehen???
