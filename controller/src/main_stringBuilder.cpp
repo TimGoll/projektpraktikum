@@ -53,12 +53,10 @@ namespace communication {
         if (this->ready) {
             if (millis() >= this->lastTime) {
                 //temporary
-                char output[] = "    "; //4 Byte + \0 !! Wichtig fpr strcat()
+                char output[] = "    "; //4 Byte + \0 !! Wichtig für strcat()
 
-                //HEADER
-                // - nur zu Beginn einmal Funktion ausfuehren
-                // - this->dateString entaelt Datum als String (fuer Dateiname, Headerinfo)
-                // ...
+                //HEADER nur zu Beginn einmal Funktion ausfuehren:
+                //(Markus): Header der txt-Datei wird beim Öffnen von dieser erstellt, siehe StoreD::openFile
 
                 // Zeit in millis()
                 // Passe currentTime so an, dass sie die relative Zeit zum Start anzeigt (rechne Schreibeverschiebnung wieder raus)
@@ -72,7 +70,7 @@ namespace communication {
                 }
 
                 //Ventilwerte
-                control::Main_ValveCtrl MVC;
+                //control::Main_ValveCtrl MVC; //vergessen zu löschen???
                 this->main_valveCtrl->getValveValueList(valveValueList);
                 for (int i = 0; i < this->main_valveCtrl->getAmount_valve(); i++) {
                     strcat(this->newLine, cmn::integerToByte(valveValueList[i], 3, output)); //TODO richtige Bytesize
@@ -83,6 +81,9 @@ namespace communication {
 
                 // Sende String an SD
                 // sende String an LabCom
+                // Wie genau kann ich den Begriff "Senden" verstehen???
+                // Wird in StoreD nicht auf newLine "bei Bedarf" zugegriffen? Wenn ja, sollte nach diesem Zugriff der String, wie unten geschrieben, zurückgesetzt werden
+
                 // (Bei SD die Funktion aufrufen, die deine Loop ersetzt (this->storeD->...) // bei lab com this->main_labCom->setNewLine(string))
                 // setze String zurueck fuer neuen String!
 

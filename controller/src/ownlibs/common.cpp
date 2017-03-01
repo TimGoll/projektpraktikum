@@ -38,22 +38,26 @@ namespace cmn {
         strcpy(timeString_out, timeString_temp);
     }
 
-    //TODO setze \0 an Ende des outputstrings
     char* integerToByte(unsigned long value, int bytesize, char output[]) {
-      int power; //Potenz??
+      int basisToPower_i; //nimmt den Wert 255^i mit i:[0,1,2,..,bytesize-1] an; wird zur Bestimmung der Koeffizienten xi benötigt (siehe unten)
       int xi;
 
-      //value*=MAX_AMOUNT_DEC_PLACES; //aktuell eh nicht brauchbar, da int kein Komma unterstuetzt
+      //value*=MAX_FLOAT_POINT_SHIFT; //aktuell eh nicht brauchbar, da int kein Komma unterstuetzt
 
-      for (int i=0; i < bytesize; i++){
-        power = 1;
-        for (int k=0; k < bytesize - i -1; k++){ //enspricht power = power^(MAX_ROW_BYTES-i-1) -> für i=0 ist power=255^(3-0-1)=255^2, i=1 ist power=255^(3-1-1)=255, i=0 ist power=255^(3-2-1)=255^0=1
-          power *= 255;
+      //for-Schleife bestimmt Koeffizienten xi im 256-System: value|_10erSystem = (x0*1 + x1*255 + x2*(255^2) + x3*(255^3) + ...)|_256er-System   mit i:[0,1,2,..,bytesize-1]
+      //und schreibt das ASCII-Zeichen mit dem ASCII-Wert xi als Char-Zeichen in output[i]
+      for (int i = bytesize-1; i >= 0; i--){
+        basisToPower_i = 1;
+        //for-Schleife realisiert basis=255^i
+        for (int k=0; k < i; k++){
+          basisToPower_i *= 255;
         }
-        xi        = value % power; //x_i = value mod (255^î)
-        value     = value - xi*power;
-        output[i] = xi; //Schreibt ASCII-Zeichen mit dem ASCII-Wert xi als Char-Zeichen in output
+
+      xi        = value % basisToPower_i; //xi = value mod (255^i)
+      value     = value - xi*basisToPower_i;
+      output[i] = xi; //Schreibt ASCII-Zeichen mit dem ASCII-Wert xi als Char-Zeichen in output[i]
       }
+      output[bytesize]="\0";
       return output;
     }
 };

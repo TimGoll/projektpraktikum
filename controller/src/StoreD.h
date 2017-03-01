@@ -6,8 +6,11 @@
 #include <mthread.h>
 #include <SD.h>
 
+
 #include "main_valveCtrl.h" //Objekte zum Speichern der Objektpointer
 #include "main_mfcCtrl.h"
+#include "main_stringBuilder.h"
+#include "main_boschCom.h"
 
 #include "config.h"
 
@@ -30,6 +33,7 @@ namespace storage {
         int filenumber;
         int decplaces;
         int decplaceshelp;
+        char buffer[16]; //Buffer für Werte vom Messintervall, MFC-Anzahl, Ventil-Anzahl usw.
         File myFile;
         //Programm gestartet -> Messung gestartet -> Messung gestoppt -> Messung gestartet -> restart = true
         bool restart = false;

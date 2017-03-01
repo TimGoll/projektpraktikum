@@ -10,7 +10,7 @@ namespace storage {
     }
 
     void StoreD::setFilename(){
-      sprintf(filename, "file%04d.txt\0",filenumber);
+      //??? sprintf(filename, "Messung_%s_#%04d.txt\0", this->dateString, filenumber); //-> "Messung_01.01.17_#1.txt"
     }
 
     void StoreD::detFilenumber(int filenumber, char filename[]){
@@ -18,32 +18,46 @@ namespace storage {
       setFilename();
       while (SD.exists(filename)) {
         filenumber++;
+        setFilename();
       }
     }
 
     void StoreD::openFile(){
         //TODO: auf Display anzeigen, dass gespeichert wird
         SD.begin();
-        if (restart==false) {
+        if (restart==false) { //restart standardmäßig auf false
           detFilenumber(filenumber, filename);
           setFilename();
         }
         myFile = SD.open(filename, FILE_WRITE);
+
         /*
-        myFile.print("Messung am "); myFile.println(/*getDate);
-        myFile.print("Messintervall: "); myFile.println(/*getIntervall);
-        control::Main_MfcCtrl MMC;
-        myFile.print("Anzahl MFCs: "); myFile.println(/*inttochar(MMC.getAmount_MFC));
-        control::Main_ValveCtrl MVC;
-        myFile.print("Anzahl Ventile: "); myFile.println(/*inttochar(MVC.getAmount_valve));
-        for (int i = 0; i < MMC.getAmount_MFC(); i++) {
-            myFile.print("MFC%d: ", i); myFile.print(/*getType_MFC);
-            if i < (MMC.getAmount_MFC()-1){
-              myFile.print(" ,");
-            }
-        }
-        myFile.println("");
-        */
+        //HEADER schreiben
+          myFile.print("Messung am "); myFile.println(this->dateString);
+
+          //hier "besser/lieber" überall this->main_something->intervall/getAmount_MFC()/getAmount_valve() ???
+          communication::Main_StringBuilder MSB;
+          sprintf(buffer, "%d", MSB.intervall);
+          myFile.print("Messintervall: "); myFile.println(buffer);
+
+          control::Main_MfcCtrl MMC;
+          sprintf(buffer, "%d", MMC.getAmount_MFC());
+          myFile.print("Anzahl MFCs: "); myFile.println(buffer);
+
+          control::Main_ValveCtrl MVC;
+          sprintf(buffer, "%d", MVC.getAmount_valve()));
+          myFile.print("Anzahl Ventile: "); myFile.println(buffer);
+
+          //MFC-Typen bisher nicht zugreifbar, da noch nicht existent (???)
+          /*
+          for (int i = 0; i < MMC.getAmount_MFC(); i++) {
+              myFile.print("MFC%d: ", i); myFile.print(???.getType_MFC);
+              if i < (MMC.getAmount_MFC()-1){
+                myFile.print(" ,");
+              }
+          }
+          */
+          myFile.println(""); //leere Zeile Abstand
     }
 
     void StoreD::closeFile(){
@@ -54,16 +68,17 @@ namespace storage {
     }
 
     void StoreD::writeNewLine(char newLine[]){
+      /*
+        communication::Main_StringBuilder MSB; //zweites MSB deklarieren ???
         //Sofern neue Zeile Dateigröße übersteigern würde, beginne neue Datei
         if ((MAX_SD_FILE_SIZE - myFile.size() > SERIAL_READ_MAX_LINE_SIZE)) {
-          myFile.println(/*hier Daten, communication::Main_StringBuilder *newLine[] ?? */) ;
+          myFile.println(MSB.newLine[]);
         }
         else {
           myFile.close();
-          filenumber++;
-          setFilename();
-          myFile = SD.open(filename, FILE_WRITE);
-          myFile.println(/*hier Daten, communication::Main_StringBuilder *newLine[] ?? */);
+          openFile(); //neue Datei wird geöffnet, dabei wird Dateiname bestimmt und der Header der Datei geschrieben; danach werden wieder die Messwerte abgespeichert
+          myFile.println(MSB.newLine[]);
         }
+      */
     }
 }
