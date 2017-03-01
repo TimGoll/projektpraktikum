@@ -87,9 +87,9 @@ Die Treiber befinden sich auch in diesem GitHub Repository.<br>
 **--- ALT ENDE ---**
 
 ## StoreD und die Übertragung an LabView
-Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält. Dabei wird beim erstellen der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's. Nach dem Header folgt eine Leerzeile und dann die Messdaten in codierte Form.
+Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's. Nach dem Header folgt eine Leerzeile und dann die Messdaten in codierte Form.
 
-Dabei werden die Daten auf die sogenannte "pseudobyteartige" Weise abgespeichert, was im Grunde eine Umwandlung der Messdaten vom 10er- in das 256er-System entspricht. Dabei enstpricht das ASCII-Zeichen mit der Ordnungszahl n mit n=[0,1,..255] der Zahl n. Die Anzahl der reservierten Bytes pro Messwert (bytesize) können für jeden Messwert individuell festgelegt werden. Nach jedem Datensatz wird in eine neue Zeile gesprungen. Dies hat zum einen eine optimale Speichernutzung zur Folge, zum anderen entfällt die Notwendigkeit eines Seperationszeichen zwischen den Messwerten eines Datensatzes.
+Dabei werden die Daten auf die sogenannte "pseudobyteartige" Weise abgespeichert, was im Grunde einer Umwandlung der Messdaten vom 10er- in das 256er-System entspricht. Dabei enstpricht das ASCII-Zeichen mit der Ordnungszahl n mit n=[0,1,..255] der Zahl n. Die Anzahl der reservierten Bytes pro Messwert (bytesize) können für jeden Messwert individuell festgelegt werden. Nach jedem Datensatz wird in eine neue Zeile gesprungen. Dies hat zum einen eine optimale Speichernutzung zur Folge, zum anderen entfällt die Notwendigkeit eines Seperationszeichen zwischen den Messwerten eines Datensatzes.
 
 Nach der Messung können die Daten am PC m.H. von bytesize wieder wieder zerlegt werden. Danach können die Daten ausgewertet werden.
 
