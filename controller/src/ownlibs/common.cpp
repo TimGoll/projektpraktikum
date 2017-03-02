@@ -53,11 +53,11 @@ namespace cmn {
           basisToPower_i *= 255;
         }
 
-      xi        = value % basisToPower_i; //xi = value mod (255^i)
+      xi        = value / basisToPower_i; //xi = value mod (255^i)
       value     = value - xi*basisToPower_i;
       output[i] = xi; //Schreibt ASCII-Zeichen mit dem ASCII-Wert xi als Char-Zeichen in output[i]
       }
-      output[bytesize]="\0";
+      output[bytesize-(i+1)]="\0";
       return output;
     }
 };

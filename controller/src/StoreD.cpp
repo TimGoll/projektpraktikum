@@ -20,7 +20,7 @@ namespace storage {
     }
 
     void StoreD::setFilename(){
-      sprintf(filename, "Messung_%s_#%04d.txt\0", dateString, filenumber); //-> "Messung_01.01.17_#1.txt"
+      sprintf(filename, "Messung_%s_#%03d.txt\0", dateString, filenumber); //-> "Messung_01.01.17_#1.txt"
     }
 
     void StoreD::detFilenumber(int filenumber, char filename[]){
@@ -58,10 +58,11 @@ namespace storage {
 
 
           for (int i = 0; i < MMC.getAmount_MFC(); i++) {
-              sprintf(buffer, "MFC%d: ", i);
-              myFile.print(buffer); //myFile.print(???.getType_MFC); //MFC-Typen bisher nicht zugreifbar, da noch nicht existent (???)
               if (i < (MMC.getAmount_MFC()-1)){
-                myFile.print(" ,");
+                sprintf(buffer, "MFC%d: ", i);
+                myFile.print(buffer);
+                //myFile.print(???.getType_MFC); //MFC-Typen bisher nicht zugreifbar, da noch nicht existent (???)
+                myFile.print(", ");
               }
           }
           myFile.println(""); //leere Zeile Abstand
