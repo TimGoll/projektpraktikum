@@ -86,6 +86,12 @@ Wieso wir diesen Chip dennoch genommen haben? - Ganz einfach, er wird in den mei
 Die Treiber befinden sich auch in diesem GitHub Repository.<br>
 **--- ALT ENDE ---**
 
+## I2C
+I2C wird von uns als Hauptkommunikationsbus verwendet. Folgende Adressen sind belegt:
+- Display: 0x38 (--)
+- BME280: 0x77 (0x76)
+- IO Expander (Ventilplatine): -- (--)
+
 ## StoreD und die Übertragung an LabView
 Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's. Nach dem Header folgt eine Leerzeile und dann die Messdaten in codierte Form.
 
