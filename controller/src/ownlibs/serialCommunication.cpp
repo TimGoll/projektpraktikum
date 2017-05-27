@@ -17,7 +17,7 @@ void SerialCommunication::setSerial(HardwareSerial *serial_labView, HardwareSeri
     this->serial_uart->begin(SERIAL_UART_BAUDRATE);
 }
 
-HardwareSerial *SerialCommunication::getType(char type) {
+HardwareSerial *SerialCommunication::getType(const char type) {
     HardwareSerial *this_serial;
 
     if (type == 'L') {
@@ -34,78 +34,86 @@ HardwareSerial *SerialCommunication::getType(char type) {
     return this_serial;
 }
 
-void SerialCommunication::print(char type, String &input) {
+int SerialCommunication::available(const char type) {
+    return this->getType(type)->available();
+}
+
+int SerialCommunication::read(const char type) {
+    return this->getType(type)->read();
+}
+
+void SerialCommunication::print(const char type, String &input) {
     this->getType(type)->print(input);
 }
 
-void SerialCommunication::print(char type, char input[]) {
+void SerialCommunication::print(const char type, const char input[]) {
     this->getType(type)->print(input);
 }
 
-void SerialCommunication::print(char type, char input) {
+void SerialCommunication::print(const char type, const char input) {
     this->getType(type)->print(input);
 }
 
-void SerialCommunication::print(char type, unsigned char input) {
+void SerialCommunication::print(const char type, unsigned char input) {
     this->getType(type)->print(input);
 }
 
-void SerialCommunication::print(char type, int input) {
+void SerialCommunication::print(const char type, int input) {
     this->getType(type)->print(input);
 }
 
-void SerialCommunication::print(char type, unsigned int input) {
+void SerialCommunication::print(const char type, unsigned int input) {
     this->getType(type)->print(input);
 }
 
-void SerialCommunication::print(char type, long input) {
+void SerialCommunication::print(const char type, long input) {
     this->getType(type)->print(input);
 }
 
-void SerialCommunication::print(char type, unsigned long input) {
+void SerialCommunication::print(const char type, unsigned long input) {
     this->getType(type)->print(input);
 }
 
-void SerialCommunication::print(char type, double input) {
+void SerialCommunication::print(const char type, double input) {
     this->getType(type)->print(input);
 }
 
 
 
 
-void SerialCommunication::println(char type, String &input) {
+void SerialCommunication::println(const char type, String &input) {
     this->getType(type)->println(input);
 }
 
-void SerialCommunication::println(char type, char input[]) {
+void SerialCommunication::println(const char type, const char input[]) {
     this->getType(type)->println(input);
 }
 
-void SerialCommunication::println(char type, char input) {
+void SerialCommunication::println(const char type, const char input) {
     this->getType(type)->println(input);
 }
 
-void SerialCommunication::println(char type, unsigned char input) {
+void SerialCommunication::println(const char type, unsigned char input) {
     this->getType(type)->println(input);
 }
 
-void SerialCommunication::println(char type, int input) {
+void SerialCommunication::println(const char type, int input) {
     this->getType(type)->println(input);
 }
 
-void SerialCommunication::println(char type, unsigned int input) {
+void SerialCommunication::println(const char type, unsigned int input) {
     this->getType(type)->println(input);
 }
 
-void SerialCommunication::println(char type, long input) {
+void SerialCommunication::println(const char type, long input) {
     this->getType(type)->println(input);
 }
 
-void SerialCommunication::println(char type, unsigned long input) {
+void SerialCommunication::println(const char type, unsigned long input) {
     this->getType(type)->println(input);
 }
 
-void SerialCommunication::println(char type, double input) {
+void SerialCommunication::println(const char type, double input) {
     this->getType(type)->println(input);
 }
 

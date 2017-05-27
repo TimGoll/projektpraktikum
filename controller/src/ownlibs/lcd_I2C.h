@@ -88,7 +88,7 @@ public:
 	void backlight_off();
 	void backlight_on();
 	void backlight_setColor(int r, int g, int b);
-    void updateDisplayMatrix(char dm0[21], char dm1[21], char dm2[21], char dm3[21]);
+    void updateDisplayMatrix(const char dm0[21], const char dm1[21], const char dm2[21], const char dm3[21]);
 
 	// Ergaenzungen Ende
 
@@ -119,7 +119,7 @@ private:
     void expanderWrite(uint8_t);
     void pulseEnable(uint8_t);
 
-    void changeSingleChars(char new_dm[21], char last_dm[21], int line);
+    void changeSingleChars(const char new_dm[21], char last_dm[21], int line);
 
     uint8_t _Addr;
     uint8_t _displayfunction;

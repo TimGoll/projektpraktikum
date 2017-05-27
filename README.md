@@ -74,23 +74,10 @@ srl->println('D', "Hallo Welt mit Zeilenende!"); //Natuerlich gibt es das ganze 
 ```
 Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei Typen: L, D und U für LabView, Debug und UART. Die Baudrate wird in der **config.h** eingestellt.
 
-Über den LabView Port wird nach Erfolgreicher Initialisierung des Boards ein "ready" gesendet. Wurde Ein Befehl korrekt erkannt und erfolgreich verarbeitet wird ein "ok" gesendet, ansonsten kommt ein Errorcode.
+Über den LabView Port wird nach Erfolgreicher Initialisierung des Boards ein _"ready"_ gesendet. Wurde Ein Befehl korrekt erkannt und erfolgreich verarbeitet wird ein _"ok"_ gesendet, ansonsten kommt ein Errorcode.
 
 ## Serielle Hardware
 Die Verbindung zwischen dem Teensy und dem PC über Serielle Verbindung wird mittels dem IC **CH340G** realisiert. Dieser funktioniert Plug and Play unter Windows (Windows 10 getestet) und lässt sich auch [mit einfachen Treibern](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) unter MacOS zum Laufen bringen.
-
-**--- ALT ---**<br>
-Die Verbindung zwischen dem Teensy und dem PC über Serielle Verbindung ist daher etwas schwer, da das Board keine eigene Möglichkeit der Kommunikation bietet. Abhilfe schafft jedoch der **Prolific PL2303HX** IC, welcher ein Uart Signal zu einem USB-Signal wandelt und dem PC ein USB-Device simuliert. Dieser Chip ist stanndardmäßig nicht mit Windowsversionen neuer als Windows 8 kompatibel, doch ein [inofizieller Treiber](http://www.ifamilysoftware.com/news37.html) schafft Abhilfe. <br>
-Wieso wir diesen Chip dennoch genommen haben? - Ganz einfach, er wird in den meisten käuflich erhältlichen USB<->Uart bauteilen verwendet und somit gibt es auch am meisten Informationen zu diesem.
-
-Die Treiber befinden sich auch in diesem GitHub Repository.<br>
-**--- ALT ENDE ---**
-
-## I2C
-I2C wird von uns als Hauptkommunikationsbus verwendet. Folgende Adressen sind belegt:
-- Display: 0x38 (--)
-- BME280: 0x77 (0x76)
-- IO Expander (Ventilplatine): -- (--)
 
 ## StoreD und die Übertragung an LabView
 Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's. Nach dem Header folgt eine Leerzeile und dann die Messdaten in codierte Form.
@@ -98,6 +85,44 @@ Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Da
 Dabei werden die Daten auf die sogenannte "pseudobyteartige" Weise abgespeichert, was im Grunde einer Umwandlung der Messdaten vom 10er- in das 256er-System entspricht. Dabei enstpricht das ASCII-Zeichen mit der Ordnungszahl n mit n=[0,1,..255] der Zahl n. Die Anzahl der reservierten Bytes pro Messwert (bytesize) können für jeden Messwert individuell festgelegt werden. Nach jedem Datensatz wird in eine neue Zeile gesprungen. Dies hat zum einen eine optimale Speichernutzung zur Folge, zum anderen entfällt die Notwendigkeit eines Seperationszeichen zwischen den Messwerten eines Datensatzes.
 
 Nach der Messung können die Daten am PC m.H. von bytesize wieder wieder zerlegt werden. Danach können die Daten ausgewertet werden.
+
+
+## I2C
+I2C wird von uns als Hauptkommunikationsbus verwendet. Folgende Adressen sind belegt:
+- Display: 0x38 (--)
+- BME280: 0x77 (0x76)
+- IO Expander (Ventilplatine): -- (--)
+
+## BME280
+Der Boschsensor wird innerhalb der Klasse ```main_boschCom``` verwaltet. Dort wird ein bme-Objekt erstellt. Dieses Objekt wird geliefert von einer leicht angepassten Adafruit-Bibliothek. (Diese könnte man noch weiter ausmisten, da der ganze SPI Bereich eigentlich nicht gebraucht wird)
+
+**Anschluss des Sensors**
+Folgende Pinbelegung ergab sich nach einigem Durchmessen mit einem Multimeter. Bisher erwies sich dieses Layout als korrekt.
+```
+        +----\_/----+
+    VDD |o         o|                     VDD und VDDIO   : 3V3
+  VDDIO |o         o|                     GND             : 0V
+    GND |o         o|                     SDO (Adresspin) : 0V (0x76), 3V3 (0x77)
+    SDO |o         o|                     CSB             : 3V3
+    SDA |o         o|                     SDA / SCL       : I2C Bus (3V3 level)
+    SCL |o         o|
+    CSB |o   |_|   o|
+        |o         o|
+        |o         o|
+        |o         o|
+        |o         o| (SCL)
+        |o         o| (SDA)
+        |o         o|
+        |o         o|
+        |           |
+        +-----------+
+```
+Den Sensor auslesen kann man in der besagten ```main_boschCom``` mittels folgenden Befehlen:
+```cpp
+this->bme280->readTemperature();
+this->bme280->readPressure();
+this->bme280->readHumidity();
+```
 
 ## Display:
 Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden. <br>
@@ -146,6 +171,9 @@ Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgefü
 
 ### 1003:
 **Lese-Timeout überschritten.** In der _config.h_ wird eine maximale Lesezeit pro String definiert. Wird diese Zeit überschritten, wird das Lesen des Strings an dieser Stelle abgebrochen.
+
+### 1004:
+**Falsche Anzahl an Argumenten** Bei der Übertragung von LabView an den Controller wird immer überprüft, ob die Anzahl an eingetroffenen Elementen der Anzahl an erwarteten Elementen entspricht.
 
 ### 5000:
 **Zufriff auf nicht definierte MFC/Ventil ID.** Trifft dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.

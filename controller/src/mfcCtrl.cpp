@@ -6,7 +6,7 @@ namespace control {
 
         //setze defaultwerte für das "nextEvent"
         this->nextEvent.value = -1;
-        this->nextEvent.time  = -1;
+        this->nextEvent.time  = 0;
 
         this->ready = false;
 
@@ -68,10 +68,14 @@ namespace control {
         return this->currentValue;
     }
 
+    void MfcCtrl::getType(char type[]) {
+        strcpy(type, this->type);
+    }
+
     //HAUPTSCHLEIFE
     bool MfcCtrl::compute() {
         if (this->ready) {
-            if (this->nextEvent.time == -1) { //lade erstes Event in nextEvent
+            if (this->nextEvent.value == -1) { //lade erstes Event in nextEvent
                 if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
                     return false;
                 nextEvent = eventList.pop();

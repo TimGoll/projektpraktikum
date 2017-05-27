@@ -37,14 +37,14 @@ namespace communication {
         this->main_stringBuilder = main_stringBuilder;
     }
 
-    int Main_LabCom::readLine() { //TODO Serial.labview hier
+    int Main_LabCom::readLine() {
         this->bufferCharIndex = 0; //setze index auf Startposition zurueck
         unsigned long startTime = millis();
 
         //Lese so lange, bis Zeile vollstaendig empfangen wurde, oder Timeout erreicht wurde (Main-Thread wird blockiert)
         while(millis() < startTime + SERIAL_READ_TIMEOUT) {
-            if (Serial.available() > 0) { //Lese Daten, wenn vorhanden
-                this->inDataBuffer[this->bufferCharIndex] = Serial.read(); //Serial.read() gibt einen einzelnen Char zurueck
+            if (srl->available('L') > 0) { //Lese Daten, wenn vorhanden
+                this->inDataBuffer[this->bufferCharIndex] = srl->read('L'); //srl->read() gibt einen einzelnen Char zurueck
 
                 //UEBERPRUEFUNG
                 if (this->bufferCharIndex == 0) {
@@ -56,7 +56,7 @@ namespace communication {
                         //lese String dennoch bis Zum Ende um mehrfache "Falscher Beginn" Meldung zu verhindern
                         char searchForEnd = ' ';
                         while (searchForEnd != '\n') {
-                            searchForEnd = Serial.read();
+                            searchForEnd = srl->read('L');
                         }
                         return ERR_SERIAL_READ_WRONG_LINE_BEGIN;
                     }
@@ -111,6 +111,7 @@ namespace communication {
                 this->inDataArray[arrayIndex][arrayCharIndex] = this->inDataBuffer[currentCharIndex];
             }
         }
+        return 0;
     }
 
     void Main_LabCom::start() {
@@ -153,23 +154,26 @@ namespace communication {
         if (kill_flag)
             return false;
 
-        // Im Lesemodus wird, wenn ein String verfügbar ist (Serial.available() ), der String
+        // Im Lesemodus wird, wenn ein String verfügbar ist (srl->available() ), der String
         // vollstaendig eingelesen und, sofern kein Fehler aufgetreten ist, anschließend in ein Array zerteilt.
         // Je nach headerLineCounter (Zeile im Header) wird dieses Array an eine anderen Stelle weiter
         // verarbeitet.
         if (this->reading) { //Empfange Messprogramm
-            if (Serial.available() > 0) { //TODO Serial.labiew hier
+            if (srl->available('L') > 0) {
                 int errCode = this->readLine();
                 if (errCode == 1) { //Funktion wird ausgefuerhrt und bei Erfolg in If gegangen
                     //Der Header muss einzeln verarbeitet werden, daher gibt es einen headerLineCounter,
                     //der die erwartete Zeile speichert
                     int arraySize = this->splitLine();
 
-                    srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
-
-                    //TODO In jedem Schritt Ueberpruefungen, ob das Erwartete eingetroffen ist
                     switch (this->headerLineCounter) {
                         case 0: //ZEILE 0: MFC+Ventilanzahl
+                            if (arraySize != 2) {
+                                srl->println('D', "Zeile 0: Falsche Anzahl an Einträgen.");
+                                srl->println('L', "1004");
+                                this->main_display->throwError(1004);
+                                break;
+                            }
                             this->amount_MFC   = atoi(this->inDataArray[0]);
                             this->amount_valve = atoi(this->inDataArray[1]);
 
@@ -183,34 +187,70 @@ namespace communication {
                             this->main_display->header_started(this->amount_MFC, this->amount_valve);
 
                             this->headerLineCounter = 1;
-                            break; //Bei Switch-Case-Strukturen ist ein 'break' noetig um einen else-if-Effekt zu erhalten
+                            srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
+                            break;
                         case 1: //ZEILE 1: MFC-Adressen
+                            if (arraySize != this->amount_MFC) {
+                                srl->println('D', "Zeile 1: Anzahl der gegebenen Adressen stimmt nicht mit Anzahl der MFCs überein.");
+                                srl->println('L', "1004");
+                                this->main_display->throwError(1004);
+                                break;
+                            }
                             this->main_mfcCtrl->setAdresses(this->inDataArray);
 
                             this->headerLineCounter = 2;
+                            srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
                         case 2: //ZEILE 2: MFC-Typen
+                            if (arraySize != this->amount_MFC) {
+                                srl->println('D', "Zeile 2: Anzahl der gegebenen Typen stimmt nicht mit Anzahl der MFCs überein.");
+                                srl->println('L', "1004");
+                                this->main_display->throwError(1004);
+                                break;
+                            }
                             this->main_mfcCtrl->setTypes(this->inDataArray);
 
                             this->headerLineCounter = 3;
+                            srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
                         case 3: //ZEILE 3: Ventil-Pins
+                            if (arraySize != this->amount_valve) {
+                                srl->println('D', "Zeile 3: Anzahl der gegebenen Pin-Nummern stimmt nicht mit Anzahl der Ventile überein.");
+                                srl->println('L', "1004");
+                                this->main_display->throwError(1004);
+                                break;
+                            }
                             this->main_valveCtrl->setPins(this->inDataArray);
 
                             this->headerLineCounter = 4;
+                            srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
                         case 4: //ZEILE 4: Messaufloesung wird gesetzt
+                            if (arraySize != 1) {
+                                srl->println('D', "Zeile 4: Intervallgröße besteht aus einem Wert.");
+                                srl->println('L', "1004");
+                                this->main_display->throwError(1004);
+                                break;
+                            }
                             //StringBuilder, sowie BoschCom arbeiten mit dem selben Intervall
                             //Ersterer ist jedoch um eine halbe Periode in der Zeit verschoben
                             this->main_boschCom->setIntervall(atoi(this->inDataArray[0]));
                             this->main_stringBuilder->setIntervall(atoi(this->inDataArray[0]));
 
                             this->headerLineCounter = 5;
+                            srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
                         case 5: //ZEILE 5: DateString wird gesetzt
+                            if (arraySize != 1) {
+                                srl->println('D', "Zeile 5: Datum besteht aus einem Wert.");
+                                srl->println('L', "1004");
+                                this->main_display->throwError(1004);
+                                break;
+                            }
                             this->main_stringBuilder->setDateString(this->inDataArray[0]);
 
                             this->headerLineCounter = 6;
+                            srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
                         case 6: //ZEILE 6: Letzte Zeile, hier wird ein 'begin' erwartet
                             if (strcmp(this->inDataArray[0], "begin") == 0) {
@@ -220,9 +260,19 @@ namespace communication {
                                 this->main_display->event_started();
 
                                 this->headerLineCounter = 7;
+                            } else {
+                                srl->println('D', "Zeile 6: Es wird ein 'begin' erwartet");
+                                srl->println('L', "1004");
+                                this->main_display->throwError(1004);
                             }
                             break;
                         case 7: //ZEILE 7: Eventliste
+                            if (arraySize != 4) {
+                                srl->println('D', "Zeile 7: Events bestehen aus 4 Elementen, ansonsten wird ein 'end' erwartet.");
+                                srl->println('L', "1004");
+                                this->main_display->throwError(1004);
+                                break;
+                            }
                             if (strcmp(this->inDataArray[0], "M") == 0) { //MFC
                                 if (atoi(this->inDataArray[1]) < this->amount_MFC) {
                                     this->main_mfcCtrl->setEvent(
@@ -255,11 +305,19 @@ namespace communication {
 
                                 this->headerLineCounter = 8;
                             }
+                            srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
                         case 8: //ZEILE 8: Warte auf Start (kann auch durch Button aufgerufen werden)
+                            if (arraySize != 1) {
+                                srl->println('D', "Zeile 8: Es wird ein 'start' erwartet.");
+                                srl->println('L', "1004");
+                                this->main_display->throwError(1004);
+                                break;
+                            }
                             if (strcmp(this->inDataArray[0], "start") == 0) {
                                 this->start();
                             }
+                            srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
                     }
                 } else if (errCode > 1) {

@@ -38,8 +38,9 @@ namespace cmn {
         strcpy(timeString_out, timeString_temp);
     }
 
+
     char* integerToByte(unsigned long value, int bytesize, char output[]) {
-      int basisToPower_i; //nimmt den Wert 255^i mit i:[0,1,2,..,bytesize-1] an; wird zur Bestimmung der Koeffizienten xi benötigt (siehe unten)
+      /*int basisToPower_i; //nimmt den Wert 255^i mit i:[0,1,2,..,bytesize-1] an; wird zur Bestimmung der Koeffizienten xi benötigt (siehe unten)
       int xi;
 
       //value*=MAX_FLOAT_POINT_SHIFT; //aktuell eh nicht brauchbar, da int kein Komma unterstuetzt
@@ -58,6 +59,6 @@ namespace cmn {
       output[i] = xi; //Schreibt ASCII-Zeichen mit dem ASCII-Wert xi als Char-Zeichen in output[i]
       }
       output[bytesize-(i+1)]="\0";
-      return output;
+      return output;*/
     }
 };

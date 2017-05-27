@@ -60,6 +60,14 @@ namespace control {
         return this->queueFinished;
     }
 
+    void Main_MfcCtrl::getMfcType(int id, char type[]) {
+        if (id < this->amount_MFC) {
+            char type_tmp[16];
+            this->mfc_list[id]->getType(type_tmp);
+            strcpy(type, type_tmp);
+        }
+    }
+
 
     bool Main_MfcCtrl::loop() {
         //Gebe false zurueck um den Thread zu beenden. True bedeutet, dass der Thread weiter läuft

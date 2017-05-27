@@ -5,6 +5,8 @@
 #include <newdel.h> //fügt new und delete hinzu, wird für "mthread" benötigt
 #include <mthread.h>
 
+#include <bme280.h>
+
 #include "ownlibs/serialCommunication.h"
 
 namespace communication {
@@ -29,6 +31,8 @@ namespace communication {
         unsigned long lastTime;
 
         int currentValue;
+
+        Adafruit_BME280 *bme280;
     };
 }
 

@@ -70,7 +70,6 @@ namespace communication {
                 }
 
                 //Ventilwerte
-                //control::Main_ValveCtrl MVC; //vergessen zu löschen???
                 this->main_valveCtrl->getValveValueList(valveValueList);
                 for (int i = 0; i < this->main_valveCtrl->getAmount_valve(); i++) {
                     strcat(this->newLine, cmn::integerToByte(valveValueList[i], 3, output)); //TODO richtige Bytesize

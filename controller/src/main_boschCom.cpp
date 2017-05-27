@@ -4,6 +4,12 @@ namespace communication {
     Main_BoschCom::Main_BoschCom() {
         this->ready = false;
         this->currentValue = 0;
+
+        this->bme280 = new Adafruit_BME280(0x76);
+        if (!this->bme280->begin())
+            srl->println('D', "BME280 nicht gefunden.");
+        else
+            srl->println('D', "BME280 gefunden.");
     }
     Main_BoschCom::~Main_BoschCom() {
 
@@ -36,6 +42,13 @@ namespace communication {
                 //Lese Sensor aus, speichere in this->currentValue;
                 //srl->print('D', millis());
                 //srl->println('D', " Messe Boschsensor ...");
+
+                /*
+                 * Read BME280 with...
+                 * this->bme280->readTemperature()
+                 * this->bme280->readPressure()
+                 * this->bme280->readHumidity()
+                 */
 
 
                 this->lastTime += this->intervall;

@@ -40,6 +40,9 @@ namespace control {
         int getAmount_MFC();
         //wird von Main_LabCom kontinuierlich abgefragt, ob die queue abgeschlossen ist.
         bool getQueueFinished();
+        //schreibt Typ eines MFCs (ID dessen angeben) in gegebenes Array; bleibt leer,
+        //wenn ID nicht existent ist
+        void getMfcType(int id, char type[]);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();

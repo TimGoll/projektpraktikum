@@ -157,7 +157,7 @@ void LiquidCrystal_I2C::backlight_setColor(int r, int g, int b) {
  * Neue Methode zum Update der gesamten Bildmatrix. Diese vergleicht ausserdem den neuen Text mit
  * dem Alten, um nur die Zeichen zu uebertragen, die sich geaendert haben.
  */
-void LiquidCrystal_I2C::updateDisplayMatrix(char dm0[21], char dm1[21], char dm2[21], char dm3[21]) {
+void LiquidCrystal_I2C::updateDisplayMatrix(const char dm0[21], const char dm1[21], const char dm2[21], const char dm3[21]) {
     changeSingleChars(dm0, last_dm0, 0);
     changeSingleChars(dm1, last_dm1, 1);
     changeSingleChars(dm2, last_dm2, 2);
@@ -165,7 +165,7 @@ void LiquidCrystal_I2C::updateDisplayMatrix(char dm0[21], char dm1[21], char dm2
 }
 
 //privat
-void LiquidCrystal_I2C::changeSingleChars(char new_dm[21], char last_dm[21], int line) {
+void LiquidCrystal_I2C::changeSingleChars(const char new_dm[21], char last_dm[21], int line) {
     if (strcmp(new_dm, last_dm) != 0) {
         for (int i = 0; i < 21; i++) {
             if (new_dm[i] != last_dm[i]) {

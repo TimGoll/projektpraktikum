@@ -1,7 +1,7 @@
 #include "errors.h"
 
 namespace io {
-    char error_1000[][DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1] = {
+    const char error_1000[][DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1] = {
         {
             "     ERROR 1000     ",
             "                    ",
@@ -25,10 +25,16 @@ namespace io {
             "                    ",
             "    Serial Read     ",
             "      Timeout       "
+        },
+        {
+            "     ERROR 1004     ",
+            "                    ",
+            "   Falschen Anzahl  ",
+            "   von Argumenten   "
         }
     };
 
-    char error_5000[][DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1] = {
+    const char error_5000[][DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1] = {
         {
             "     ERROR 5000     ",
             "                    ",

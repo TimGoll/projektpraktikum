@@ -36,6 +36,8 @@ namespace control {
         int getCurrentValue();
         //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool compute();
+        //schreibt den Typ dieses MFCs in einen String
+        void getType(char type[]);
     private:
         int id; //kontunierliche MFC-Id
         char type[16];
