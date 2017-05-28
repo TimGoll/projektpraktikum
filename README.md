@@ -1,5 +1,5 @@
 # Dokumentation des Projektpraktikums
-Projektpraktikum (Mikrokontrollerpraktikum + Messtechnikpraktikum) Wintersemester 2016/17 am LMT
+Projektpraktikum (Mikrokontrollerpraktikum + Messtechnikpraktikum) Winter- + Sommersemester 2016/17 am LMT
 
 _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
 
@@ -16,6 +16,9 @@ _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
 
 3. [**QueueList**](http://playground.arduino.cc/Code/QueueList): <br>
  Fügt verkettete Listen hinzu, welche beliebige Datentypen speichern können. **Hinweis:** es ist nicht möglich Pointer in ihnen zu speichern.
+
+4. [**Adafruit BME280**](https://github.com/adafruit/Adafruit_BME280_Library) und [**Adafruit Sensor**](https://github.com/adafruit/Adafruit_Sensor): <br>
+  Ansteuerung des Boschsensors (Die Version im Repo ist leicht verändert).
 
 ## Programmablauf:
 1. Programm startet nach Öffnen der Seriellen Verbindung (Reset erfolgt automatisch auf dem Arduino; zu schauen, wie dies auf dem Teensy zu erreichen ist, eventuell Reset-Pin vom USB<->UART-Chip abgreifen (sofern vorhanden)?)
@@ -88,10 +91,10 @@ Nach der Messung können die Daten am PC m.H. von bytesize wieder wieder zerlegt
 
 
 ## I2C
-I2C wird von uns als Hauptkommunikationsbus verwendet. Folgende Adressen sind belegt:
+I2C wird von uns als Hauptkommunikationsbus verwendet. Folgende Adressen sind belegt (In der Klammer stehen die alternativen Adrerssen):
 - Display: 0x38 (--)
-- BME280: 0x77 (0x76)
-- IO Expander (Ventilplatine): -- (--)
+- BME280: 0x76 (0x77)
+- IO Expander (Ventilplatine, PCA9555): 0x20 (0x21 .. 0x27)
 
 ## BME280
 Der Boschsensor wird innerhalb der Klasse ```main_boschCom``` verwaltet. Dort wird ein bme-Objekt erstellt. Dieses Objekt wird geliefert von einer leicht angepassten Adafruit-Bibliothek. (Diese könnte man noch weiter ausmisten, da der ganze SPI Bereich eigentlich nicht gebraucht wird)
@@ -173,7 +176,7 @@ Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgefü
 **Lese-Timeout überschritten.** In der _config.h_ wird eine maximale Lesezeit pro String definiert. Wird diese Zeit überschritten, wird das Lesen des Strings an dieser Stelle abgebrochen.
 
 ### 1004:
-**Falsche Anzahl an Argumenten** Bei der Übertragung von LabView an den Controller wird immer überprüft, ob die Anzahl an eingetroffenen Elementen der Anzahl an erwarteten Elementen entspricht.
+**Falsche Anzahl an Argumenten.** Bei der Übertragung von LabView an den Controller wird immer überprüft, ob die Anzahl an eingetroffenen Elementen der Anzahl an erwarteten Elementen entspricht.
 
 ### 5000:
 **Zufriff auf nicht definierte MFC/Ventil ID.** Trifft dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.
@@ -228,7 +231,7 @@ Zur Ausführung müssen ```Python 2.7``` und ```pySerial``` installiert sein und
 
 Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausgeführt, insofern man sich im Verzeichnis dieser Datei befindet. In der Datei kann in einem Array die Übertragung definiert werden.
 
-[[Einrichtung von Python (Windows)]] (https://learn.adafruit.com/arduino-lesson-17-email-sending-movement-detector/installing-python-and-pyserial)
+[[Einrichtung von Python (Windows)]](https://learn.adafruit.com/arduino-lesson-17-email-sending-movement-detector/installing-python-and-pyserial)
 
 ## LabView:
 @Matthias Baltes: TODO!

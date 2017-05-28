@@ -8,6 +8,7 @@
 #include "config.h"
 #include "valveCtrl.h"
 #include "main_display.h"
+#include "ownlibs/pca9555.h"
 
 namespace control {
     // an die Ventile werden absolutwerte uerbtragen. Diese basieren auf der Zeit, die gespeichert
