@@ -56,7 +56,7 @@
 
 class LiquidCrystal_I2C : public Print {
 public:
-    LiquidCrystal_I2C(uint8_t lcd_Addr, const int i_red_pin, const int i_green_pin, const int i_blue_pin, uint8_t lcd_cols, uint8_t lcd_rows);
+    LiquidCrystal_I2C(uint8_t lcd_Addr, uint8_t i_red_pin, uint8_t i_green_pin, uint8_t i_blue_pin, uint8_t lcd_cols, uint8_t lcd_rows);
     void begin(uint8_t cols, uint8_t rows, uint8_t charsize = LCD_5x8DOTS );
     void clear();
     void home();
@@ -84,10 +84,10 @@ public:
 
     // Ergaenzungen
 
-	void backlight_brightness(int brightness);
+	void backlight_brightness(uint8_t brightness);
 	void backlight_off();
 	void backlight_on();
-	void backlight_setColor(int r, int g, int b);
+	void backlight_setColor(uint8_t r, uint8_t g, uint8_t b);
     void updateDisplayMatrix(const char dm0[21], const char dm1[21], const char dm2[21], const char dm3[21]);
 
 	// Ergaenzungen Ende
@@ -130,11 +130,11 @@ private:
     uint8_t _rows;
     uint8_t _backlightval;
 
-    int red_pin;
-    int green_pin;
-    int blue_pin;
-    int brightness;
-    bool backlight;
+    uint8_t _red_pin;
+    uint8_t _green_pin;
+    uint8_t _blue_pin;
+    uint8_t _brightness;
+    uint8_t _backlight;
 
     char last_dm0[21];
     char last_dm1[21];

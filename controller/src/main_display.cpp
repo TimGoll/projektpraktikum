@@ -31,9 +31,9 @@ namespace io {
 
     }
 
-    void Main_Display::throwError(int errorNumber) {
+    void Main_Display::throwError(uint16_t errorNumber) {
         if (errorNumber >= 1000 && errorNumber < 2000) {
-            int arrayIndex = errorNumber % 1000; //hole Index der Arrays, indem 1000er "entfernt" wird
+            uint16_t arrayIndex = errorNumber % 1000; //hole Index der Arrays, indem 1000er "entfernt" wird
             this->display->backlight_setColor(255,180,0);
 
             this->display->updateDisplayMatrix(
@@ -47,7 +47,7 @@ namespace io {
         } else
 
         if (errorNumber >= 5000 && errorNumber < 6000) {
-            int arrayIndex = errorNumber % 5000; //hole Index der Arrays, indem 1000er "entfernt" wird
+            uint16_t arrayIndex = errorNumber % 5000; //hole Index der Arrays, indem 1000er "entfernt" wird
             this->display->backlight_setColor(255,0,0);
 
             this->display->updateDisplayMatrix(
@@ -70,7 +70,7 @@ namespace io {
         );
     }
 
-    void Main_Display::header_started(int amountMFC, int amountValve) {
+    void Main_Display::header_started(uint16_t amountMFC, uint16_t amountValve) {
         this->amountMFC   = amountMFC;
         this->amountValve = amountValve;
 
@@ -100,7 +100,7 @@ namespace io {
         );
     }
 
-    void Main_Display::start(unsigned long startTime) {
+    void Main_Display::start(uint32_t startTime) {
         this->startTime = startTime;
         this->ready     = true;
 
@@ -115,14 +115,14 @@ namespace io {
         this->afterErrorTime = millis() + 500;
     }
 
-    void Main_Display::setLastEvent (char type, int id, int value, unsigned int time) {
+    void Main_Display::setLastEvent (char type, uint16_t id, uint16_t value, uint32_t time) {
         this->lastEvent_type  = type;
         this->lastEvent_id    = id;
         this->lastEvent_value = value;
         this->lastEvent_time  = time;
     }
 
-    void Main_Display::setLastEvent_id (int id) {
+    void Main_Display::setLastEvent_id (uint16_t id) {
         this->lastEvent_id  = id;
     }
 

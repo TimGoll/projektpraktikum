@@ -25,9 +25,9 @@ namespace communication {
         ~Main_StringBuilder();
         //setze das Intervall, in welchem die Hauptschleife ausgefuert wird.
         //Zeit ist gleich der des Sensors
-        void setIntervall(int intervall);
+        void setIntervall(uint16_t intervall);
         //aktiviere Klasse von LabCom aus, setzt die erste Intervallzeit
-        void start(unsigned long time);
+        void start(uint32_t time);
         //LabCom meldet, dass beide Queues abgearbeitet sind, Meldung wird auf dem Display
         //angezeigt
         void bothQueuesFinished ();
@@ -43,13 +43,13 @@ namespace communication {
         bool loop();
     private:
         bool ready;
-        unsigned long lastTime;
-        unsigned long startTime;
-        int intervall;
+        uint32_t lastTime;
+        uint32_t startTime;
+        uint16_t intervall;
         char dateString[32];
 
-        int mfcValueList[MAX_AMOUNT_MFC];
-        int valveValueList[MAX_AMOUNT_VALVE];
+        uint16_t mfcValueList[MAX_AMOUNT_MFC];
+        uint16_t valveValueList[MAX_AMOUNT_VALVE];
 
         char currentValveValue[16];
         char currentMfcValue[16];

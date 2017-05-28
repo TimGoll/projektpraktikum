@@ -13,40 +13,40 @@
 namespace control {
     // Dies ist die Klasse fuer die MFCs. Jeder MFC bekommt seine eigene Instanz
     // diser Klasse, da dies dann deutlich einfacher zu handhaben ist. Die Objekte
-    // werden in LabCom(??) erstellt und nach VOLLSTAENDIGER Beendigung der Messung
+    // werden in main_mfcCtrl erstellt und nach VOLLSTAENDIGER Beendigung der Messung
     // auch wieder geloescht.
     class MfcCtrl {
     public:
         //Defaultconstructor
-        MfcCtrl(int id);
+        MfcCtrl(uint16_t id);
         //Destructor
         ~MfcCtrl();
         //Es gibt zwei verschiedene Typen von MFCs, der Typ muss vorher gesetzt werden
         void setType(char type[]);
         //Jeder MFC hat seine eigene Adresse, die gesetzt werden muss
-        void setAdress(char adress[]);
+        void setAddress(char address[]);
         //Stellwerte fuer die MFCs koennen als Pseudoevents gesetzt werden. Die Ereignisse
         //werden in einer Queue gespeichert und bei gegebenen Zeitpunkt ausgefuehrt
-        void setEvent(int value, unsigned long time);
+        void setEvent(uint16_t value, uint32_t time);
         //sobald diese Funktion ausgefuehrt wird, beginnt das Programm mit der Ansteuerung
-        void start(unsigned long startTime);
+        void start(uint32_t startTime);
         //Gebe Adresse des Displayobjektes an diesen MFC, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
         //Gibt den aktuellen Soll-Wert des MFCs zurueck
-        int getCurrentValue();
+        uint16_t getCurrentValue();
         //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool compute();
         //schreibt den Typ dieses MFCs in einen String
         void getType(char type[]);
     private:
-        int id; //kontunierliche MFC-Id
+        uint16_t id; //kontunierliche MFC-Id
         char type[16];
-        char adress[16];
-        QueueList <eventElement> eventList;
+        char address[16];
         bool ready;
-        unsigned long startTime;
-        int currentValue;
+        uint32_t startTime;
+        int16_t currentValue;
 
+        QueueList <eventElement> eventList;
         eventElement nextEvent;
 
         io::Main_Display *main_display;

@@ -39,7 +39,7 @@ namespace communication {
 
     int Main_LabCom::readLine() {
         this->bufferCharIndex = 0; //setze index auf Startposition zurueck
-        unsigned long startTime = millis();
+        uint32_t startTime = millis();
 
         //Lese so lange, bis Zeile vollstaendig empfangen wurde, oder Timeout erreicht wurde (Main-Thread wird blockiert)
         while(millis() < startTime + SERIAL_READ_TIMEOUT) {
@@ -87,13 +87,13 @@ namespace communication {
     }
 
     int Main_LabCom::splitLine() {
-        int currentCharIndex = 0;
-        int endCharIndex = this->bufferCharIndex -1; //da letztes Zeichen '>' ist
+        uint16_t currentCharIndex = 0;
+        uint16_t endCharIndex = this->bufferCharIndex -1; //da letztes Zeichen '>' ist
 
         //Schleife, die durch die Ziel-Array-Indexe navigiert
-        for (int arrayIndex = 0; arrayIndex < SERIAL_READ_MAX_BLOCK_AMOUNT; arrayIndex++) {
+        for (uint16_t arrayIndex = 0; arrayIndex < SERIAL_READ_MAX_BLOCK_AMOUNT; arrayIndex++) {
             //Schleife, die durch die Char-Positionen eines Ziel-Array-Eintrags navigiert
-            for (int arrayCharIndex = 0; arrayCharIndex < SERIAL_READ_MAX_BLOCK_SIZE; arrayCharIndex++) {
+            for (uint16_t arrayCharIndex = 0; arrayCharIndex < SERIAL_READ_MAX_BLOCK_SIZE; arrayCharIndex++) {
                 currentCharIndex++; //Wird anfangs um 1 erhoet, Zeichen 1 ist zu ignorieren ('<')
 
                 if (this->inDataBuffer[currentCharIndex] == ',') { //Eintrag zu ende
@@ -196,7 +196,7 @@ namespace communication {
                                 this->main_display->throwError(1004);
                                 break;
                             }
-                            this->main_mfcCtrl->setAdresses(this->inDataArray);
+                            this->main_mfcCtrl->setAddresses(this->inDataArray);
 
                             this->headerLineCounter = 2;
                             srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
@@ -213,21 +213,33 @@ namespace communication {
                             this->headerLineCounter = 3;
                             srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
-                        case 3: //ZEILE 3: Ventil-Pins
+                        case 3: //ZEILE 3: Ventil PCB Adressen
+                            if (arraySize == 0 || arraySize > MAX_AMOUNT_VALVE_PCB) {
+                                srl->println('D', "Zeile 3: Anzahl der Adressen nicht korrekt.");
+                                srl->println('L', "1004");
+                                this->main_display->throwError(1004);
+                                break;
+                            }
+                            this->main_valveCtrl->setPcbAddresses(arraySize, this->inDataArray);
+
+                            this->headerLineCounter = 4;
+                            srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
+                            break;
+                        case 4: //ZEILE 4: Ventil-Pins
                             if (arraySize != this->amount_valve) {
-                                srl->println('D', "Zeile 3: Anzahl der gegebenen Pin-Nummern stimmt nicht mit Anzahl der Ventile überein.");
+                                srl->println('D', "Zeile 4: Anzahl der gegebenen Pin-Nummern stimmt nicht mit Anzahl der Ventile überein.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;
                             }
                             this->main_valveCtrl->setPins(this->inDataArray);
 
-                            this->headerLineCounter = 4;
+                            this->headerLineCounter = 5;
                             srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
-                        case 4: //ZEILE 4: Messaufloesung wird gesetzt
+                        case 5: //ZEILE 5: Messaufloesung wird gesetzt
                             if (arraySize != 1) {
-                                srl->println('D', "Zeile 4: Intervallgröße besteht aus einem Wert.");
+                                srl->println('D', "Zeile 5: Intervallgröße besteht aus einem Wert.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;
@@ -237,38 +249,39 @@ namespace communication {
                             this->main_boschCom->setIntervall(atoi(this->inDataArray[0]));
                             this->main_stringBuilder->setIntervall(atoi(this->inDataArray[0]));
 
-                            this->headerLineCounter = 5;
+                            this->headerLineCounter = 6;
                             srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
-                        case 5: //ZEILE 5: DateString wird gesetzt
+                        case 6: //ZEILE 6: DateString wird gesetzt
                             if (arraySize != 1) {
-                                srl->println('D', "Zeile 5: Datum besteht aus einem Wert.");
+                                srl->println('D', "Zeile 6: Datum besteht aus einem Wert.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;
                             }
                             this->main_stringBuilder->setDateString(this->inDataArray[0]);
 
-                            this->headerLineCounter = 6;
+                            this->headerLineCounter = 7;
                             srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
-                        case 6: //ZEILE 6: Letzte Zeile, hier wird ein 'begin' erwartet
+                        case 7: //ZEILE 7: Letzte Zeile, hier wird ein 'begin' erwartet
                             if (strcmp(this->inDataArray[0], "begin") == 0) {
                                 srl->println('D', "Header vollstaendig.");
 
                                 //Sage Display, dass Header vollstaendig und Events beginnen
                                 this->main_display->event_started();
 
-                                this->headerLineCounter = 7;
+                                srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
+                                this->headerLineCounter = 8;
                             } else {
-                                srl->println('D', "Zeile 6: Es wird ein 'begin' erwartet");
+                                srl->println('D', "Zeile 7: Es wird ein 'begin' erwartet");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                             }
                             break;
-                        case 7: //ZEILE 7: Eventliste
-                            if (arraySize != 4) {
-                                srl->println('D', "Zeile 7: Events bestehen aus 4 Elementen, ansonsten wird ein 'end' erwartet.");
+                        case 8: //ZEILE 8: Eventliste
+                            if (arraySize != 4 && strcmp(this->inDataArray[0], "end") != 0) {
+                                srl->println('D', "Zeile 8: Events bestehen aus 4 Elementen, ansonsten wird ein 'end' erwartet.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;
@@ -303,13 +316,13 @@ namespace communication {
                                 //Sage Display, dass Event-Uebertragung abgeschlossen ist
                                 this->main_display->event_finished();
 
-                                this->headerLineCounter = 8;
+                                this->headerLineCounter = 9;
                             }
                             srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                             break;
-                        case 8: //ZEILE 8: Warte auf Start (kann auch durch Button aufgerufen werden)
+                        case 9: //ZEILE 9: Warte auf Start (kann auch durch Button aufgerufen werden)
                             if (arraySize != 1) {
-                                srl->println('D', "Zeile 8: Es wird ein 'start' erwartet.");
+                                srl->println('D', "Zeile 9: Es wird ein 'start' erwartet.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;

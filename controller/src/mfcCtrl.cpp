@@ -1,7 +1,7 @@
 #include "mfcCtrl.h"
 
 namespace control {
-    MfcCtrl::MfcCtrl(int id) {
+    MfcCtrl::MfcCtrl(uint16_t id) {
         this->id = id;
 
         //setze defaultwerte für das "nextEvent"
@@ -31,16 +31,16 @@ namespace control {
         srl->println('D', this->type);
     }
 
-    void MfcCtrl::setAdress(char adress[]) {
-        strcpy(this->adress, adress);
+    void MfcCtrl::setAddress(char address[]) {
+        strcpy(this->address, address);
 
         srl->print('D', "MFC ");
         srl->print('D', this->id);
         srl->print('D', " Adresse: ");
-        srl->println('D', this->adress);
+        srl->println('D', this->address);
     }
 
-    void MfcCtrl::setEvent(int value, unsigned long time) {
+    void MfcCtrl::setEvent(uint16_t value, uint32_t time) {
         eventElement newEvent; //Erstelle neue Datenstruktur
         newEvent.value = value;
         newEvent.time  = time;
@@ -55,7 +55,7 @@ namespace control {
         this->eventList.push(newEvent); //Speichere Datenstruktur in einer Liste
     }
 
-    void MfcCtrl::start(unsigned long startTime) {
+    void MfcCtrl::start(uint32_t startTime) {
         this->startTime = startTime;
         this->ready = true;
     }
@@ -64,7 +64,7 @@ namespace control {
         this->main_display = main_display;
     }
 
-    int MfcCtrl::getCurrentValue() {
+    uint16_t MfcCtrl::getCurrentValue() {
         return this->currentValue;
     }
 
@@ -84,7 +84,7 @@ namespace control {
             if (millis() >= this->startTime + this->nextEvent.time) {
                 //TODO: set MFC to this->nextEvent->value
 
-                unsigned long currentTime = millis();
+                uint32_t currentTime = millis();
 
                 srl->print('D', "MFC\t");
                 srl->print('D', this->id);

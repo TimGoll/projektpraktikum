@@ -11,26 +11,39 @@ namespace control {
 
     }
 
-    void Main_ValveCtrl::createValve(int amount) {
+    void Main_ValveCtrl::createValve(uint16_t amount) {
         this->amount_valve = amount;
-        for (int i = 0; i < this->amount_valve; i++) {
+        for (uint16_t i = 0; i < this->amount_valve; i++) {
             this->valve_list[i] = new control::ValveCtrl(i);
             this->valve_list[i]->setMainDisplayObjectPointer(this->main_display);
             this->valve_continue_next_loop[i] = true;
         }
     }
 
-    void Main_ValveCtrl::setPins(char pins[][SERIAL_READ_MAX_BLOCK_SIZE]) {
-        for (int i = 0; i < this->amount_valve; i++) {
-            this->valve_list[i]->setPin(atoi(pins[i])); //Uebergebe Pin-Nummer als Integer
+    void Main_ValveCtrl::setPcbAddresses(uint16_t amount, char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
+        for (uint16_t i = 0; i < amount; i++) {
+            this->comPointer[i] = new Pca9555(strtoul(adresses[i], NULL, 8)); //strtoul() parsed unsigned Hex-Zahlen
         }
     }
 
-    void Main_ValveCtrl::setEvent(int valveID, int value, unsigned long time) {
+    void Main_ValveCtrl::setPins(char pins[][SERIAL_READ_MAX_BLOCK_SIZE]) {
+        for (uint16_t i = 0; i < this->amount_valve; i++) {
+            char tmp_ids[2][16];
+            cmn::split(tmp_ids, pins[i], ' ');
+
+            uint16_t id_pcb   = atoi(tmp_ids[0]);
+            uint16_t id_valve = atoi(tmp_ids[1]);
+
+            this->valve_list[i]->setComPointer(this->comPointer[id_pcb]);
+            this->valve_list[i]->setPin(id_valve);
+        }
+    }
+
+    void Main_ValveCtrl::setEvent(uint16_t valveID, uint16_t value, uint32_t time) {
         this->valve_list[valveID]->setEvent(value, time);
     }
 
-    void Main_ValveCtrl::start(unsigned long startTime) {
+    void Main_ValveCtrl::start(uint32_t startTime) {
         for (int i = 0; i < this->amount_valve; i++) {
             this->valve_list[i]->start(startTime);
         }
@@ -40,13 +53,13 @@ namespace control {
         this->main_display = main_display;
     }
 
-    void Main_ValveCtrl::getValveValueList(int valveValueList[]) {
-        for (int i = 0; i < this->amount_valve; i++) {
+    void Main_ValveCtrl::getValveValueList(uint16_t valveValueList[]) {
+        for (uint16_t i = 0; i < this->amount_valve; i++) {
             valveValueList[i] = this->valve_list[i]->getCurrentValue();
         }
     }
 
-    int Main_ValveCtrl::getAmount_valve(){
+    uint16_t Main_ValveCtrl::getAmount_valve(){
       return this->amount_valve;
     }
 

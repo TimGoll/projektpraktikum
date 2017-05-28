@@ -14,6 +14,7 @@
 
 #define MAX_AMOUNT_MFC 16
 #define MAX_AMOUNT_VALVE 16
+#define MAX_AMOUNT_VALVE_PCB 8
 
 #define MAX_SD_FILE_SIZE 52428800 //bytes, entspricht 50 MB
 //obsolet, da bytesize eingeführt

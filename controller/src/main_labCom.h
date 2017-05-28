@@ -60,17 +60,17 @@ namespace communication {
 
         bool reading;
         bool sending;
-        int amount_queueFinished;
+        uint16_t amount_queueFinished;
 
         char inDataBuffer[SERIAL_READ_MAX_LINE_SIZE];
-        int bufferCharIndex;
+        uint16_t bufferCharIndex;
 
         char inDataArray [SERIAL_READ_MAX_BLOCK_AMOUNT][SERIAL_READ_MAX_BLOCK_SIZE];
-        int headerLineCounter;
+        uint16_t headerLineCounter;
 
         //Header-Varablen:
-        int amount_MFC;
-        int amount_valve;
+        uint16_t amount_MFC;
+        uint16_t amount_valve;
     };
 }
 

@@ -3,8 +3,8 @@
 
 namespace control {
     typedef struct eventElementStruct {
-        int value;
-        unsigned long time;
+        int16_t value;
+        uint32_t time;
     } eventElement;
 
 }

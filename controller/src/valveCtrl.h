@@ -7,6 +7,7 @@
 #include <QueueList.h>
 
 #include "ownlibs/serialCommunication.h"
+#include "ownlibs/pca9555.h"
 #include "eventElement.h"
 #include "main_display.h"
 
@@ -14,33 +15,36 @@ namespace control {
     class ValveCtrl {
     public:
         //Defaultconstructor
-        ValveCtrl(int id);
+        ValveCtrl(uint16_t id);
         //Destructor
         ~ValveCtrl();
+        //setze Pointer des Com-Objects
+        void setComPointer(Pca9555 *pca9555);
         //setzt den Pin des Ventils
-        void setPin(int pin);
+        void setPin(uint16_t pin);
         //Stellwerte fuer die Ventile koennen als Pseudoevents gesetzt werden. Die Ereignisse
         //werden in einer Queue gespeichert und bei gegebenen Zeitpunkt ausgefuehrt
-        void setEvent(int value, unsigned long time);
+        void setEvent(uint16_t value, uint32_t time);
         //sobald diese Funktion ausgefuehrt wird, beginnt das Programm mit der Ansteuerung
-        void start(unsigned long startTime);
+        void start(uint32_t startTime);
         //Gebe Adresse des Displayobjektes an dieses Ventil, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
         //Gibt den aktuellen Soll-Wert des Ventils zurueck
-        int getCurrentValue();
+        uint16_t getCurrentValue();
         //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool compute();
     private:
-        int id;
-        int pin;
-        QueueList <eventElement> eventList;
-        bool ready;
-        unsigned long startTime;
-        int currentValue;
+        uint16_t id;
+        uint16_t pin;
+        bool     ready;
+        uint32_t startTime;
+        int16_t  currentValue;
 
+        QueueList <eventElement> eventList;
         eventElement nextEvent;
 
         io::Main_Display *main_display;
+        Pca9555 *pca9555;
     };
 }
 

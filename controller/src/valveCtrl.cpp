@@ -1,7 +1,7 @@
 #include "valveCtrl.h"
 
 namespace control {
-    ValveCtrl::ValveCtrl(int id) {
+    ValveCtrl::ValveCtrl(uint16_t id) {
         this->id = id;
 
         //setze defaultwerte für das "nextEvent"
@@ -20,10 +20,12 @@ namespace control {
 
     }
 
-    void ValveCtrl::setPin(int pin) {
-        this->pin = pin;
+    void ValveCtrl::setComPointer(Pca9555 *pca9555) {
+        this->pca9555 = pca9555;
+    }
 
-        pinMode(this->pin, OUTPUT);
+    void ValveCtrl::setPin(uint16_t pin) {
+        this->pin = pin;
 
         srl->print('D', "Ventil ");
         srl->print('D', this->id);
@@ -31,7 +33,7 @@ namespace control {
         srl->println('D', this->pin);
     }
 
-    void ValveCtrl::setEvent(int value, unsigned long time) {
+    void ValveCtrl::setEvent(uint16_t value, uint32_t time) {
         eventElement newEvent; //Erstelle neue Datenstruktur
         newEvent.value = value;
         newEvent.time  = time;
@@ -46,7 +48,7 @@ namespace control {
         this->eventList.push(newEvent); //Speichere Datenstruktur in einer Liste
     }
 
-    void ValveCtrl::start(unsigned long startTime) {
+    void ValveCtrl::start(uint32_t startTime) {
         this->startTime = startTime;
         this->ready = true;
     }
@@ -55,7 +57,7 @@ namespace control {
         this->main_display = main_display;
     }
 
-    int ValveCtrl::getCurrentValue() {
+    uint16_t ValveCtrl::getCurrentValue() {
         return this->currentValue;
     }
 
@@ -70,9 +72,9 @@ namespace control {
 
             if (millis() >= this->startTime + this->nextEvent.time) {
                 //setze Ventil auf this->nextEvent.value
-                digitalWrite(this->pin, this->nextEvent.value);
+                this->pca9555->digitalWrite(this->pin, this->nextEvent.value);
 
-                unsigned long currentTime = millis();
+                uint32_t currentTime = millis();
 
                 srl->print('D', "Ventil\t");
                 srl->print('D', this->id);

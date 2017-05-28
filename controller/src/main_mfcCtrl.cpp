@@ -11,33 +11,33 @@ namespace control {
 
     }
 
-    void Main_MfcCtrl::createMFC(int amount) {
+    void Main_MfcCtrl::createMFC(uint16_t amount) {
         this->amount_MFC = amount;
-        for (int i = 0; i < this->amount_MFC; i++) {
+        for (uint16_t i = 0; i < this->amount_MFC; i++) {
             this->mfc_list[i] = new control::MfcCtrl(i);
             this->mfc_list[i]->setMainDisplayObjectPointer(this->main_display);
             this->mfc_continue_next_loop[i] = true;
         }
     }
 
-    void Main_MfcCtrl::setAdresses(char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
-        for (int i = 0; i < this->amount_MFC; i++) {
-            this->mfc_list[i]->setAdress(adresses[i]);
+    void Main_MfcCtrl::setAddresses(char addresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
+        for (uint16_t i = 0; i < this->amount_MFC; i++) {
+            this->mfc_list[i]->setAddress(addresses[i]);
         }
     }
 
     void Main_MfcCtrl::setTypes(char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
-        for (int i = 0; i < this->amount_MFC; i++) {
+        for (uint16_t i = 0; i < this->amount_MFC; i++) {
             this->mfc_list[i]->setType(adresses[i]);
         }
     }
 
-    void Main_MfcCtrl::setEvent(int mfcID, int value, unsigned long time) {
+    void Main_MfcCtrl::setEvent(uint16_t mfcID, uint16_t value, uint32_t time) {
         this->mfc_list[mfcID]->setEvent(value, time);
     }
 
-    void Main_MfcCtrl::start(unsigned long startTime) {
-        for (int i = 0; i < this->amount_MFC; i++) {
+    void Main_MfcCtrl::start(uint32_t startTime) {
+        for (uint16_t i = 0; i < this->amount_MFC; i++) {
             this->mfc_list[i]->start(startTime);
         }
     }
@@ -46,13 +46,13 @@ namespace control {
         this->main_display = main_display;
     }
 
-    void Main_MfcCtrl::getMfcValueList(int mfcValueList[]) {
-        for (int i = 0; i < this->amount_MFC; i++) {
+    void Main_MfcCtrl::getMfcValueList(uint16_t mfcValueList[]) {
+        for (uint16_t i = 0; i < this->amount_MFC; i++) {
             mfcValueList[i] = this->mfc_list[i]->getCurrentValue();
         }
     }
 
-    int Main_MfcCtrl::getAmount_MFC(){
+    uint16_t Main_MfcCtrl::getAmount_MFC(){
       return this->amount_MFC;
     }
 
@@ -60,7 +60,7 @@ namespace control {
         return this->queueFinished;
     }
 
-    void Main_MfcCtrl::getMfcType(int id, char type[]) {
+    void Main_MfcCtrl::getMfcType(uint16_t id, char type[]) {
         if (id < this->amount_MFC) {
             char type_tmp[16];
             this->mfc_list[id]->getType(type_tmp);
@@ -75,7 +75,7 @@ namespace control {
             return false;
 
         //Aufrufen der MFC.compute() Funktionen. Kann immer getan werden, hat erst Wirkung nach demsie mit MFC.start() aktiviert werden.
-        for (int i = 0; i < this->amount_MFC; i++) {
+        for (uint16_t i = 0; i < this->amount_MFC; i++) {
             if (this->mfc_continue_next_loop[i]) {
                 this->mfc_continue_next_loop[i] = this->mfc_list[i]->compute();
 

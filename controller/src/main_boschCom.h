@@ -17,20 +17,20 @@ namespace communication {
         //Destructor
         ~Main_BoschCom();
         //setzt Messintervall
-        void setIntervall(int intervall);
+        void setIntervall(uint16_t intervall);
         //aktiviert den Sensor, startet Messung
-        void start(unsigned long time);
+        void start(uint32_t time);
         //gibt aktuellen Messwert des Sensors zurueck
-        int getCurrentValue();
+        uint16_t getCurrentValue();
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
     private:
-        int intervall;
+        uint16_t intervall;
         bool ready;
-        unsigned long lastTime;
+        uint32_t lastTime;
 
-        int currentValue;
+        uint16_t currentValue;
 
         Adafruit_BME280 *bme280;
     };

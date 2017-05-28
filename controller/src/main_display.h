@@ -20,42 +20,42 @@ namespace io {
         //Destructor
         ~Main_Display();
         //verarbeite Error Nummer und gebe Displayausgabe
-        void throwError(int errorNumber);
+        void throwError(uint16_t errorNumber);
         //zeige auf dem Display an, dass Uebertragung gestartet werden kann
         void boardIsReady();
         //Zeige an, dass Header-Uebertragung gestartet wurde
-        void header_started(int amountMFC, int amountValve);
+        void header_started(uint16_t amountMFC, uint16_t amountValve);
         //Zeige an, dass Header vollstanedig + Event-Uebertragung gestartet
         void event_started();
         //Zeige an, dass Event-Uebertragung dertig und Mess-Start erwartet wird
         void event_finished();
         //Messung gestartet, beginne Live-Ausgabe
-        void start(unsigned long startTime);
+        void start(uint32_t startTime);
         //setze letzt ausgefuehrtes Event zur Displayausgabe
-        void setLastEvent(char type, int id, int value, unsigned int time);
+        void setLastEvent(char type, uint16_t id, uint16_t value, uint32_t time);
         //LabCom meldet, dass beide Queues abgearbeitet sind, Meldung wird auf dem Display
         //angezeigt
         void bothQueuesFinished ();
 
 
-        void setLastEvent_id(int id);
+        void setLastEvent_id(uint16_t id);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
     private:
-        unsigned long afterErrorTime;
-        unsigned long lastPrint;
-        unsigned long startTime;
-        int amountMFC;
-        int amountValve;
+        uint32_t afterErrorTime;
+        uint32_t lastPrint;
+        uint32_t startTime;
+        uint16_t amountMFC;
+        uint16_t amountValve;
         bool ready;
-        int amount_queueFinished;
+        uint16_t amount_queueFinished;
 
         //lastEvent-Variablen
         char lastEvent_type;
-        int lastEvent_id;
-        int lastEvent_value;
-        unsigned long lastEvent_time;
+        uint16_t lastEvent_id;
+        uint16_t lastEvent_value;
+        uint32_t lastEvent_time;
 
         LiquidCrystal_I2C *display; //LCD-Write-Class
     };

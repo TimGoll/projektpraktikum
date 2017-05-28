@@ -38,6 +38,21 @@ namespace cmn {
         strcpy(timeString_out, timeString_temp);
     }
 
+    void split(char destination[][16], char source[], char symbol) {
+        uint8_t destination_id = 0;
+        uint8_t destination_iterator = 0;
+        for (uint8_t i = 0; source[i] != '\0'; i++) {
+            if (source[i] == symbol) {
+                destination[destination_id][destination_iterator] = '\0';
+                destination_id++;
+                destination_iterator = 0;
+            } else {
+                destination[destination_id][destination_iterator] = source[i];
+                destination_iterator++;
+            }
+        }
+    }
+
 
     char* integerToByte(unsigned long value, int bytesize, char output[]) {
       /*int basisToPower_i; //nimmt den Wert 255^i mit i:[0,1,2,..,bytesize-1] an; wird zur Bestimmung der Koeffizienten xi benötigt (siehe unten)

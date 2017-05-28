@@ -21,22 +21,22 @@
 // can't assume that its in that state when a sketch starts (and the
 // LiquidCrystal constructor is called).
 
-LiquidCrystal_I2C::LiquidCrystal_I2C(uint8_t lcd_Addr, const int i_red_pin, const int i_green_pin, const int i_blue_pin, uint8_t lcd_cols, uint8_t lcd_rows) {
+LiquidCrystal_I2C::LiquidCrystal_I2C(uint8_t lcd_Addr, uint8_t i_red_pin, uint8_t i_green_pin, uint8_t i_blue_pin, uint8_t lcd_cols, uint8_t lcd_rows) {
   _Addr = lcd_Addr;
   _cols = lcd_cols;
   _rows = lcd_rows;
   _backlightval = LCD_NOBACKLIGHT;
 
-  red_pin = i_red_pin;
-  green_pin = i_green_pin;
-  blue_pin = i_blue_pin;
+  _red_pin = i_red_pin;
+  _green_pin = i_green_pin;
+  _blue_pin = i_blue_pin;
 
-  brightness = 255;
-  backlight = true;
+  _brightness = 255;
+  _backlight = true;
 
-  pinMode(red_pin, OUTPUT);
-  pinMode(green_pin, OUTPUT);
-  pinMode(blue_pin, OUTPUT);
+  pinMode(_red_pin, OUTPUT);
+  pinMode(_green_pin, OUTPUT);
+  pinMode(_blue_pin, OUTPUT);
 
   strcpy(last_dm0, "                    ");
   strcpy(last_dm1, "                    ");
@@ -117,39 +117,39 @@ void LiquidCrystal_I2C::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
 
 // Ergaenzungen
 
-void LiquidCrystal_I2C::backlight_brightness(int brightness) {
-	this->brightness = brightness;
+void LiquidCrystal_I2C::backlight_brightness(uint8_t brightness) {
+	this->_brightness = brightness;
 }
 
 void LiquidCrystal_I2C::backlight_off() {
-	this->backlight = false;
+	this->_backlight = false;
 	this->backlight_setColor(0,0,0);
 }
 
 void LiquidCrystal_I2C::backlight_on() {
-	this->backlight = true;
+	this->_backlight = true;
 	this->backlight_setColor(255,255,255);
 }
 
-void LiquidCrystal_I2C::backlight_setColor(int r, int g, int b) {
-	if (this->backlight) {
+void LiquidCrystal_I2C::backlight_setColor(uint8_t r, uint8_t g, uint8_t b) {
+	if (this->_backlight) {
 		//mische Farben zueinander ab
 		r = map(r, 0, 255, 0, 255);
 		g = map(g, 0, 255, 0, 110);
 		b = map(b, 0, 255, 0, 115);
 
-		r = map(r, 0, 255, 0, brightness);
-		g = map(g, 0, 255, 0, brightness);
-		b = map(b, 0, 255, 0, brightness);
+		r = map(r, 0, 255, 0, _brightness);
+		g = map(g, 0, 255, 0, _brightness);
+		b = map(b, 0, 255, 0, _brightness);
 
 		//Input ist Anode --> Wert invertieren
 		r = map(r, 0, 255, 255, 0);
 		g = map(g, 0, 255, 255, 0);
 		b = map(b, 0, 255, 255, 0);
 
-		analogWrite(red_pin, r);
-		analogWrite(green_pin, g);
-		analogWrite(blue_pin, b);
+		analogWrite(_red_pin, r);
+		analogWrite(_green_pin, g);
+		analogWrite(_blue_pin, b);
 	}
 }
 

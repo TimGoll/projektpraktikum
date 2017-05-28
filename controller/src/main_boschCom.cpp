@@ -15,19 +15,19 @@ namespace communication {
 
     }
 
-    void Main_BoschCom::setIntervall(int intervall) {
+    void Main_BoschCom::setIntervall(uint16_t intervall) {
         this->intervall = intervall;
 
         srl->print('D', "BoschCom: Intervall gesetzt auf: ");
         srl->println('D', this->intervall);
     }
 
-    void Main_BoschCom::start(unsigned long time) {
+    void Main_BoschCom::start(uint32_t time) {
         this->ready = true;
         this->lastTime = time;
     }
 
-    int Main_BoschCom::getCurrentValue() {
+    uint16_t Main_BoschCom::getCurrentValue() {
         return this->currentValue;
     }
 

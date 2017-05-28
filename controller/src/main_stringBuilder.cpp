@@ -10,14 +10,14 @@ namespace communication {
 
     }
 
-    void Main_StringBuilder::setIntervall(int intervall) {
+    void Main_StringBuilder::setIntervall(uint16_t intervall) {
         this->intervall = intervall;
 
         srl->print('D', "StringBuilder: Intervall gesetzt auf: ");
         srl->println('D', this->intervall);
     }
 
-    void Main_StringBuilder::start(unsigned long time) {
+    void Main_StringBuilder::start(uint32_t time) {
         this->ready = true;
         this->startTime = time;
         this->lastTime = time + this->intervall / 2; //addiere halbes Intervall um versetzt zur Messung zu speichern
@@ -60,18 +60,18 @@ namespace communication {
 
                 // Zeit in millis()
                 // Passe currentTime so an, dass sie die relative Zeit zum Start anzeigt (rechne Schreibeverschiebnung wieder raus)
-                unsigned long currentTime = this->lastTime - ( this->startTime +  this->intervall / 2);
+                uint32_t currentTime = this->lastTime - ( this->startTime +  this->intervall / 2);
                 strcat(this->newLine, cmn::integerToByte(currentTime, 4, output));
 
                 //MFC Werte
                 this->main_mfcCtrl->getMfcValueList(mfcValueList);
-                for (int i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
+                for (uint16_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
                     strcat(this->newLine, cmn::integerToByte(mfcValueList[i], 3, output)); //TODO richtige Bytesize
                 }
 
                 //Ventilwerte
                 this->main_valveCtrl->getValveValueList(valveValueList);
-                for (int i = 0; i < this->main_valveCtrl->getAmount_valve(); i++) {
+                for (uint16_t i = 0; i < this->main_valveCtrl->getAmount_valve(); i++) {
                     strcat(this->newLine, cmn::integerToByte(valveValueList[i], 3, output)); //TODO richtige Bytesize
                 }
 

@@ -19,39 +19,41 @@ namespace control {
         //Destructor
         ~Main_MfcCtrl();
         //Funktion, die von LabCom aufgerufen wird. Sie erstellt MFC-Objekte
-        void createMFC(int amount);
+        void createMFC(uint16_t amount);
         //Wird von LabCom aufgerufen und bekommt ein Array mit allen Adressen.
         //Adressen werden weiter an alle MFC-Objekte gegeben
-        void setAdresses(char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]);
+        void setAddresses(char addresses[][SERIAL_READ_MAX_BLOCK_SIZE]);
         //Wird von LabCom aufgerufen und bekommt ein Array mit allen Typen
         //Typen werden weiter an alle MFC-Objekte gegeben.
         void setTypes(char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]);
         //Wird von LabCom aufgerufen und enthält Eventdaten. Wichtig ist hier, dass
         //dieser Aufruf immer nur fuer EIN MFC ist, daher ist die ID von Noeten
-        void setEvent(int mfcID, int value, unsigned long time);
+        void setEvent(uint16_t mfcID, uint16_t value, uint32_t time);
         //setzt die 'ready'-Variable der MFCs auf true. Außerdem wird der Nullpunkt der Steuerung gesetzt
-        void start(unsigned long startTime);
+        void start(uint32_t startTime);
         //Gebe Adresse des Displayobjektes an die einzelnen MFCs, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
         //Diese Funktion wird vom StringBuilder aufgerufen und sammelt die Daten der MFCs
         //um sie in den Ausgabestring zu schreiben
         //Die Funktion fragt die einzelnen MFCs nach ihren Werten ab
-        void getMfcValueList(int mfcValueList[]);
-        int getAmount_MFC();
+        void getMfcValueList(uint16_t mfcValueList[]);
+        //gibt die Anzahl an MFCs zurueck
+        uint16_t getAmount_MFC();
         //wird von Main_LabCom kontinuierlich abgefragt, ob die queue abgeschlossen ist.
         bool getQueueFinished();
         //schreibt Typ eines MFCs (ID dessen angeben) in gegebenes Array; bleibt leer,
         //wenn ID nicht existent ist
-        void getMfcType(int id, char type[]);
+        void getMfcType(uint16_t id, char type[]);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
     private:
-        int amount_MFC;
-        control::MfcCtrl *mfc_list[MAX_AMOUNT_MFC]; //Hier werden die Adressen der MFC-Objekte gespeichert
+        int16_t amount_MFC;
         bool mfc_continue_next_loop[MAX_AMOUNT_MFC];
-        int amount_of_finished_mfcs;
+        uint16_t amount_of_finished_mfcs;
         bool queueFinished;
+
+        control::MfcCtrl *mfc_list[MAX_AMOUNT_MFC]; //Hier werden die Adressen der MFC-Objekte gespeichert
 
         io::Main_Display *main_display;
     };

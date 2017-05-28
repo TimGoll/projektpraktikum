@@ -34,13 +34,14 @@ Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren F
 1. ```<Anzahl MFC, Anzahl Ventile>```
 2. ```<Adresse MFC 0, Adresse MFC 1, ...>```
 3. ```<Typ MFC 0, Typ MFC 1, ...>```
-4. ```<Ventil-Pin-0, Ventil-Pin-1, ...>```
-5. ```<Messintervall>```
-6. ```<Datum + Zeit>``` Aktuelles Datum & Uhrzeit. Wird im Header der Messung gespeichert, relativ dazu wird gemessen
-7. ```<begin>``` Ende des Headers, Beginn mit der Eventübertragung
-8. ```<MFC oder Ventil, ID, Wert, Zeit>``` Setze Events. Hierbei müssen die Events je MFC/Ventil zeitlich sortiert sein, um eine einfachere Verarbeitung zu gewährleisten. Untereinander dürfen die Events jedoch vertauscht sein. (Zeit von MFC2 darf vor MFC1 sein, auch bei späterer Übertragung. Jedoch darf Zeit von MFC1 nicht vor der Zeit von MFC1 sein)
-9. ```<end>``` Ende der Eventübertragung, warte auf Start der Messung
-10. ```<start>``` Nicht zwigend notwendig, kann auch händisch per Taster gestartet werden
+4. ```<Ventilplatinenadresse1, ...>``` Hexadezimale Ventilplatinenadressen
+5. ```<Platinen-ID Ventil-Pin-ID, Platinen-ID Ventil-Pin-ID, ...>```
+6. ```<Messintervall>```
+7. ```<Datum + Zeit>``` Aktuelles Datum & Uhrzeit. Wird im Header der Messung gespeichert, relativ dazu wird gemessen
+8. ```<begin>``` Ende des Headers, Beginn mit der Eventübertragung
+9. ```<MFC oder Ventil, ID, Wert, Zeit>``` Setze Events. Hierbei müssen die Events je MFC/Ventil zeitlich sortiert sein, um eine einfachere Verarbeitung zu gewährleisten. Untereinander dürfen die Events jedoch vertauscht sein. (Zeit von MFC2 darf vor MFC1 sein, auch bei späterer Übertragung. Jedoch darf Zeit von MFC1 nicht vor der Zeit von MFC1 sein)
+10. ```<end>``` Ende der Eventübertragung, warte auf Start der Messung
+11. ```<start>``` Nicht zwigend notwendig, kann auch händisch per Taster gestartet werden
 
 **Beispiel**:
 
@@ -48,7 +49,8 @@ Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren F
 <6,9>
 <adresse0,adress1,adresse2,adresse3,adresse4,adresse5>
 <typ0,typ1,typ2,typ3,typ4,typ5>
-<2,3,4,5,6,7,8,9,10>
+<0x20>
+<0 0, 0 1, 0 2, 0 3, 0 4, 0 6, 0 9, 0 12, 0 15>
 <10>
 <08.02.2017 13:03:29>
 <begin>
