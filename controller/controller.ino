@@ -7,8 +7,6 @@
 #include <QueueList.h>
 #include <Wire.h>
 
-
-
 //Klassen aus Includes mit einem "main" im Namen werden in dieser Datei erstellt
 //und haben einen Thread
 #include "src/main_labCom.h"
@@ -23,15 +21,15 @@
 
 #include "src/ownlibs/serialCommunication.h"
 
-bool debugStatus = false;
 void debug() {
-    debugStatus = !debugStatus;
     //set debug-status to srl
+    srl->activateDebug(digitalRead(PIN_DEBUGSWITCH));
+    digitalWrite(PIN_DEBUGLED, digitalRead(PIN_DEBUGSWITCH));
 }
 
-communication::Main_LabCom *main_labCom_tmp;
+communication::Main_LabCom *main_labCom_globalPointer;
 void start() {
-    main_labCom_tmp->start();
+    main_labCom_globalPointer->start();
 }
 
 void setup() {
@@ -70,10 +68,17 @@ void setup() {
     main_thread_list -> add_thread(main_valveCtrl);
 
     // ERSTELLE INTERRUPTS FUER TASTER
+    pinMode(PIN_DEBUGSWITCH, INPUT_PULLDOWN);
+    pinMode(PIN_STARTBUTTON, INPUT_PULLDOWN);
     attachInterrupt(PIN_DEBUGSWITCH, debug, CHANGE);
     attachInterrupt(PIN_STARTBUTTON, start, RISING);
 
     // INIT SWITCH
-    debugStatus = digitalRead(PIN_DEBUGSWITCH);
-    main_labCom_tmp = main_labCom; //speichere in globaler Variable
+    srl->activateDebug(digitalRead(PIN_DEBUGSWITCH));
+    digitalWrite(PIN_DEBUGLED, digitalRead(PIN_DEBUGSWITCH));
+    main_labCom_globalPointer = main_labCom; //speichere in globaler Variable
+
+    // INIT LEDS
+    pinMode(PIN_DEBUGLED, OUTPUT);
+    pinMode(PIN_FINISHLED, OUTPUT);
 }

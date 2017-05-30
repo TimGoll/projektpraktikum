@@ -4,10 +4,12 @@ namespace communication {
     Main_LabCom::Main_LabCom() {
         this->reading = true;
         this->sending = false;
+        this->finished = false;
+
+        this->amount_valve = 0;
+        this->amount_MFC = 0;
 
         this->headerLineCounter = 0;
-
-        this->amount_queueFinished = 0;
 
         srl->println('D', "LabCom erstellt.");
         srl->println('L', "ready"); //Sende Startbefehl an LabView
@@ -37,7 +39,7 @@ namespace communication {
         this->main_stringBuilder = main_stringBuilder;
     }
 
-    int Main_LabCom::readLine() {
+    int16_t Main_LabCom::readLine() {
         this->bufferCharIndex = 0; //setze index auf Startposition zurueck
         uint32_t startTime = millis();
 
@@ -86,7 +88,7 @@ namespace communication {
         return ERR_SERIAL_READ_TIMEOUT; //Timeout
     }
 
-    int Main_LabCom::splitLine() {
+    uint16_t Main_LabCom::splitLine() {
         uint16_t currentCharIndex = 0;
         uint16_t endCharIndex = this->bufferCharIndex -1; //da letztes Zeichen '>' ist
 
@@ -120,7 +122,9 @@ namespace communication {
         this->sending = true;
 
         //Fuege 1000ms zum Start hinzu, um Verzoegerungen durch die Startanzeige zu vermindern
-        unsigned long startTime = millis() + 1000;
+        uint32_t startTime = millis() + 1000;
+
+        srl->println('D', startTime);
 
         //starte MFCs
         this->main_mfcCtrl->start(startTime);
@@ -169,7 +173,7 @@ namespace communication {
                     switch (this->headerLineCounter) {
                         case 0: //ZEILE 0: MFC+Ventilanzahl
                             if (arraySize != 2) {
-                                srl->println('D', "Zeile 0: Falsche Anzahl an Einträgen.");
+                                srl->println('D', "Zeile 0: Falsche Anzahl an Eintraegen.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;
@@ -191,7 +195,7 @@ namespace communication {
                             break;
                         case 1: //ZEILE 1: MFC-Adressen
                             if (arraySize != this->amount_MFC) {
-                                srl->println('D', "Zeile 1: Anzahl der gegebenen Adressen stimmt nicht mit Anzahl der MFCs überein.");
+                                srl->println('D', "Zeile 1: Anzahl der gegebenen Adressen stimmt nicht mit Anzahl der MFCs ueberein.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;
@@ -203,7 +207,7 @@ namespace communication {
                             break;
                         case 2: //ZEILE 2: MFC-Typen
                             if (arraySize != this->amount_MFC) {
-                                srl->println('D', "Zeile 2: Anzahl der gegebenen Typen stimmt nicht mit Anzahl der MFCs überein.");
+                                srl->println('D', "Zeile 2: Anzahl der gegebenen Typen stimmt nicht mit Anzahl der MFCs ueberein.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;
@@ -215,7 +219,7 @@ namespace communication {
                             break;
                         case 3: //ZEILE 3: Ventil PCB Adressen
                             if (arraySize == 0 || arraySize > MAX_AMOUNT_VALVE_PCB) {
-                                srl->println('D', "Zeile 3: Anzahl der Adressen nicht korrekt.");
+                                srl->println('D', "Zeile 3: Anzahl der Adressen ist nicht korrekt.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;
@@ -227,7 +231,7 @@ namespace communication {
                             break;
                         case 4: //ZEILE 4: Ventil-Pins
                             if (arraySize != this->amount_valve) {
-                                srl->println('D', "Zeile 4: Anzahl der gegebenen Pin-Nummern stimmt nicht mit Anzahl der Ventile überein.");
+                                srl->println('D', "Zeile 4: Anzahl der gegebenen Pin-Nummern stimmt nicht mit Anzahl der Ventile ueberein.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;
@@ -239,7 +243,7 @@ namespace communication {
                             break;
                         case 5: //ZEILE 5: Messaufloesung wird gesetzt
                             if (arraySize != 1) {
-                                srl->println('D', "Zeile 5: Intervallgröße besteht aus einem Wert.");
+                                srl->println('D', "Zeile 5: Intervallgroesse besteht aus einem Wert.");
                                 srl->println('L', "1004");
                                 this->main_display->throwError(1004);
                                 break;
@@ -291,7 +295,7 @@ namespace communication {
                                     this->main_mfcCtrl->setEvent(
                                         atoi(this->inDataArray[1]), //MFC-ID
                                         atoi(this->inDataArray[2]), //value
-                                        strtoul(this->inDataArray[3], NULL, 0) //time (unsigned long)
+                                        strtoul(this->inDataArray[3], NULL, 0) //time (uint32_t)
                                     );
                                 } else {
                                     this->main_display->throwError(ERR_SERIAL_UNDEFINED_INDEX);
@@ -302,7 +306,7 @@ namespace communication {
                                     this->main_valveCtrl->setEvent(
                                         atoi(this->inDataArray[1]), //Ventil-ID
                                         atoi(this->inDataArray[2]), //value
-                                        strtoul(this->inDataArray[3], NULL, 0) //time (unsigned long)
+                                        strtoul(this->inDataArray[3], NULL, 0) //time (uint32_t)
                                     );
                                 } else {
                                     this->main_display->throwError(ERR_SERIAL_UNDEFINED_INDEX);
@@ -343,7 +347,8 @@ namespace communication {
 
         if (this->sending) { //Sende Messwerte parallel zur Messung
             //ueberpruefe kontinuierlich, ob Eventliste noch Inhalt hat
-            if (this->main_mfcCtrl->getQueueFinished() && this->main_valveCtrl->getQueueFinished()) {
+            if (this->main_mfcCtrl->getQueueFinished() && this->main_valveCtrl->getQueueFinished() && !this->finished) {
+                this->finished = true;
                 this->main_display->bothQueuesFinished();
                 this->main_stringBuilder->bothQueuesFinished();
             }

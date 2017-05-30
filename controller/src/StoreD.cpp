@@ -24,17 +24,17 @@ namespace storage {
     }
 
     void StoreD::detFilenumber(int filenumber, char filename[]){
-      filenumber = 1;
+      /*filenumber = 1;
       setFilename();
       while (SD.exists(filename)) {
         filenumber++;
         setFilename();
-      }
+    }*/
     }
 
     void StoreD::openFile(){
         //TODO: auf Display anzeigen, dass gespeichert wird
-        SD.begin();
+        /*SD.begin();
         if (restart==false) { //restart standardmäßig auf false
           detFilenumber(filenumber, filename);
           setFilename();
@@ -65,17 +65,19 @@ namespace storage {
                 myFile.print(", ");
               }
           }
-          myFile.println(""); //leere Zeile Abstand
+          myFile.println(""); //leere Zeile Abstand*/
     }
 
     void StoreD::closeFile(){
+        /*
           myFile.close();
           filenumber++;
           setFilename();
-          restart = true;
+          restart = true;*/
     }
 
     void StoreD::writeNewLine(){
+        /*
         //Sofern neue Zeile Dateigröße übersteigern würde, beginne neue Datei
         if ((MAX_SD_FILE_SIZE - myFile.size() > SERIAL_READ_MAX_LINE_SIZE)) {
           myFile.println(newLine);
@@ -84,6 +86,6 @@ namespace storage {
           myFile.close();
           openFile(); //neue Datei wird geöffnet, dabei wird Dateiname bestimmt und der Header der Datei geschrieben; danach werden wieder die Messwerte abgespeichert
           myFile.println(newLine);
-        }
-    }
+      }*/
+  }
 }

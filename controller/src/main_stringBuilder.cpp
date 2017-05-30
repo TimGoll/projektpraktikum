@@ -4,7 +4,7 @@ namespace communication {
     Main_StringBuilder::Main_StringBuilder() {
         this->ready = false;
 
-        this->storeD = new storage::StoreD(); //Erzeuge StoreD Objekt
+        //this->storeD = new storage::StoreD(); //Erzeuge StoreD Objekt
     }
     Main_StringBuilder::~Main_StringBuilder() {
 
@@ -52,36 +52,41 @@ namespace communication {
 
         if (this->ready) {
             if (millis() >= this->lastTime) {
+
                 //temporary
-                char output[] = "    "; //4 Byte + \0 !! Wichtig für strcat()
+                //char output[] = "    "; //4 Byte + \0 !! Wichtig für strcat()
 
                 //HEADER nur zu Beginn einmal Funktion ausfuehren:
                 //(Antwort von Markus): Header der txt-Datei wird beim Öffnen von dieser erstellt, siehe StoreD::openFile
 
                 // Zeit in millis()
                 // Passe currentTime so an, dass sie die relative Zeit zum Start anzeigt (rechne Schreibeverschiebnung wieder raus)
-                uint32_t currentTime = this->lastTime - ( this->startTime +  this->intervall / 2);
-                strcat(this->newLine, cmn::integerToByte(currentTime, 4, output));
+                //uint32_t currentTime = this->lastTime - ( this->startTime +  this->intervall / 2);
+                //cmn::integerToByte(currentTime, 4, output);
+                //strcat(this->newLine, output);
 
                 //MFC Werte
                 this->main_mfcCtrl->getMfcValueList(mfcValueList);
                 for (uint16_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
-                    strcat(this->newLine, cmn::integerToByte(mfcValueList[i], 3, output)); //TODO richtige Bytesize
+                    //cmn::integerToByte(mfcValueList[i], 3, output);
+                    //strcat(this->newLine, output); //TODO richtige Bytesize
                 }
 
                 //Ventilwerte
                 this->main_valveCtrl->getValveValueList(valveValueList);
                 for (uint16_t i = 0; i < this->main_valveCtrl->getAmount_valve(); i++) {
-                    strcat(this->newLine, cmn::integerToByte(valveValueList[i], 3, output)); //TODO richtige Bytesize
+                    //cmn::integerToByte(valveValueList[i], 3, output);
+                    //strcat(this->newLine, output); //TODO richtige Bytesize
                 }
 
                 //Boschsensor
-                strcat(this->newLine, cmn::integerToByte(this->main_boschCom->getCurrentValue(), 3, output)); //TODO richtige Bytesize
+                //cmn::integerToByte(this->main_boschCom->getCurrentValue(), 3, output);
+                //strcat(this->newLine, output); //TODO richtige Bytesize
 
                 // Sende String an SD
-                this->storeD->setNewLine(this->newLine);
-                this->storeD->setDate(this->dateString);
-                this->storeD->setIntervall(this->intervall);
+                //this->storeD->setNewLine(this->newLine);
+                //this->storeD->setDate(this->dateString);
+                //this->storeD->setIntervall(this->intervall);
 
                 // sende String an LabCom
 

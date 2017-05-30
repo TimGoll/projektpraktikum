@@ -21,8 +21,10 @@ namespace control {
     }
 
     void Main_ValveCtrl::setPcbAddresses(uint16_t amount, char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
+        srl->println('D', "Adressen der Ventilplatinen gesetzt, Kommunikationsobjekte erzeugt.");
         for (uint16_t i = 0; i < amount; i++) {
             this->comPointer[i] = new Pca9555(strtoul(adresses[i], NULL, 8)); //strtoul() parsed unsigned Hex-Zahlen
+            this->comPointer[i]->begin();
         }
     }
 
@@ -72,7 +74,7 @@ namespace control {
         if (kill_flag)
             return false;
 
-        //Aufrufen der Valve.compute() Funktionen. Kann immer getan werden, hat erst Wirkung nach demsie mit Valve.start() aktiviert werden.
+        //Aufrufen der valveCtrl->compute() Funktionen. Kann immer getan werden, hat erst Wirkung nach demsie mit valveCtrl->start() aktiviert werden.
         for (int i = 0; i < this->amount_valve; i++) {
             if (this->valve_continue_next_loop[i]) {
                 this->valve_continue_next_loop[i] = this->valve_list[i]->compute();

@@ -21,17 +21,17 @@ namespace cmn {
         strcpy(string, buffer); //schiebe neuen String in alten
     }
 
-    void getTimeString(unsigned long time, char timeString_out[]) {
-        int days    = time / 86400000;
+    void getTimeString(uint32_t time, char timeString_out[]) {
+        uint16_t days    = time / 86400000;
         time        = time % 86400000;
 
-        int hours   = time / 3600000;
+        uint16_t hours   = time / 3600000;
         time        = time % 3600000;
 
-        int minutes = time / 60000;
+        uint16_t minutes = time / 60000;
         time        = time % 60000;
 
-        int seconds = time / 1000;
+        uint16_t seconds = time / 1000;
 
         char timeString_temp[12];
         sprintf(timeString_temp, "%02d:%02d:%02d:%02d\0", days, hours, minutes, seconds);
@@ -54,8 +54,8 @@ namespace cmn {
     }
 
 
-    char* integerToByte(unsigned long value, int bytesize, char output[]) {
-      /*int basisToPower_i; //nimmt den Wert 255^i mit i:[0,1,2,..,bytesize-1] an; wird zur Bestimmung der Koeffizienten xi benötigt (siehe unten)
+    void integerToByte(unsigned long value, int bytesize, char output[]) {
+      int basisToPower_i; //nimmt den Wert 255^i mit i:[0,1,2,..,bytesize-1] an; wird zur Bestimmung der Koeffizienten xi benötigt (siehe unten)
       int xi;
 
       //value*=MAX_FLOAT_POINT_SHIFT; //aktuell eh nicht brauchbar, da int kein Komma unterstuetzt
@@ -73,7 +73,8 @@ namespace cmn {
       value     = value - xi*basisToPower_i;
       output[i] = xi; //Schreibt ASCII-Zeichen mit dem ASCII-Wert xi als Char-Zeichen in output[i]
       }
-      output[bytesize-(i+1)]="\0";
-      return output;*/
+      //output[bytesize-(i+1)]="\0"; //TODO
+      output[bytesize-(1)]='\0';
+      //return output; //du brauchst hier kein return, da du die Adresse vom output der Funktion uebergibst.
     }
 };

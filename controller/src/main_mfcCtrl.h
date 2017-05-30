@@ -50,7 +50,7 @@ namespace control {
     private:
         int16_t amount_MFC;
         bool mfc_continue_next_loop[MAX_AMOUNT_MFC];
-        uint16_t amount_of_finished_mfcs;
+        int16_t amount_of_finished_mfcs;
         bool queueFinished;
 
         control::MfcCtrl *mfc_list[MAX_AMOUNT_MFC]; //Hier werden die Adressen der MFC-Objekte gespeichert

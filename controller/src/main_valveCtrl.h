@@ -47,7 +47,7 @@ namespace control {
     private:
         int16_t amount_valve;
         bool valve_continue_next_loop[MAX_AMOUNT_VALVE];
-        uint16_t amount_of_finished_valves;
+        int16_t amount_of_finished_valves;
         bool queueFinished;
 
         control::ValveCtrl *valve_list[MAX_AMOUNT_VALVE]; //Hier werden die Adressen der Valve-Objekte gespeichert

@@ -12,6 +12,7 @@ public:
     ~SerialCommunication();
 
     void setSerial(HardwareSerial *serial_labView, HardwareSerial *serial_debug, HardwareSerial* serial_uart);
+    void activateDebug(bool activate);
 
     int available(char type); //returns number of bytes in buffer
     int read(char type); //Returns the first byte of incoming serial data available (or -1 if no data is available)
@@ -42,6 +43,8 @@ private:
     HardwareSerial *serial_labView;
     HardwareSerial *serial_debug;
     HardwareSerial *serial_uart;
+
+    bool debug_activated;
 };
 
 extern SerialCommunication *srl;

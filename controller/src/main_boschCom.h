@@ -30,7 +30,7 @@ namespace communication {
         bool ready;
         uint32_t lastTime;
 
-        uint16_t currentValue;
+        int16_t currentValue; //TODO
 
         Adafruit_BME280 *bme280;
     };

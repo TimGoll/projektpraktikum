@@ -7,16 +7,18 @@ toWrite = True
 i = 0
 counter = 0
 
-port = "/dev/cu.usbmodem1421" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
+port = "COM4" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
 
 data = [
     '<4,7>',
     '<adresse0,adresse1,adresse2,adresse3>',
     '<buerkert,buerkert,buerkert,buerkert>',
-    '<26,28,30,32,34,36,38>',
-    '<25>',
-    '<08.02.2017 13:03:29>',
+    '<0x20>',
+    '<0 0, 0 1, 0 2, 0 3, 0 4, 0 5, 0 6>',
+    '<10>',
+    '<datumTODO>',
     '<begin>',
+
     '<V,0,0,0>',
     '<V,1,0,0>',
     '<V,2,0,0>',
@@ -89,11 +91,15 @@ data = [
     '<start>'
 ]
 
+ready = False
 readline_running = True
 class readline (threading.Thread):
     def run (self):
+        global ready, readline_running;
         while (readline_running):
             in_data = str(serialConnection.readline())
+            if (in_data.find("ready") != -1):
+                ready = True
             print (in_data, end="")
 
 read = readline()
@@ -114,18 +120,19 @@ try:
 
     read.setDaemon(True) #Daemon - thread stops after exiting main-thread
     read.start()
+
+    while(not ready):
+        sleep(0.075)
     # MAINLOOP
+    sleep(1) #nach ready kurze Pause!
     while (True):
         if (toWrite == True):
-            if (counter == 0):
-                sleep(2)
-
             serialConnection.write(data[i] + "\n") #add '\n' (new line) to symbolize line ending
             i+=1
             if (i == len(data)):
                 toWrite = False
 
-        sleep(0.075)
+        sleep(0.085)
         counter+=1
 
 except KeyboardInterrupt:

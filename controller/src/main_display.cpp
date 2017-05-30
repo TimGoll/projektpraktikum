@@ -6,8 +6,8 @@ namespace io {
         this->lastPrint       = 0;
         this->startTime       = 0;
 
-        this->amountMFC       = 0;
-        this->amountValve     = 0;
+        this->amount_MFC       = 0;
+        this->amount_valve     = 0;
 
         this->ready           = false;
 
@@ -15,8 +15,6 @@ namespace io {
         this->lastEvent_id    = 5;
         this->lastEvent_value = 0;
         this->lastEvent_time  = 0;
-
-        this->amount_queueFinished = 0;
 
         this->display         = new LiquidCrystal_I2C(0x38, 10, 9, 8, 4, 20);
 
@@ -70,9 +68,9 @@ namespace io {
         );
     }
 
-    void Main_Display::header_started(uint16_t amountMFC, uint16_t amountValve) {
-        this->amountMFC   = amountMFC;
-        this->amountValve = amountValve;
+    void Main_Display::header_started(uint16_t amount_MFC, uint16_t amount_valve) {
+        this->amount_MFC   = amount_MFC;
+        this->amount_valve = amount_valve;
 
         this->display->updateDisplayMatrix(
             "   DATEN GESTARTET  ",
@@ -129,6 +127,7 @@ namespace io {
     void Main_Display::bothQueuesFinished () {
         //MFC und Ventil Eventlisten sind vollstaendig abgearbeitet
         srl->println('D', "Alle Eventlisten abgearbeitet. Programm endet hier.");
+        srl->println('D', "Fuer weitere Messung Board bitte resetten.");
 
         this->display->backlight_setColor(0,255,0);
 
@@ -137,9 +136,9 @@ namespace io {
 
         //Baue Anzeigetext
         char displayText [DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //TODO: Eins groesser, da '\0'
-        sprintf(displayText[0], "         #M:%02d #V:%02d\0", this->amountMFC, this->amountValve);
+        sprintf(displayText[0], "         #M:%02d #V:%02d\0", this->amount_MFC, this->amount_valve);
         sprintf(displayText[1], "                    \0");
-        sprintf(displayText[2], "   ABGESCHLOSSEN    \0");
+        sprintf(displayText[2], " ABGESCHLOSSEN NACH \0");
         sprintf(displayText[3], "    %s     \0", endTime_string);
 
         this->display->updateDisplayMatrix(
@@ -163,8 +162,8 @@ namespace io {
 
         if (millis() >= this->afterErrorTime) { //Errors haben Vorrang und blockieren Ausgabe
             this->display->backlight_setColor(255,255,255);
-
-            if (this->ready && millis() >= this->lastPrint + DISPLAY_REDRAW_INTERVALL) {
+                                                                                         //da die Startzeit 1000ms in die Zukunft gesetzt wird
+            if (this->ready && millis() >= this->lastPrint + DISPLAY_REDRAW_INTERVALL && millis() >= this->startTime) {
                 //Erstelle String der letzten Event Zeit
                 char lastEventTime_string[12];
                 cmn::getTimeString(this->lastEvent_time, lastEventTime_string);
@@ -175,7 +174,7 @@ namespace io {
 
                 //Baue Anzeigetext
                 char displayText [DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //TODO: Eins groesser, da '\0'
-                sprintf(displayText[0], "         #M:%02d #V:%02d\0", this->amountMFC, this->amountValve);
+                sprintf(displayText[0], "         #M:%02d #V:%02d\0", this->amount_MFC, this->amount_valve);
                 sprintf(displayText[1], "                    \0");
                 sprintf(displayText[2], "LAUFZEIT:%s\0", currentTime_string);
                 sprintf(displayText[3], "%c%02d-%04d-%s\0", this->lastEvent_type, this->lastEvent_id, this->lastEvent_value, lastEventTime_string);

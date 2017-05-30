@@ -46,10 +46,10 @@ namespace communication {
         //Diese Funktion wird zu Programmstart mehrmals ausgefuehrt, bis die kompletten Daten
         //eingetroffen sind. Sie liefert bei erfolgreicher Ausfuehrung 1, ansonsten
         //einen Errorcode mit einer Fehlermeldung in der Konsole
-        int readLine();
+        int16_t readLine();
         //Eingetroffene und vollstaendige Zeile wird an Kommata zerlegt und in Array gespeichert.
         //Gibt nach vollstaendiger Durchfuehrung die Anzahl an Eintraegen im Array zurueck.
-        int splitLine();
+        uint16_t splitLine();
 
         //Adressen der Ventil, MFC und Display Hauptobjekte zur Verteilung der Daten
         control::Main_MfcCtrl *main_mfcCtrl;
@@ -60,7 +60,6 @@ namespace communication {
 
         bool reading;
         bool sending;
-        uint16_t amount_queueFinished;
 
         char inDataBuffer[SERIAL_READ_MAX_LINE_SIZE];
         uint16_t bufferCharIndex;
@@ -71,6 +70,8 @@ namespace communication {
         //Header-Varablen:
         uint16_t amount_MFC;
         uint16_t amount_valve;
+
+        bool finished;
     };
 }
 

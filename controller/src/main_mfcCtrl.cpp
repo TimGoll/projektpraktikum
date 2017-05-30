@@ -74,7 +74,7 @@ namespace control {
         if (kill_flag)
             return false;
 
-        //Aufrufen der MFC.compute() Funktionen. Kann immer getan werden, hat erst Wirkung nach demsie mit MFC.start() aktiviert werden.
+        //Aufrufen der mfcCtrl->compute() Funktionen. Kann immer getan werden, hat erst Wirkung nachdem sie mit mfcCtrl->start() aktiviert werden.
         for (uint16_t i = 0; i < this->amount_MFC; i++) {
             if (this->mfc_continue_next_loop[i]) {
                 this->mfc_continue_next_loop[i] = this->mfc_list[i]->compute();

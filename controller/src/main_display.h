@@ -24,7 +24,7 @@ namespace io {
         //zeige auf dem Display an, dass Uebertragung gestartet werden kann
         void boardIsReady();
         //Zeige an, dass Header-Uebertragung gestartet wurde
-        void header_started(uint16_t amountMFC, uint16_t amountValve);
+        void header_started(uint16_t amount_MFC, uint16_t amount_valve);
         //Zeige an, dass Header vollstanedig + Event-Uebertragung gestartet
         void event_started();
         //Zeige an, dass Event-Uebertragung dertig und Mess-Start erwartet wird
@@ -46,10 +46,9 @@ namespace io {
         uint32_t afterErrorTime;
         uint32_t lastPrint;
         uint32_t startTime;
-        uint16_t amountMFC;
-        uint16_t amountValve;
+        uint16_t amount_MFC;
+        uint16_t amount_valve;
         bool ready;
-        uint16_t amount_queueFinished;
 
         //lastEvent-Variablen
         char lastEvent_type;
