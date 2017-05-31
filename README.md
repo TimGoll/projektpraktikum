@@ -129,6 +129,62 @@ this->bme280->readPressure();
 this->bme280->readHumidity();
 ```
 
+## MFCs
+Bei unserem Aufbau verwenden wir zwei verschiedene Typen von MFCs. **Bürkert** und **MKS** sind die beiden Hersteller, dazu gibt es noch alte analoge MFCs, die von einer anderen Projektgruppe digitalisiert wurden. Diese basieren dadurch auch auf dem **Bürkert** Protokoll. <br>
+Von uns angesteuert werden alle MFCs von ihrer jeweiligen Klasse, je nach Typ bekommen sie bei der Initialisierung jedoch ein anderes Kommunikationsobjekt übergeben. Dieses Objekt führt verschiedene Befehle aus und gibt gegebenefalls Daten an die MFC Klasse zurück.
+
+### Bürkert [[Handbuch]](https://www.buerkert.de/de/Media/plm/MAN/MA/MA8006-Supplem.MFC-DE-DE.pdf)
+Hier die für uns interessanten Informationen rausgeschrieben, siehe Seite 8ff.
+```
+Präampel:       2..20 mal 0x20          // Synchronisierung des Datenverkehrs
+Startzeichen:   Master->Slave 0x02      // WAS?
+                Slave->Master 0x06      // WAS? Definiert dies, ob eine Antwort erwartet wird?
+Adresse:        BIT 7:    1             // unser Master ist Primär
+                BIT 6:    0             // kein Burstmodus Hier
+                BIT 5..0: 0..32         // Pollingadresse
+Befehl:         8-bit Zahl
+                ohne 31, 127, 254, 255
+Bytezählwert:   Anzahl der Antwortbytes + Datenbytes
+Antwortcode:    Nur für Slave->Master (2 Byte groß)
+Daten:          Hängen von Befehl ab
+Checksumme:     8-bit XOR Kombination von Startzeichen bis Daten
+```
+Befehle:
+```
+0x01 - ReadPrimaryVariable (S.13)
+0x92 - ExtSetpoint (S.18)
+```
+Flusseinheit in Prozent. Maximal 40,976sccm.
+
+### MKS [[Handbuch]](https://www.mksinst.com/Docs/R/1153Aman.pdf)
+Siehe Seite 53ff
+```
+Präampel:       @ @ @ (min 1)           // Synchronisierung des Datenverkehrs
+Adresse:        001..253                // Empfängeradresse
+Befehl:         3 stelliger Befehlscode
+Zeichen:        ! oder ?
+Query:          Wert für Befehl (Checksumme??)
+Terminierung:   ;
+Checksumme:     letzten beiden Zeichen der Hexadezimalen Summe (nur ein @)
+```
+Befehle:
+```
+FSP? - Lese aktuellen Fluss (S.74)
+FSP! - Setze Fluss (S.74) - Fluss: 0..400.000.000 (entspricht 0..400.000)
+```
+Flusseinheit in sccm (cm^3/min), 100% ensprechen 400k
+### allgemein:
+- Fehlermeldungen werden weitergereicht and Display und LabView
+- Baudrate ist 9600
+- **Wir nehmen sccm als Standardeinheit für beide Typen!** Für Bürkert wird der Wert auf dem Board umgerechnet
+
+## Ventile
+Die Ventilsteuerung befindet sich auf einer abgesonderten Platine. Das hat für uns die beiden Vorteile, dass zum Einen Kurzschlüsse auf der Ventilplatine keinen Schaden an der Hauptsteuerung verursachen können und zum Anderen es uns möglich ist "beliebig" viele Ventile mit einem Microcontroller zu steuern.
+
+Theoretisch sind bis zu 8 Ventilplatinen mit je 16 Ventilen nötig, also insgesamt 128 Stück. Auf der Platine befindet sich ein dreipoliger DIP-Switch zum Einstellen der Adresse (Adressraum: 0x20..0x27). Die Adressen sind bei Programmstart per LabView an den Controller zu übertragen. Jede der acht Platinen hat 16 Pins (0 bis 15), die auch bei der Initailisierung so angegeben werden müssen (```<Platinen-ID Pin-ID, ...>```), intern haben die Ventile jedoch einen andere fortlaufende Numerierung.
+
+Die softwareseitige Ansteuerung wird mittels einer kleinen von uns geschriebenen Bibiliothek namens ```pca9555``` (Name des I2C ICs) realisiert. Angelehnt an die Syntax von der Arduino-Umgebung gibt es auch hier eine ```digitalWrite(pinNumber)```-Funktion, der Einfachheit halber haben wir jedoch auf weitere Funktionen verzichtet und bei Porgammstart werden automatisch alle Pins als Ausgang definiert.
+
 ## Display:
 Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden. <br>
 Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gibt es:

@@ -50,11 +50,11 @@ void setup() {
     main_labCom->setMainBoschObjectPointer(main_boschCom);
     main_labCom->setMainDisplayObjectPointer(main_display);
     main_labCom->setMainStringBuilderObjectPointer(main_stringBuilder);
-    
+
     main_mfcCtrl->setMainDisplayObjectPointer(main_display);
-    
+
     main_valveCtrl->setMainDisplayObjectPointer(main_display);
-    
+
     main_stringBuilder->setMainValveObjectPointer(main_valveCtrl);
     main_stringBuilder->setMainMfcObjectPointer(main_mfcCtrl);
     main_stringBuilder->setMainBoschObjectPointer(main_boschCom);
@@ -81,4 +81,8 @@ void setup() {
     // INIT LEDS
     pinMode(PIN_DEBUGLED, OUTPUT);
     pinMode(PIN_FINISHLED, OUTPUT);
+
+    // MFC RS CHIP-ENABLES
+    pinMode(PIN_ENABLE_MKS, OUTPUT);
+    pinMode(PIN_ENABLE_BRK, OUTPUT);
 }
