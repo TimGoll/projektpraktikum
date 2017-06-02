@@ -136,7 +136,7 @@ Von uns angesteuert werden alle MFCs von ihrer jeweiligen Klasse, je nach Typ be
 ### Bürkert [[Handbuch]](https://www.buerkert.de/de/Media/plm/MAN/MA/MA8006-Supplem.MFC-DE-DE.pdf)
 Hier die für uns interessanten Informationen rausgeschrieben, siehe Seite 8ff.
 ```
-Präampel:       2..20 mal 0x20          // Synchronisierung des Datenverkehrs
+Präampel:       2..20 mal 0xFF          // Synchronisierung des Datenverkehrs
 Startzeichen:   Master->Slave 0x02      // WAS?
                 Slave->Master 0x06      // WAS? Definiert dies, ob eine Antwort erwartet wird?
 Adresse:        BIT 7:    1             // unser Master ist Primär
@@ -151,28 +151,27 @@ Checksumme:     8-bit XOR Kombination von Startzeichen bis Daten
 ```
 Befehle:
 ```
-0x01 - ReadPrimaryVariable (S.13)
+0x03 - ReadCurrentAndFourDynamicVariables (S.14)
 0x92 - ExtSetpoint (S.18)
 ```
 Flusseinheit in Prozent. Maximal 40,976sccm.
 
 ### MKS [[Handbuch]](https://www.johnmorrisgroup.com/Content/Attachments/120115/MF1-man.pdf)
+"Human Readable Protocol" siehe Seite 73ff, übertragung alles in Ascii Chars.
 ```
-Präambel:           //@ @ @ (min 1)               // Synchronisierung des Datenverkehrs
-Adresse:        S. 60ff? //001..253               // Empfängeradresse
+Präambel:       @ (Synchronisierung des Datenverkehrs)
+Adresse:        2 Byte, 00 bis 99?
 Befehl:         1-stelliger Befehlscode (S.74)
-Zeichen:        S:28 unten? //! oder ?
-Query:              //Wert für Befehl (Checksumme??)
-Terminierung:       //;
-Checksumme:         //letzten beiden Zeichen der Hexadezimalen Summe (nur ein @)
+Wert:           1.00000 (Beispielhaft, aber diese Bytegröße)
+Terminierung:   \r (Carriage Return)
 ```
-Befehle:                              Return Cmd:
+Befehle:
 ```
-F  - Lese aktuellen Fluss (S.74)      F
-S  - Setze Fluss (S.74)               F            
+F  - Lese aktuellen Fluss (S.74)
+S  - Setze Fluss (S.74)
 ```
 Fluss: 0..500 sccm (S.16)
-```
+
 Flusseinheit in sccm (cm^3/min), 100% ensprechen 400k
 ### allgemein:
 - Fehlermeldungen werden weitergereicht and Display und LabView
