@@ -156,21 +156,22 @@ Befehle:
 ```
 Flusseinheit in Prozent. Maximal 40,976sccm.
 
-### MKS [[Handbuch]](https://www.mksinst.com/Docs/R/1153Aman.pdf)
-Siehe Seite 53ff
+### MKS [[Handbuch]](https://www.johnmorrisgroup.com/Content/Attachments/120115/MF1-man.pdf)
 ```
-Präampel:       @ @ @ (min 1)           // Synchronisierung des Datenverkehrs
-Adresse:        001..253                // Empfängeradresse
-Befehl:         3 stelliger Befehlscode
-Zeichen:        ! oder ?
-Query:          Wert für Befehl (Checksumme??)
-Terminierung:   ;
-Checksumme:     letzten beiden Zeichen der Hexadezimalen Summe (nur ein @)
+Präambel:           //@ @ @ (min 1)               // Synchronisierung des Datenverkehrs
+Adresse:        S. 60ff? //001..253               // Empfängeradresse
+Befehl:         1-stelliger Befehlscode (S.74)
+Zeichen:        S:28 unten? //! oder ?
+Query:              //Wert für Befehl (Checksumme??)
+Terminierung:       //;
+Checksumme:         //letzten beiden Zeichen der Hexadezimalen Summe (nur ein @)
 ```
-Befehle:
+Befehle:                              Return Cmd:
 ```
-FSP? - Lese aktuellen Fluss (S.74)
-FSP! - Setze Fluss (S.74) - Fluss: 0..400.000.000 (entspricht 0..400.000)
+F  - Lese aktuellen Fluss (S.74)      F
+S  - Setze Fluss (S.74)               F            
+```
+Fluss: 0..500 sccm (S.16)
 ```
 Flusseinheit in sccm (cm^3/min), 100% ensprechen 400k
 ### allgemein:
