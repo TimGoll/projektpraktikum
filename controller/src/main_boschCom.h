@@ -30,7 +30,7 @@ namespace communication {
         bool ready;
         uint32_t lastTime;
 
-        int16_t currentValue; //TODO
+        int16_t currentValue; //TODO mehrere Werte speichern?
 
         Adafruit_BME280 *bme280;
     };

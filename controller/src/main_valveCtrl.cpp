@@ -23,7 +23,7 @@ namespace control {
     void Main_ValveCtrl::setPcbAddresses(uint16_t amount, char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]) {
         srl->println('D', "Adressen der Ventilplatinen gesetzt, Kommunikationsobjekte erzeugt.");
         for (uint16_t i = 0; i < amount; i++) {
-            this->comPointer[i] = new Pca9555(strtoul(adresses[i], NULL, 8)); //strtoul() parsed unsigned Hex-Zahlen
+            this->comPointer[i] = new Pca9555((int)strtol(adresses[i], NULL, 0)); //strtoul() parsed unsigned Hex-Zahlen
             this->comPointer[i]->begin();
         }
     }

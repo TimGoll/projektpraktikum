@@ -9,6 +9,9 @@
 #include "mfcCtrl.h"
 #include "main_display.h"
 
+#include "mfcCom_buerkert.h"
+#include "mfcCom_mks.h"
+
 namespace control {
     // an die MFCs werden absolutwerte uerbtragen. Diese basieren auf der Zeit, die gespeichert
     // wird, wenn diese Klasse erstellt wird

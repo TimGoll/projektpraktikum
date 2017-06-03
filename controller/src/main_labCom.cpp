@@ -117,38 +117,35 @@ namespace communication {
     }
 
     void Main_LabCom::start() {
-        //Aendere Seriellen Modus
-        this->reading = false;
-        this->sending = true;
+        if (this->headerLineCounter == 9) { //erwarte 'start'
+            //Aendere Seriellen Modus
+            this->reading = false;
+            this->sending = true;
 
-        //Fuege 1000ms zum Start hinzu, um Verzoegerungen durch die Startanzeige zu vermindern
-        uint32_t startTime = millis() + 1000;
+            //Fuege 1000ms zum Start hinzu, um Verzoegerungen durch die Startanzeige zu vermindern
+            uint32_t startTime = millis() + 1000;
 
-        srl->println('D', startTime);
+            srl->println('D', startTime);
 
-        //starte MFCs
-        this->main_mfcCtrl->start(startTime);
+            //starte MFCs
+            this->main_mfcCtrl->start(startTime);
 
-        //starte Ventile
-        this->main_valveCtrl->start(startTime);
+            //starte Ventile
+            this->main_valveCtrl->start(startTime);
 
-        //starte Boschsensor
-        this->main_boschCom->start(startTime);
+            //starte Boschsensor
+            this->main_boschCom->start(startTime);
 
-        //starte Display
-        this->main_display->start(startTime);
+            //starte Display
+            this->main_display->start(startTime);
 
-        //starte Stringbuilder (und damit SD)
-        this->main_stringBuilder->start(startTime);
+            //starte Stringbuilder (und damit SD)
+            this->main_stringBuilder->start(startTime);
 
-        srl->print('D', "[Zeit: ");
-        srl->print('D', startTime);
-        srl->println('D', "] Messung gestartet.");
-    }
-
-    void Main_LabCom::setNewLine(char newLine[]) {
-        //Prinzte neue Zeile an LabView
-        //TODO!
+            srl->print('D', "[Zeit: ");
+            srl->print('D', startTime);
+            srl->println('D', "] Messung gestartet.");
+        }
     }
 
     //////////////////// MAINLOOP ////////////////////

@@ -3,8 +3,6 @@
 namespace communication {
     Main_StringBuilder::Main_StringBuilder() {
         this->ready = false;
-
-        //this->storeD = new storage::StoreD(); //Erzeuge StoreD Objekt
     }
     Main_StringBuilder::~Main_StringBuilder() {
 
@@ -24,6 +22,8 @@ namespace communication {
     }
 
     void Main_StringBuilder::bothQueuesFinished() {
+        //beende Messung
+        this->ready = false;
         //beide Queues sind abgearbeitet, sage Datei, dass sie nun geschlossen werden kann.
         this->storeD->closeFile();
     }
@@ -43,6 +43,10 @@ namespace communication {
 
     void Main_StringBuilder::setMainBoschObjectPointer(communication::Main_BoschCom *main_boschCom) {
         this->main_boschCom = main_boschCom;
+    }
+
+    void Main_StringBuilder::setStoreDObjectPointer(storage::StoreD *storeD) {
+        this->storeD = storeD;
     }
 
     bool Main_StringBuilder::loop() {
@@ -88,7 +92,9 @@ namespace communication {
                 //this->storeD->setDate(this->dateString);
                 //this->storeD->setIntervall(this->intervall);
 
-                // sende String an LabCom
+                // sende String an LabView
+                srl->print('L', "PLATZHALTER - Daten der Messung, die auch auf die SD Karte kommen, hier; Zeit: ");
+                srl->println('L', millis());
 
                 // (Bei SD die Funktion aufrufen, die deine Loop ersetzt (this->storeD->...) // bei lab com this->main_labCom->setNewLine(string))
                 // setze String zurueck fuer neuen String!

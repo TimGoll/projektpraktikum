@@ -89,6 +89,7 @@ public:
 	void backlight_on();
 	void backlight_setColor(uint8_t r, uint8_t g, uint8_t b);
     void updateDisplayMatrix(const char dm0[21], const char dm1[21], const char dm2[21], const char dm3[21]);
+    void setSymbol(uint8_t id, uint8_t x, uint8_t y);
 
 	// Ergaenzungen Ende
 

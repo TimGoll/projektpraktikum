@@ -1,6 +1,9 @@
 #include "StoreD.h"
 
 namespace storage {
+    //TODO: liefere Dateinamen in einem Verzeichnis (Programme)
+    //TODO: lese Datei und liefere Inhalt
+
     StoreD::StoreD() {
 
     }

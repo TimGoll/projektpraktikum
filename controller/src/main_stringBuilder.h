@@ -38,6 +38,7 @@ namespace communication {
         void setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl);
         void setMainMfcObjectPointer(control::Main_MfcCtrl *main_mfcCtrl);
         void setMainBoschObjectPointer(communication::Main_BoschCom *main_boschCom);
+        void setStoreDObjectPointer(storage::StoreD *storeD);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -58,6 +59,8 @@ namespace communication {
         char newLine[SERIAL_READ_MAX_LINE_SIZE];
 
         storage::StoreD *storeD; //Hier wird das StoreD-Objekt gespeichert
+
+        //Diese Objekte werden gebraucht, um Daten fuer die Speicherung zu "sammeln"
         control::Main_ValveCtrl *main_valveCtrl;
         control::Main_MfcCtrl *main_mfcCtrl;
         communication::Main_BoschCom *main_boschCom;

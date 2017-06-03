@@ -3,7 +3,7 @@
 Pca9555::Pca9555(uint8_t address) {
     this->_address = address;
     this->_valueRegister         = 0b0000000000000000; //alle Pins auf LOW
-    this->_configurationRegister = 0b1111111111111111; //alle PINS als OUTPUT
+    this->_configurationRegister = 0b0000000000000000; //alle PINS als OUTPUT
 
     Wire.begin();
 }

@@ -22,26 +22,26 @@
 // LiquidCrystal constructor is called).
 
 LiquidCrystal_I2C::LiquidCrystal_I2C(uint8_t lcd_Addr, uint8_t i_red_pin, uint8_t i_green_pin, uint8_t i_blue_pin, uint8_t lcd_cols, uint8_t lcd_rows) {
-  _Addr = lcd_Addr;
-  _cols = lcd_cols;
-  _rows = lcd_rows;
-  _backlightval = LCD_NOBACKLIGHT;
+    _Addr = lcd_Addr;
+    _cols = lcd_cols;
+    _rows = lcd_rows;
+    _backlightval = LCD_NOBACKLIGHT;
 
-  _red_pin = i_red_pin;
-  _green_pin = i_green_pin;
-  _blue_pin = i_blue_pin;
+    _red_pin = i_red_pin;
+    _green_pin = i_green_pin;
+    _blue_pin = i_blue_pin;
 
-  _brightness = 255;
-  _backlight = true;
+    _brightness = 255;
+    _backlight = true;
 
-  pinMode(_red_pin, OUTPUT);
-  pinMode(_green_pin, OUTPUT);
-  pinMode(_blue_pin, OUTPUT);
+    pinMode(_red_pin, OUTPUT);
+    pinMode(_green_pin, OUTPUT);
+    pinMode(_blue_pin, OUTPUT);
 
-  strcpy(last_dm0, "                    ");
-  strcpy(last_dm1, "                    ");
-  strcpy(last_dm2, "                    ");
-  strcpy(last_dm3, "                    ");
+    strcpy(last_dm0, "                    ");
+    strcpy(last_dm1, "                    ");
+    strcpy(last_dm2, "                    ");
+    strcpy(last_dm3, "                    ");
 }
 
 void LiquidCrystal_I2C::init(){
@@ -164,16 +164,57 @@ void LiquidCrystal_I2C::updateDisplayMatrix(const char dm0[21], const char dm1[2
     changeSingleChars(dm3, last_dm3, 3);
 }
 
+void LiquidCrystal_I2C::setSymbol(uint8_t id, uint8_t x, uint8_t y) {
+    setCursor(x,y);
+    write(byte(id));
+    if (y == 0)
+        last_dm0[x] = '~'; //Platzhalter fuer changeSingleChars
+    if (y == 1)
+        last_dm1[x] = '~'; //Platzhalter fuer changeSingleChars
+    if (y == 2)
+        last_dm2[x] = '~'; //Platzhalter fuer changeSingleChars
+    if (y == 3)
+        last_dm3[x] = '~'; //Platzhalter fuer changeSingleChars
+}
+
 //privat
 void LiquidCrystal_I2C::changeSingleChars(const char new_dm[21], char last_dm[21], int line) {
+    bool end_reached = false;
     if (strcmp(new_dm, last_dm) != 0) {
         for (int i = 0; i < 21; i++) {
-            if (new_dm[i] != last_dm[i]) {
-                setCursor(i, line);
-                print(new_dm[i]);
+            if (new_dm[i] == '\0')
+                end_reached = true;
+
+            if (end_reached) {
+                if (last_dm[i] == '\0')
+                    break;
+
+                if (last_dm[i] != ' ') {
+                    setCursor(i, line);
+                    print(' ');
+                }
+            } else {
+                if (new_dm[i] != last_dm[i]) {
+                    setCursor(i, line);
+                    print(new_dm[i]);
+                }
             }
+
         }
         strcpy(last_dm, new_dm);
+
+        //garantiere, dass leerzeichen im last_dm sind, sodass alte Zeichen ueberschrieben werden
+        int i;
+        bool end_of_source = false;
+        for (i = 0; i < 21; i++) {
+            if (last_dm[i] == '\0')
+                end_of_source = true;
+
+            if (end_of_source) { //fuelle mit Leerzeichen bis zum Ende
+                last_dm[i] = ' ';
+                last_dm[i+1] = '\0';
+            }
+        }
     }
 }
 

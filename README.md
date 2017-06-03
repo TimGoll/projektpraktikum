@@ -22,9 +22,10 @@ _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
 
 ## Programmablauf:
 1. Programm startet nach Öffnen der Seriellen Verbindung (Reset erfolgt automatisch auf dem Arduino; zu schauen, wie dies auf dem Teensy zu erreichen ist, eventuell Reset-Pin vom USB<->UART-Chip abgreifen (sofern vorhanden)?)
-2. Programm empfängt Daten (werden überprüft) und startet nach einem Tasterdruck/"start"-Befehl
-3. Arbeitet Eventlisten ab, gibt Debug-Informationen aus, sofern über Schalter aktiviert, während der Laufzeit Einstellbar
-4. Im Idle-Modus nach Vollständiger Abarbeitung aller Events; es wäre möglich eine LED leuchten zu lassen, wenn das Programm fertig ist
+2. Programm empfängt Daten (werden überprüft) und startet nach einem Tasterdruck/"Start"-Befehl
+3. Alternativ kommt man, bevor man eine Übertragung gestartet hat, mit einem Tastendruck in ein Menü, von wo aus man Programme, die auf der SD-Karte gespeichert sind, auswählen und starten kann.
+4. Arbeitet Eventlisten ab, gibt Debug-Informationen aus, sofern über Schalter aktiviert, während der Laufzeit Einstellbar
+5. Im Idle-Modus nach Vollständiger Abarbeitung aller Events; nach Abschluss des Programms leuchtet eine LED und das Display färbt sich rot
 
 ## Übertragungsprotokoll (LabView -> Microcontroller):
 Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren Format. Als Anfangs und Endzeichen dienen zur Überprüfung der Vollständigkeit jeweils ein öffnender und schließender Tag. Alle Zeitangaben sind in Millisekunden, es gibt nur ganzzahliger Integerwerte. Die IDs beginnen bei 0.
@@ -296,6 +297,38 @@ Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausg
 
 
 ## Elektronik:
+## Pinbelegung
+Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer aktuellen Belegung.
+```
+                                         U
+                                +------| S |------+
+                                |o GND |_B_| VIN o|
+                  Labview - RX1 |o 00        GND o|
+                  LabView - TX1 |o 01        3V3 o|
+                                |o 02         23 o|
+                                |o 03         22 o|
+                                |o 04         21 o|
+                                |o 05         20 o|
+                                |o 06         19 o| I2C - SCL0
+                 Uart-MKS - RX3 |o 07         18 o| I2C - SDA0
+                 Uart-MKS - TX3 |o 08         17 o| EINGANG - Debug-Schalter
+                    Debug - RX2 |o 09         16 o| EINGANG - OK-Taster
+                    Debug - TX2 |o 10         15 o| EINGANG - Runter-Taster
+                                |o 11         14 o| EINGANG - Hoch-Tater
+                                |o 12         13 o|
+                                |o 3V3       GND o|
+                                |o 24            o|
+                                |o 25            o|
+           Enable MKS - AUSGANG |o 26         39 o|
+       Enable Bürkert - AUSGANG |o 27         38 o|
+                                |o 28         37 o| PWM - Displaybeleuchtung blau
+            Debug-LED - AUSGANG |o 29         36 o| PWM - Displaybeleuchtung grün
+    Abgeschlossen-LED - AUSGANG |o 30  _____  35 o| PWM - Displaybeleuchtung rot
+             Uart-Bürkert - RX4 |o 31 |  S  | 34 o|
+             Uart-Bürkert - TX4 |o 32 |  D  | 33 o|
+                                +-----------------+
+```
+
 ### Hardware
 1. Schaltkizze: [[link]](../master/electronic/Schalplan.pdf)
 2. Verwendete Bauteile auf dem Haupboard:

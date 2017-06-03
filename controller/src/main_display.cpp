@@ -16,11 +16,28 @@ namespace io {
         this->lastEvent_value = 0;
         this->lastEvent_time  = 0;
 
-        this->display         = new LiquidCrystal_I2C(0x38, 10, 9, 8, 4, 20);
+        this->started_transmission = false;
+
+        this->display         = new LiquidCrystal_I2C(0x38, 35, 36, 37, 4, 20);
 
         this->display->init();
         this->display->clear();
         this->display->backlight_setColor(255,255,255);
+        uint8_t customChar[8] = {
+            0b00000,
+            0b00000,
+            0b01000,
+            0b01100,
+            0b01110,
+            0b01100,
+            0b01000,
+            0b00000
+        };
+        this->display->createChar(0, customChar);
+
+        this->_cursor_position = 0;
+        this->_selected_item = 0;
+        this->_menu_open = false;
 
         //Zeige an, dass Objekt erzeugt wurde und Board bereit ist
         this->boardIsReady();
@@ -63,14 +80,16 @@ namespace io {
         this->display->updateDisplayMatrix(
             "    BOARD BEREIT    ",
             "                    ",
-            "      Warte auf     ",
-            "    Uebertragung    "
+            "  Uebertrage Daten  ",
+            " oder oeffne Menue  "
         );
     }
 
     void Main_Display::header_started(uint16_t amount_MFC, uint16_t amount_valve) {
         this->amount_MFC   = amount_MFC;
         this->amount_valve = amount_valve;
+
+        this->started_transmission = true;
 
         this->display->updateDisplayMatrix(
             "   DATEN GESTARTET  ",
@@ -129,17 +148,19 @@ namespace io {
         srl->println('D', "Alle Eventlisten abgearbeitet. Programm endet hier.");
         srl->println('D', "Fuer weitere Messung Board bitte resetten.");
 
+        digitalWrite(PIN_FINISHLED, HIGH);
+
         this->display->backlight_setColor(0,255,0);
 
         char endTime_string[12];
         cmn::getTimeString(millis() - this->startTime, endTime_string);
 
         //Baue Anzeigetext
-        char displayText [DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //TODO: Eins groesser, da '\0'
-        sprintf(displayText[0], "         #M:%02d #V:%02d\0", this->amount_MFC, this->amount_valve);
-        sprintf(displayText[1], "                    \0");
-        sprintf(displayText[2], " ABGESCHLOSSEN NACH \0");
-        sprintf(displayText[3], "    %s     \0", endTime_string);
+        char displayText[DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //Eins groesser, da '\0'
+        sprintf(displayText[0], "         #M:%02d #V:%02d", this->amount_MFC, this->amount_valve);
+        sprintf(displayText[1], "                    ");
+        sprintf(displayText[2], " ABGESCHLOSSEN NACH ");
+        sprintf(displayText[3], "    %s     ", endTime_string);
 
         this->display->updateDisplayMatrix(
             displayText[0],
@@ -148,9 +169,81 @@ namespace io {
             displayText[3]
         );
 
-        this->afterErrorTime = 4294967295; //maximale Zeit in u_int32
+        this->afterErrorTime = 4294967295; //maximale Zeit in uint32_t
     }
 
+
+    void Main_Display::menu_setMenuItems(char items[][16], uint8_t amount) {
+        this->_amount_of_items = amount;
+        strcpy(this->_items[0], "ZURUECK");
+        for (uint8_t i = 0; i < amount; i++) {
+            strcpy(this->_items[i+1], items[i+1]);
+        }
+    }
+
+    void Main_Display::menu_controlMenu() {
+        if (!this->started_transmission) {
+            if (!this->_menu_open) { //Menue nicht geoeffnet, stelle Anzeige dar
+                this->_menu_open = true;
+                this->menu_drawMenu();
+                this->display->setSymbol(0, 2,0);
+            } else { //menu geoeffnet, bestaetige Auswahl
+                this->_menu_open = false;
+                if (this->_selected_item == 0) {
+                    this->boardIsReady();
+                } else {
+                    //TODO setze "fertig" Flag an LabCom
+                    //TODO gebe Datei an LabCom?
+                    this->event_finished();
+                }
+            }
+        }
+    }
+
+    void Main_Display::menu_navigateMenu(uint8_t direction) {
+        if (this->_menu_open) {
+            if (direction == 0) { //nach oben
+                this->_cursor_position--;
+                this->_cursor_position = max(this->_cursor_position, 0);
+                this->_selected_item--;
+                this->_selected_item = max(this->_selected_item, 0);
+                srl->println('D', "up");
+            } else if (direction == 1) { //nach unten
+                this->_cursor_position++;
+                this->_cursor_position = min(this->_cursor_position, 3);
+                this->_selected_item++;
+                this->_selected_item = min(this->_selected_item, this->_amount_of_items-1);
+                srl->println('D', "down");
+            }
+
+            srl->println('D', this->_cursor_position);
+            srl->println('D', this->_selected_item);
+
+            this->menu_drawMenu();
+            this->display->setSymbol(0, 2,this->_cursor_position);
+        }
+    }
+
+    void Main_Display::menu_drawMenu() {
+        uint8_t first_line_id = this->_selected_item - this->_cursor_position;
+
+        char displayText[DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //eins groesser da '\0'
+        strcpy(displayText[0], "M| ");
+        strcat(displayText[0], this->_items[first_line_id]);
+        strcpy(displayText[1], "E| ");
+        strcat(displayText[1], this->_items[first_line_id + 1]);
+        strcpy(displayText[2], "N| ");
+        strcat(displayText[2], this->_items[first_line_id + 2]);
+        strcpy(displayText[3], "U| ");
+        strcat(displayText[3], this->_items[first_line_id + 3]);
+
+        this->display->updateDisplayMatrix(
+            displayText[0],
+            displayText[1],
+            displayText[2],
+            displayText[3]
+        );
+    }
 
 
 
@@ -173,11 +266,11 @@ namespace io {
                 cmn::getTimeString(millis() - this->startTime, currentTime_string);
 
                 //Baue Anzeigetext
-                char displayText [DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //TODO: Eins groesser, da '\0'
-                sprintf(displayText[0], "         #M:%02d #V:%02d\0", this->amount_MFC, this->amount_valve);
-                sprintf(displayText[1], "                    \0");
-                sprintf(displayText[2], "LAUFZEIT:%s\0", currentTime_string);
-                sprintf(displayText[3], "%c%02d-%04d-%s\0", this->lastEvent_type, this->lastEvent_id, this->lastEvent_value, lastEventTime_string);
+                char displayText [DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //Eins groesser, da '\0'
+                sprintf(displayText[0], "         #M:%02d #V:%02d", this->amount_MFC, this->amount_valve);
+                sprintf(displayText[1], "                    ");
+                sprintf(displayText[2], "LAUFZEIT:%s", currentTime_string);
+                sprintf(displayText[3], "%c%02d-%04d-%s", this->lastEvent_type, this->lastEvent_id, this->lastEvent_value, lastEventTime_string);
 
                 this->display->updateDisplayMatrix(
                     displayText[0],

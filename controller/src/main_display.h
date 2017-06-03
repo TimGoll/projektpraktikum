@@ -37,24 +37,38 @@ namespace io {
         //angezeigt
         void bothQueuesFinished ();
 
+        void menu_setMenuItems(char items[][16], uint8_t amount);
+        void menu_navigateMenu(uint8_t direction);
+        void menu_controlMenu();
+
 
         void setLastEvent_id(uint16_t id);
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
     private:
+        void menu_drawMenu();
+
         uint32_t afterErrorTime;
         uint32_t lastPrint;
         uint32_t startTime;
         uint16_t amount_MFC;
         uint16_t amount_valve;
         bool ready;
+        bool started_transmission;
 
         //lastEvent-Variablen
         char lastEvent_type;
         uint16_t lastEvent_id;
         uint16_t lastEvent_value;
         uint32_t lastEvent_time;
+
+        //menu Variablen
+        char _items[MENU_MAX_AMOUNT_ENTRIES][16];
+        int8_t _cursor_position;
+        int8_t _selected_item;
+        uint8_t _amount_of_items;
+        bool _menu_open;
 
         LiquidCrystal_I2C *display; //LCD-Write-Class
     };
