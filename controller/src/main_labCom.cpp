@@ -145,6 +145,9 @@ namespace communication {
             srl->print('D', "[Zeit: ");
             srl->print('D', startTime);
             srl->println('D', "] Messung gestartet.");
+
+            //verhindere weitere Start-Eingaben:
+            this->headerLineCounter = 10;
         }
     }
 

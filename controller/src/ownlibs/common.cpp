@@ -34,7 +34,7 @@ namespace cmn {
         uint16_t seconds = time / 1000;
 
         char timeString_temp[12];
-        sprintf(timeString_temp, "%02d:%02d:%02d:%02d\0", days, hours, minutes, seconds);
+        sprintf(timeString_temp, "%02d:%02d:%02d:%02d", days, hours, minutes, seconds);
         strcpy(timeString_out, timeString_temp);
     }
 

@@ -1,16 +1,17 @@
 #include "mfcCom_mks.h"
 
 namespace communication {
-    MfCCom_Mks::MfCCom_Mks() {
+    MfcCom_Mks::MfcCom_Mks() {
 
     }
 
-    MfCCom_Mks::~MfCCom_Mks() {
+    MfcCom_Mks::~MfcCom_Mks() {
 
     }
 
-    uint8_t MfCCom_Mks::writeValue(uint8_t address, float value) {
-        sprintf(this->_address, "%02d", address);
+    uint8_t MfcCom_Mks::writeValue(char address[], float value) {
+        //sprintf(this->_address, "%02d", address);
+        strcpy(this->_address, address);
         //TODO this->_value auf Form: x.xxxxx (1.5)
 
         srl->print('U', "@");
@@ -18,9 +19,11 @@ namespace communication {
         srl->print('U', "S"); //Setze Fluss
         srl->print('U', this->_value);
         srl->print('U', '\r'); //Termimierung
+
+        srl->println('U', ""); //DEBUG: zeilenumbruch
     }
 
-    uint32_t MfCCom_Mks::readValue(uint8_t address) {
+    uint32_t MfcCom_Mks::readValue(char address[]) {
         sprintf(this->_address, "%02d", address);
 
         srl->print('U', "@");

@@ -3,8 +3,9 @@ Projektpraktikum (Mikrokontrollerpraktikum + Messtechnikpraktikum) Winter- + Som
 
 _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
 
-## Aktuelles Demonstrationsvideo:
-[Link zu YouTube Video](https://www.youtube.com/watch?v=2sz4_vMzZEc)
+## Aktuelle Demonstrationsvideos:
+[Demovideo 1 (03.12.2016)](https://www.youtube.com/watch?v=2sz4_vMzZEc) <br>
+[Demovideo 2 (04.06.2017)](https://www.youtube.com/watch?v=daKc67VaTdY)
 
 ## Verwendete Bibliotheken:
 1. [**mThread**](http://www.kwartzlab.ca/2010/09/arduino-multi-threading-librar/): <br>
@@ -409,13 +410,13 @@ die Dispaly Ports 4,5,6 und 11,12,13,14. (Einer zu wenig?)
        24 unique files.
         2 files ignored.
 
- https://github.com/AlDanial/cloc v 1.70  T=0.50 s (48.0 files/s, 2734.0 lines/s)
+ https://github.com/AlDanial/cloc v 1.70  T=0.50 s (72.0 files/s, 6490.0 lines/s)
  -------------------------------------------------------------------------------
  Language                     files          blank        comment           code
  -------------------------------------------------------------------------------
- C++                             11            185             50            665
- C/C++ Header                    13             72             88            307
+ C++                             17            424            235           1564
+ C/C++ Header                    19            158            175            689
  -------------------------------------------------------------------------------
- SUM:                            24            257            138            972
+ SUM:                            36            582            410           2253
  -------------------------------------------------------------------------------
  ```

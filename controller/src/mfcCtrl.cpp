@@ -82,7 +82,8 @@ namespace control {
             }
 
             if (millis() >= this->startTime + this->nextEvent.time) {
-                //TODO: set MFC to this->nextEvent->value
+                //set MFC to this->nextEvent->value
+                communication::mfcCom->writeValue(this->type, this->address, this->nextEvent.value);
 
                 uint32_t currentTime = millis();
 

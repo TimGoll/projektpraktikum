@@ -13,9 +13,9 @@ namespace communication {
         //Destructor
         ~MfcCom_Buerkert();
         //schreibe Soll-Wert an MFC, gebe Fehlercode zurueck, falls voranden
-        uint8_t writeValue(uint8_t address, float value);   // ExtSetpoint
+        uint8_t writeValue(char address[], float value);   // ExtSetpoint
         //lese Wert eines MFCs
-        uint32_t readValue(uint8_t address);                // ReadCurrentAndFourDynamicVariables
+        uint32_t readValue(char address[]);                // ReadCurrentAndFourDynamicVariables
         //lese maximalwert
         //uint32_t readMaxFlow(uint8_t address);
     private:

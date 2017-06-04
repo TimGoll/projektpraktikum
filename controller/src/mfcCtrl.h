@@ -10,8 +10,7 @@
 #include "eventElement.h"
 #include "main_display.h"
 
-#include "mfcCom_mks.h"
-#include "MfcCom_Buerkert.h"
+#include "mfcCom.h"
 
 namespace control {
     // Dies ist die Klasse fuer die MFCs. Jeder MFC bekommt seine eigene Instanz

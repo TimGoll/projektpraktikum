@@ -11,8 +11,8 @@ port = "COM9" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
 
 data = [
     '<4,16>',
-    '<adresse0,adresse1,adresse2,adresse3>',
-    '<buerkert,buerkert,buerkert,buerkert>',
+    '<01,21,07,14>',
+    '<Buerkert,Buerkert,MKS,MKS>',
     '<0x20>',
     '<0 0, 0 1, 0 2, 0 3, 0 4, 0 5, 0 6, 0 7, 0 8, 0 9, 0 10, 0 11, 0 12, 0 13, 0 14, 0 15>',
     '<250>',

@@ -6,16 +6,16 @@
 #include "ownlibs/serialCommunication.h"
 
 namespace communication {
-    class MfCCom_Mks {
+    class MfcCom_Mks {
     public:
         //Defaultconstructor
-        MfCCom_Mks();
+        MfcCom_Mks();
         //Destructor
-        ~MfCCom_Mks();
+        ~MfcCom_Mks();
         //schreibe Soll-Wert an MFC, gebe Fehlercode zurueck, falls voranden
-        uint8_t writeValue(uint8_t address, float value);
+        uint8_t writeValue(char address[], float value);
         //lese Wert eines MFCs
-        uint32_t readValue(uint8_t address);
+        uint32_t readValue(char address[]);
     private:
         char _address[3];
         char _value[8];

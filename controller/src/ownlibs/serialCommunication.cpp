@@ -15,10 +15,6 @@ void SerialCommunication::setSerial(HardwareSerial *serial_labView, HardwareSeri
     this->serial_labView->begin(SERIAL_LABVIEW_BAUDRATE);
     this->serial_debug->begin(SERIAL_DEBUG_BAUDRATE);
     this->serial_uart->begin(SERIAL_UART_BAUDRATE);
-
-    //debug
-    this->serial_debug = serial_labView;
-    this->serial_uart = serial_labView;
 }
 
 void SerialCommunication::activateDebug(bool activate) {

@@ -9,10 +9,10 @@ namespace communication {
 
     }
 
-    uint8_t MfcCom_Buerkert::writeValue(uint8_t address, float value) {
+    uint8_t MfcCom_Buerkert::writeValue(char address[], float value) {
         this->_preambel  = 0xFF; //sende 2 bis 20 Mal zur Initilisierung
         this->_startsign = 0x02; //Master->Slave
-        this->_address   = byte_adress(address);
+        this->_address   = byte_adress(atoi(address));
         this->_command   = 0x92; //Setze Wert
         this->_answer    = 0; //keine Antwort hier, dennoch 2 Byte gross
         this->_data      = this->byte4_floatToInt(value);
@@ -37,10 +37,15 @@ namespace communication {
         srl->print('U', this->_data);
         srl->print('U', this->_checksum);
         digitalWrite(PIN_ENABLE_BRK, LOW);
+
+        srl->println('U', ""); //DEBUG: zeilenumbruch
+
+        return 0; //TODO
     }
 
-    uint32_t MfcCom_Buerkert::readValue(uint8_t address) {
+    uint32_t MfcCom_Buerkert::readValue(char address[]) {
         //TODO lese Wert
+        return 0;
     }
 
 
@@ -49,7 +54,9 @@ namespace communication {
         uint8_t parameter = 0b10000000;
 
         //setze ersten beiden bits auf _10_
-        return parameter | address;
+        uint8_t return_value = parameter | address;
+
+        return return_value;
     }
 
     uint8_t MfcCom_Buerkert::byte_checksum(uint8_t start_sign, uint8_t address, uint8_t command, uint16_t answer, uint32_t data) {
