@@ -19,6 +19,8 @@ namespace communication {
         this->ready = true;
         this->startTime = time;
         this->lastTime = time + this->intervall / 2; //addiere halbes Intervall um versetzt zur Messung zu speichern
+        this->storeD->setAmountMFC(getAmount_MFC());
+        this->storeD->openfile();
     }
 
     void Main_StringBuilder::bothQueuesFinished() {
@@ -30,6 +32,7 @@ namespace communication {
 
     void Main_StringBuilder::setDateString(char dateString[]) {
         strcpy(this->dateString, dateString);
+        this->storeD->setDate(this->dateString);
     }
 
 
@@ -57,40 +60,40 @@ namespace communication {
         if (this->ready) {
             if (millis() >= this->lastTime) {
 
-                //temporary
-                //char output[] = "    "; //4 Byte + \0 !! Wichtig für strcat()
+                // temporary
+                char output[] = "    "; //4 Byte + \0 !! Wichtig für strcat()
 
-                //HEADER nur zu Beginn einmal Funktion ausfuehren:
-                //(Antwort von Markus): Header der txt-Datei wird beim Öffnen von dieser erstellt, siehe StoreD::openFile
+                // HEADER nur zu Beginn einmal Funktion ausfuehren:
+                // (Antwort von Markus): Header der txt-Datei wird beim Öffnen von dieser erstellt, siehe StoreD::openFile
 
                 // Zeit in millis()
                 // Passe currentTime so an, dass sie die relative Zeit zum Start anzeigt (rechne Schreibeverschiebnung wieder raus)
-                //uint32_t currentTime = this->lastTime - ( this->startTime +  this->intervall / 2);
-                //cmn::integerToByte(currentTime, 4, output);
-                //strcat(this->newLine, output);
+                uint32_t currentTime = this->lastTime - ( this->startTime +  this->intervall / 2);
+                cmn::integerToByte(currentTime, 4, output);
+                strcat(this->newLine, output);
 
                 //MFC Werte
                 this->main_mfcCtrl->getMfcValueList(mfcValueList);
                 for (uint16_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
-                    //cmn::integerToByte(mfcValueList[i], 3, output);
-                    //strcat(this->newLine, output); //TODO richtige Bytesize
+                    cmn::integerToByte(mfcValueList[i], 3, output);
+                    strcat(this->newLine, output); //TODO richtige Bytesize
                 }
 
                 //Ventilwerte
                 this->main_valveCtrl->getValveValueList(valveValueList);
                 for (uint16_t i = 0; i < this->main_valveCtrl->getAmount_valve(); i++) {
-                    //cmn::integerToByte(valveValueList[i], 3, output);
-                    //strcat(this->newLine, output); //TODO richtige Bytesize
+                    cmn::integerToByte(valveValueList[i], 3, output);
+                    strcat(this->newLine, output); //TODO richtige Bytesize
                 }
 
-                //Boschsensor
-                //cmn::integerToByte(this->main_boschCom->getCurrentValue(), 3, output);
-                //strcat(this->newLine, output); //TODO richtige Bytesize
+                // Boschsensor
+                cmn::integerToByte(this->main_boschCom->getCurrentValue(), 3, output);
+                strcat(this->newLine, output); //TODO richtige Bytesize
 
                 // Sende String an SD
-                //this->storeD->setNewLine(this->newLine);
-                //this->storeD->setDate(this->dateString);
-                //this->storeD->setIntervall(this->intervall);
+                this->storeD->setNewLine(this->newLine);
+                this->storeD->setDate(this->dateString);
+                this->storeD->setIntervall(this->intervall);
 
                 // sende String an LabView
                 srl->print('L', "PLATZHALTER - Daten der Messung, die auch auf die SD Karte kommen, hier; Zeit: ");
