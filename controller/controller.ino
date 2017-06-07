@@ -18,17 +18,17 @@
 #include "src/StoreD.h"
 #include "src/mfcCtrl.h"
 #include "src/valveCtrl.h"
+#include "src/parseInput.h"
 
 #include "src/ownlibs/serialCommunication.h"
 #include "src/ownlibs/inputHandler.h"
-
-uint32_t last_input = 0;
 
 io::Main_Display *main_display;
 io::InputHandler *inputHandler;
 communication::Main_LabCom *main_labCom;
 communication::Main_BoschCom *main_boschCom;
 communication::Main_StringBuilder *main_stringBuilder;
+communication::ParseInput *parseInput;
 control::Main_MfcCtrl *main_mfcCtrl;
 control::Main_ValveCtrl *main_valveCtrl;
 storage::StoreD *storeD;
@@ -64,6 +64,7 @@ void setup() {
   main_labCom        = new communication::Main_LabCom();
   main_boschCom      = new communication::Main_BoschCom();
   main_stringBuilder = new communication::Main_StringBuilder();
+  parseInput         = new communication::ParseInput();
   main_mfcCtrl       = new control::Main_MfcCtrl();
   main_valveCtrl     = new control::Main_ValveCtrl();
   storeD             = new storage::StoreD(); //stringBuilder, this
@@ -75,6 +76,11 @@ void setup() {
   main_labCom->setMainDisplayObjectPointer(main_display);
   main_labCom->setMainStringBuilderObjectPointer(main_stringBuilder);
 
+  parseInput->setMainMfcObjectPointer(main_mfcCtrl);
+  parseInput->setMainValveObjectPointer(main_valveCtrl);
+  parseInput->setMainBoschObjectPointer(main_boschCom);
+  parseInput->setMainDisplayObjectPointer(main_display);
+
   main_mfcCtrl->setMainDisplayObjectPointer(main_display);
 
   main_valveCtrl->setMainDisplayObjectPointer(main_display);
@@ -83,6 +89,8 @@ void setup() {
   main_stringBuilder->setMainMfcObjectPointer(main_mfcCtrl);
   main_stringBuilder->setMainBoschObjectPointer(main_boschCom);
   main_stringBuilder->setStoreDObjectPointer(storeD);
+
+  storeD->setParseInputObjectPointer(parseInput);
 
   //noch Platzhalter, Daten kommen von StoreD
   char programs[][16] = {"Messung Eins", "Heliumtest", "Windig", "Messung Zwei", "Noch eine", "weiterer Test", "Schoenes Wetter"};

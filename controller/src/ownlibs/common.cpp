@@ -38,7 +38,7 @@ namespace cmn {
         strcpy(timeString_out, timeString_temp);
     }
 
-    void split(char destination[][16], char source[], char symbol) {
+    uint8_t split(char destination[][16], char source[], char symbol) {
         uint8_t destination_id = 0;
         uint8_t destination_iterator = 0;
         for (uint8_t i = 0; source[i] != '\0'; i++) {
@@ -51,6 +51,8 @@ namespace cmn {
                 destination_iterator++;
             }
         }
+
+        return destination_id;
     }
 
 

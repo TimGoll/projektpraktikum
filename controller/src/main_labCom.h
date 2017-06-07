@@ -28,9 +28,9 @@ namespace communication {
         void setMainMfcObjectPointer(control::Main_MfcCtrl *main_mfcCtrl);
         //Gebe Adresse des Hauptobjektes (Valve) an LabCom, um zu kommunizieren
         void setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl);
-        //Gebe Adresse des Boschsensor-Objektes weiter
+        //Gebe Adresse des Hauptobjektes (Bosch) an LabCom, um zu kommunizieren
         void setMainBoschObjectPointer(communication::Main_BoschCom *main_boschCom);
-        //Gebe Adresse des Hauptobjektes (Valve) an LabCom, um zu kommunizieren
+        //Gebe Adresse des Hauptobjektes (Display) an LabCom, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
         //Gebe Adresse des Stringbuilders an LabCom
         void setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder);
