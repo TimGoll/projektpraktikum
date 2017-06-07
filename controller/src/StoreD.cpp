@@ -21,11 +21,11 @@ namespace storage {
     void StoreD::setIntervall(int intervall){
       this->intervall = intervall;
     }
-    void StoreD::setAmountMFC(int amountMFC){
-      this->amountMFC = amountMFC;
+    void StoreD::setAmountMFC(int amount_MFC){
+      this->amount_MFC = amount_MFC;
     }
-    void StoreD::setAmountValve(int amountValve){
-      this->amountValve = amountValve;
+    void StoreD::setAmountValve(int amount_Valve){
+      this->amount_Valve = amount_Valve;
     }
 
     void StoreD::setParseInputObjectPointer(communication::ParseInput *parseInput){
@@ -45,8 +45,8 @@ namespace storage {
     }
     }
 
-    uint8_t listsource(char list[][16]) {
-    dir = SD.open("/programs/");
+    uint8_t StoreD::listsource(char list[][16]) {
+    File dir = SD.open("/programs/");
     uint8_t counter=0;
     while (true) {
         File entry =  dir.openNextFile();
@@ -55,13 +55,13 @@ namespace storage {
           break;
         }
         if (!entry.isDirectory()) {
-          list[counter] = entry.name();
+          strcpy(list[counter], entry.name());
         }
         entry.close();
         counter++;
       }
     dir.close();
-    return = counter;
+    return counter;
     }
 
     void StoreD::readFile(char name[]) {
@@ -73,7 +73,7 @@ namespace storage {
         char line[SERIAL_READ_MAX_LINE_SIZE];
         while (true){
           char newchar= file.read();
-          if (newchar='\n') {
+          if (newchar=='\n') {
             line[counter]='\0';
             break;
           }
@@ -101,15 +101,15 @@ namespace storage {
           sprintf(buffer, "%d", intervall);
           myFile.print("Messintervall: "); myFile.println(buffer);
 
-          sprintf(buffer, "%d", amountMFC);
+          sprintf(buffer, "%d", amount_MFC);
           myFile.print("Anzahl MFCs: "); myFile.println(buffer);
 
-          sprintf(buffer, "%d", amountValve);
+          sprintf(buffer, "%d", amount_Valve);
           myFile.print("Anzahl Ventile: "); myFile.println(buffer);
 
 
-          for (int i = 0; i < amountMFC; i++) {
-              if (i < (amountMFC-1)){
+          for (int i = 0; i < amount_MFC; i++) {
+              if (i < (amount_MFC-1)){
                 sprintf(buffer, "MFC%d: ", i);
                 myFile.print(buffer);
                 //myFile.print(???.getType_MFC); //MFC-Typen bisher nicht zugreifbar, da noch nicht existent (???)

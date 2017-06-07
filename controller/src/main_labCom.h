@@ -14,6 +14,7 @@
 #include "main_display.h"
 #include "main_boschCom.h"
 #include "main_stringBuilder.h"
+#include "parseInput.h"
 
 namespace communication {
     // an die MFCs werden absolutwerte uerbtragen. Diese basieren auf der Zeit, die gespeichert
@@ -34,6 +35,8 @@ namespace communication {
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
         //Gebe Adresse des Stringbuilders an LabCom
         void setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder);
+
+        void setParseInputObjectPointer(communication::ParseInput *parseInput);
         //setze neue Zeile zur Uebertragung an LabView
         void setNewLine(char newLine[]);
         //gibt Befehl zum Start der Threads von MFC und Ventil, uebergibt die Startzeit, welche als
@@ -57,6 +60,7 @@ namespace communication {
         communication::Main_BoschCom *main_boschCom;
         io::Main_Display *main_display;
         communication::Main_StringBuilder *main_stringBuilder;
+        communication::ParseInput *parseInput;
 
         bool reading;
         bool sending;

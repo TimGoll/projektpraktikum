@@ -31,9 +31,11 @@ namespace storage {
         void setNewLine(char newLine[]);
         void setDate(char dateString[]);
         void setIntervall(int intervall);
-        void setAmountMFC(int amountMFC);
-        void setAmountValve(int amountValve);
+        void setAmountMFC(int amount_MFC);
+        void setAmountValve(int amount_Valve);
         void setParseInputObjectPointer(communication::ParseInput *parseInput);
+        void readFile(char name[]);
+        uint8_t listsource(char list[][16]);
     private:
         char newLine[2000]; //MAX_LINE_SIZE?? SERIAL_READ_MAX_LINE_SIZE??
         char dateString[16];
@@ -42,12 +44,14 @@ namespace storage {
         int filenumber;
         int decplaces;
         int decplaceshelp;
+        uint8_t amount_MFC;
+        uint8_t amount_Valve;
         char buffer[16]; //Buffer für Werte vom Messintervall, MFC-Anzahl, Ventil-Anzahl usw.
         File myFile;
         //Programm gestartet -> Messung gestartet -> Messung gestoppt -> Messung gestartet -> restart = true
         bool restart = false;
 
-        communication::ParseInput *ParseInput;
+        communication::ParseInput *parseInput;
     };
 }
 

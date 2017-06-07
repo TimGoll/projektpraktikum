@@ -75,11 +75,13 @@ void setup() {
   main_labCom->setMainBoschObjectPointer(main_boschCom);
   main_labCom->setMainDisplayObjectPointer(main_display);
   main_labCom->setMainStringBuilderObjectPointer(main_stringBuilder);
+  main_labCom->setParseInputObjectPointer(parseInput);
 
   parseInput->setMainMfcObjectPointer(main_mfcCtrl);
   parseInput->setMainValveObjectPointer(main_valveCtrl);
   parseInput->setMainBoschObjectPointer(main_boschCom);
   parseInput->setMainDisplayObjectPointer(main_display);
+  parseInput->setMainStringBuilderObjectPointer(main_stringBuilder);
 
   main_mfcCtrl->setMainDisplayObjectPointer(main_display);
 

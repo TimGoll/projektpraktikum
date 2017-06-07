@@ -19,8 +19,9 @@ namespace communication {
         this->ready = true;
         this->startTime = time;
         this->lastTime = time + this->intervall / 2; //addiere halbes Intervall um versetzt zur Messung zu speichern
-        this->storeD->setAmountMFC(getAmount_MFC());
-        this->storeD->openfile();
+        this->storeD->setAmountMFC(this->main_mfcCtrl->getAmount_MFC());
+        this->storeD->setAmountValve(this->main_valveCtrl->getAmount_valve());
+        this->storeD->openFile();
     }
 
     void Main_StringBuilder::bothQueuesFinished() {

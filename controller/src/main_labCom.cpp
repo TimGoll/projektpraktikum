@@ -39,6 +39,10 @@ namespace communication {
         this->main_stringBuilder = main_stringBuilder;
     }
 
+    void Main_LabCom::setParseInputObjectPointer(communication::ParseInput *parseInput){
+      this->parseInput=parseInput;
+    }
+
     int16_t Main_LabCom::readLine() {
         this->bufferCharIndex = 0; //setze index auf Startposition zurueck
         uint32_t startTime = millis();
@@ -168,7 +172,7 @@ namespace communication {
                 if (errCode == 1) {
 
                     //Uebergebe gelesene Zeile, verarbeite zurueck gegebenen ErrorCode
-                    uint16_t parserErrCode = this->parseInput->parseNewLine();
+                    uint16_t parserErrCode = this->parseInput->parseNewLine(this->inDataBuffer);
                     if (parserErrCode >= 1000)
                         this->main_display->throwError(parserErrCode);
                     else if (parserErrCode == 1)
