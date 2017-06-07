@@ -53,28 +53,16 @@ namespace cmn {
         }
     }
 
+    void integerToByte(uint32_t value, uint8_t bytesize, char output[]) {
+        union {
+            uint8_t _convert32_to_8_bit[4];
+            uint32_t convert32_to_8_bit;
+        };
+        convert32_to_8_bit = value;
 
-    void integerToByte(unsigned long value, int bytesize, char output[]) {
-      int basisToPower_i; //nimmt den Wert 255^i mit i:[0,1,2,..,bytesize-1] an; wird zur Bestimmung der Koeffizienten xi benötigt (siehe unten)
-      int xi;
-
-      //value*=MAX_FLOAT_POINT_SHIFT; //aktuell eh nicht brauchbar, da int kein Komma unterstuetzt
-
-      //for-Schleife bestimmt Koeffizienten xi im 256-System: value|_10erSystem = (x0*1 + x1*255 + x2*(255^2) + x3*(255^3) + ...)|_256er-System   mit i:[0,1,2,..,bytesize-1]
-      //und schreibt das ASCII-Zeichen mit dem ASCII-Wert xi als Char-Zeichen in output[i]
-      for (int i = bytesize-1; i >= 0; i--){
-        basisToPower_i = 1;
-        //for-Schleife realisiert basis=255^i
-        for (int k=0; k < i; k++){
-          basisToPower_i *= 255;
+        for (uint8_t i = 0; i < bytesize; i++) {
+            output[i] = _convert32_to_8_bit[i];
         }
-
-      xi        = value / basisToPower_i; //xi = value mod (255^i)
-      value     = value - xi*basisToPower_i;
-      output[i] = xi; //Schreibt ASCII-Zeichen mit dem ASCII-Wert xi als Char-Zeichen in output[i]
-      }
-      //output[bytesize-(i+1)]="\0"; //TODO
-      output[bytesize-(1)]='\0';
-      //return output; //du brauchst hier kein return, da du die Adresse vom output der Funktion uebergibst.
+        output[bytesize] = '\0';
     }
 };

@@ -9,6 +9,7 @@
 
 #include "main_valveCtrl.h" //Objekte zum Speichern der Objektpointer
 #include "main_mfcCtrl.h"
+#include "parseInput.h"
 //#include "main_stringBuilder.h"
 
 #include "config.h"
@@ -30,6 +31,9 @@ namespace storage {
         void setNewLine(char newLine[]);
         void setDate(char dateString[]);
         void setIntervall(int intervall);
+        void setAmountMFC(int amountMFC);
+        void setAmountValve(int amountValve);
+        void setParseInputObjectPointer(communication::ParseInput *parseInput);
     private:
         char newLine[2000]; //MAX_LINE_SIZE?? SERIAL_READ_MAX_LINE_SIZE??
         char dateString[16];
@@ -43,9 +47,7 @@ namespace storage {
         //Programm gestartet -> Messung gestartet -> Messung gestoppt -> Messung gestartet -> restart = true
         bool restart = false;
 
-        control::Main_ValveCtrl *main_valveCtrl;
-        control::Main_MfcCtrl *main_mfcCtrl;
-        //communication::Main_StringBuilder *main_stringBuilder;
+        communication::ParseInput *ParseInput;
     };
 }
 

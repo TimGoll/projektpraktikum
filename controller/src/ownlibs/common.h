@@ -11,7 +11,7 @@ namespace cmn {
     //teilt gegeben String an bestimmten Zeichen, speichert diesen in Array
     void split(char destination[][16], char source[], char symbol);
     //bekommt ein x <= 256^n und gibt n Byte großen String zurueck
-    void integerToByte(unsigned long value, int bytesize, char output[]);
+    void integerToByte(uint32_t value, uint8_t bytesize, char output[]);
 };
 
 #endif
