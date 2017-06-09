@@ -9,8 +9,6 @@
 
 #include "main_valveCtrl.h" //Objekte zum Speichern der Objektpointer
 #include "main_mfcCtrl.h"
-#include "parseInput.h"
-//#include "main_stringBuilder.h"
 
 #include "config.h"
 
@@ -33,10 +31,13 @@ namespace storage {
         void setIntervall(int intervall);
         void setAmountMFC(int amount_MFC);
         void setAmountValve(int amount_Valve);
-        void setParseInputObjectPointer(communication::ParseInput *parseInput);
+        void setParseInputNewLineFunktion(uint16_t (*parseInputNewLine) (char[]));
         void readFile(char name[]);
         uint8_t listsource(char list[][16]);
     private:
+        //speichere Funktion von parseInput, um Kreisimport zu verhindern.
+        uint16_t (*parseInputNewLine) (char[]);
+
         char newLine[2000]; //MAX_LINE_SIZE?? SERIAL_READ_MAX_LINE_SIZE??
         char dateString[16];
         int intervall;
@@ -50,8 +51,6 @@ namespace storage {
         File myFile;
         //Programm gestartet -> Messung gestartet -> Messung gestoppt -> Messung gestartet -> restart = true
         bool restart = false;
-
-        communication::ParseInput *parseInput;
     };
 }
 

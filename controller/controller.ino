@@ -54,6 +54,10 @@ void button_down(uint8_t value) {
   main_display->menu_navigateMenu(1);
 }
 
+uint16_t parseNewLine_withoutClass (char newLine[]) {
+  return parseInput->parseNewLine(newLine);
+}
+
 void setup() {
   // ERSTELLE SERIELLE VERBINDUNGEN
   srl->setSerial(&Serial1, &Serial2, &Serial3); //labview / debug / uart
@@ -92,7 +96,7 @@ void setup() {
   main_stringBuilder->setMainBoschObjectPointer(main_boschCom);
   main_stringBuilder->setStoreDObjectPointer(storeD);
 
-  storeD->setParseInputObjectPointer(parseInput);
+  storeD->setParseInputNewLineFunktion(parseNewLine_withoutClass);
 
   //noch Platzhalter, Daten kommen von StoreD
   char programs[][16] = {"Messung Eins", "Heliumtest", "Windig", "Messung Zwei", "Noch eine", "weiterer Test", "Schoenes Wetter"};

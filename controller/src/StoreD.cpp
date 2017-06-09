@@ -28,8 +28,8 @@ namespace storage {
       this->amount_Valve = amount_Valve;
     }
 
-    void StoreD::setParseInputObjectPointer(communication::ParseInput *parseInput){
-      this->parseInput=parseInput;
+    void StoreD::setParseInputNewLineFunktion(uint16_t (*parseInputNewLine) (char[])) {
+      this->parseInputNewLine=parseInputNewLine;
     }
 
     void StoreD::setFilename(){
@@ -80,7 +80,7 @@ namespace storage {
           line[counter]=newchar;
           counter++;
         }
-        this->parseInput->parseNewLine(line);
+        this->parseInputNewLine(line);
       }
       file.close();
     }

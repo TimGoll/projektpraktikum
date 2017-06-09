@@ -54,8 +54,8 @@ namespace communication {
                     srl->println('L', "1004");
                     return 1004;
                 }
-                this->amount_MFC   = atoi(this->inDataArray[0]);
-                this->amount_valve = atoi(this->inDataArray[1]);
+                this->amount_MFC   = atoi(newLineArray[0]);
+                this->amount_valve = atoi(newLineArray[1]);
 
                 //erstelle MFC-Objekte in der main_mfcCtrl
                 this->main_mfcCtrl->createMFC(this->amount_MFC);
@@ -133,7 +133,7 @@ namespace communication {
                     srl->println('L', "1004");
                     return 1004;
                 }
-                this->main_stringBuilder->setDateString(this->inDataArray[0]);
+                this->main_stringBuilder->setDateString(newLineArray[0]);
 
                 this->_headerLineCounter = 7;
                 srl->println('L', "ok"); //Sende 'Befehl ok' an LabView

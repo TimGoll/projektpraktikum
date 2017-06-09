@@ -21,10 +21,13 @@ namespace communication {
         srl->print('U', '\r'); //Termimierung
 
         srl->println('U', ""); //DEBUG: zeilenumbruch
+
+        return 0;
     }
 
     uint32_t MfcCom_Mks::readValue(char address[]) {
-        sprintf(this->_address, "%02d", address);
+        //sprintf(this->_address, "%02d", address);
+        strcpy(this->_address, address);
 
         srl->print('U', "@");
         srl->print('U', this->_address);
@@ -32,5 +35,6 @@ namespace communication {
         srl->print('U', '\r'); //Termimierung
 
         //TODO verarbeite Antwort
+        return 0;
     }
 }
