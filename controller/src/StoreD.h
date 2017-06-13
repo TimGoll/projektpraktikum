@@ -31,7 +31,7 @@ namespace storage {
         void setIntervall(int intervall);
         void setAmountMFC(int amount_MFC);
         void setAmountValve(int amount_Valve);
-        void setParseInputNewLineFunktion(uint16_t (*parseInputNewLine) (char[]));
+        void setParseInputNewLineFunction(uint16_t (*parseInputNewLine) (char[]));
         void readFile(char name[]);
         uint8_t listsource(char list[][16]);
     private:
@@ -51,6 +51,7 @@ namespace storage {
         File myFile;
         //Programm gestartet -> Messung gestartet -> Messung gestoppt -> Messung gestartet -> restart = true
         bool restart = false;
+        bool sd_available;
     };
 }
 

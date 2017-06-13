@@ -44,6 +44,8 @@ namespace communication {
     }
 
     int16_t Main_LabCom::readLine() {
+        srl->println('L', "Lese neue Zeile............");
+
         this->bufferCharIndex = 0; //setze index auf Startposition zurueck
         uint32_t startTime = millis();
 
@@ -72,6 +74,14 @@ namespace communication {
                         srl->println('D', "ERROR - Falsches Zeilenende");
                         return ERR_SERIAL_READ_WRONG_LINE_ENDING;
                     } else { //vollstaendiger String abgeschlossen
+                        //entferne Anfangs- und Endzeichen
+                        uint16_t i = 0;
+                        while(this->inDataBuffer[i+1] != '>') {
+                            this->inDataBuffer[i] = this->inDataBuffer[i+1];
+                            i++;
+                        }
+                        this->inDataBuffer[i] = '\0';
+
                         this->inDataBuffer[this->bufferCharIndex +1] = '\0';
                         srl->println('D', "");
                         srl->print('D', "Eingabestring akzeptiert: ");
@@ -170,9 +180,9 @@ namespace communication {
             if (srl->available('L') > 0) {
                 int16_t errCode = this->readLine();
                 if (errCode == 1) {
-
                     //Uebergebe gelesene Zeile, verarbeite zurueck gegebenen ErrorCode
                     uint16_t parserErrCode = this->parseInput->parseNewLine(this->inDataBuffer);
+
                     if (parserErrCode >= 1000)
                         this->main_display->throwError(parserErrCode);
                     else if (parserErrCode == 1)

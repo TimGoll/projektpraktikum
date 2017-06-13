@@ -3,7 +3,7 @@ import serial, platform, glob, sys, threading
 from time import *
 
 serialConnection = None #global variable for connection
-port = "COM7" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
+port = "COM8" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
 
 running = True
 

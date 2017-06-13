@@ -46,6 +46,10 @@ namespace io {
 
     }
 
+    void Main_Display::setReadFileFunction(void (*readFile) (char[])) {
+        this->readFile = readFile;
+    }
+
     void Main_Display::throwError(uint16_t errorNumber) {
         if (errorNumber >= 1000 && errorNumber < 2000) {
             uint16_t arrayIndex = errorNumber % 1000; //hole Index der Arrays, indem 1000er "entfernt" wird
@@ -192,8 +196,7 @@ namespace io {
                 if (this->_selected_item == 0) {
                     this->boardIsReady();
                 } else {
-                    //TODO setze "fertig" Flag an LabCom
-                    //TODO gebe Datei an LabCom?
+                    this->readFile(this->_items[this->_selected_item]); //lese Datei ein
                     this->event_finished();
                 }
             }
@@ -210,9 +213,9 @@ namespace io {
                 srl->println('D', "up");
             } else if (direction == 1) { //nach unten
                 this->_cursor_position++;
-                this->_cursor_position = min(this->_cursor_position, 3);
+                this->_cursor_position = min(this->_cursor_position, (this->_amount_of_items < 3) ? this->_amount_of_items : 3);
                 this->_selected_item++;
-                this->_selected_item = min(this->_selected_item, this->_amount_of_items-1);
+                this->_selected_item = min(this->_selected_item, this->_amount_of_items -1); //TODO bug bei weniger als 3
                 srl->println('D', "down");
             }
 
@@ -231,11 +234,11 @@ namespace io {
         strcpy(displayText[0], "M| ");
         strcat(displayText[0], this->_items[first_line_id]);
         strcpy(displayText[1], "E| ");
-        strcat(displayText[1], this->_items[first_line_id + 1]);
+        if (this->_amount_of_items > 0) strcat(displayText[1], this->_items[first_line_id + 1]);
         strcpy(displayText[2], "N| ");
-        strcat(displayText[2], this->_items[first_line_id + 2]);
+        if (this->_amount_of_items > 1) strcat(displayText[2], this->_items[first_line_id + 2]);
         strcpy(displayText[3], "U| ");
-        strcat(displayText[3], this->_items[first_line_id + 3]);
+        if (this->_amount_of_items > 2) strcat(displayText[3], this->_items[first_line_id + 3]);
 
         this->display->updateDisplayMatrix(
             displayText[0],

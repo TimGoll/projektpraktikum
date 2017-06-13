@@ -37,6 +37,9 @@ namespace io {
         //angezeigt
         void bothQueuesFinished ();
 
+        //setze Funktionspointer
+        void setReadFileFunction(void (*readFile) (char[]));
+
         void menu_setMenuItems(char items[][16], uint8_t amount);
         void menu_navigateMenu(uint8_t direction);
         void menu_controlMenu();
@@ -71,6 +74,7 @@ namespace io {
         bool _menu_open;
 
         LiquidCrystal_I2C *display; //LCD-Write-Class
+        void (*readFile) (char[]); //speichere Funktionspointer
     };
 }
 

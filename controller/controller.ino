@@ -23,6 +23,7 @@
 #include "src/ownlibs/serialCommunication.h"
 #include "src/ownlibs/inputHandler.h"
 
+//OBJEKTVARIABLEN ERSTELLEN
 io::Main_Display *main_display;
 io::InputHandler *inputHandler;
 communication::Main_LabCom *main_labCom;
@@ -54,13 +55,19 @@ void button_down(uint8_t value) {
   main_display->menu_navigateMenu(1);
 }
 
-uint16_t parseNewLine_withoutClass (char newLine[]) {
+uint16_t parseNewLine_withoutClass(char newLine[]) {
   return parseInput->parseNewLine(newLine);
+}
+
+void readFile_withoutClass(char name[]) {
+  storeD->readFile(name);
 }
 
 void setup() {
   // ERSTELLE SERIELLE VERBINDUNGEN
   srl->setSerial(&Serial1, &Serial2, &Serial3); //labview / debug / uart
+
+  srl->println('D', "HALLO WELT");
 
   // ERSTELLE GEBRAUCHTE OBJEKTE
   main_display       = new io::Main_Display();
@@ -96,12 +103,13 @@ void setup() {
   main_stringBuilder->setMainBoschObjectPointer(main_boschCom);
   main_stringBuilder->setStoreDObjectPointer(storeD);
 
-  storeD->setParseInputNewLineFunktion(parseNewLine_withoutClass);
+  storeD->setParseInputNewLineFunction(parseNewLine_withoutClass);
+  main_display->setReadFileFunction(readFile_withoutClass);
 
-  //noch Platzhalter, Daten kommen von StoreD
-  char programs[][16] = {"Messung Eins", "Heliumtest", "Windig", "Messung Zwei", "Noch eine", "weiterer Test", "Schoenes Wetter"};
-  main_display->menu_setMenuItems(programs, 7);
-
+  //lese Daten von StoreD
+  char programs[32][16];
+  int amount = storeD->listsource(programs);
+  main_display->menu_setMenuItems(programs, amount);
 
   // STARTE PSEUDOTHREADS
   main_thread_list -> add_thread(main_display);

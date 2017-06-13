@@ -51,8 +51,9 @@ namespace cmn {
                 destination_iterator++;
             }
         }
+        destination[destination_id][destination_iterator] = '\0';
 
-        return destination_id;
+        return destination_id+1;
     }
 
     void integerToByte(uint32_t value, uint8_t bytesize, char output[]) {

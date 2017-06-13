@@ -9,7 +9,7 @@ counter = 0
 
 running = True
 
-port = "COM9" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
+port = "COM8" #Mac: /dev/cu.usbmodem1421, Linux: /dev/tty_xxx
 
 data = [
     '<4,16>',
