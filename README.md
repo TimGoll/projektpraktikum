@@ -54,7 +54,7 @@ Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren F
 <0x20>
 <0 0, 0 1, 0 2, 0 3, 0 4, 0 6, 0 9, 0 12, 0 15>
 <10>
-<08.02.2017 13:03:29>
+<08.02.2017-13:03:29>
 <begin>
 <M,0,120,1000>
 <M,0,240,1500>
@@ -86,12 +86,13 @@ Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei
 ## Serielle Hardware
 Die Verbindung zwischen dem Teensy und dem PC über Serielle Verbindung wird mittels dem IC **CH340G** realisiert. Dieser funktioniert Plug and Play unter Windows (Windows 10 getestet) und lässt sich auch [mit einfachen Treibern](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) unter MacOS zum Laufen bringen.
 
-## StoreD und die Übertragung an LabView
-Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's. Nach dem Header folgt eine Leerzeile und dann die Messdaten in codierte Form.
+## SD Karte
+Das SD System des Teensy scheint auf DOS zu beruhen, zumindest sind maximale Dateinamen 4 Zeichen lang (Großbuchstaben), Dateinamen, die länger als diese acht Zeichen sind, werden automatisch gekürzt. Beim Speichern in eine Datei ist es jedoch wichtig, dass der Dateiname maximal 8 Zeichen hat, ansonsten tritt ein Fehler auf.
 
-Dabei werden die Daten auf die sogenannte "pseudobyteartige" Weise abgespeichert, was im Grunde einer Umwandlung der Messdaten vom 10er- in das 256er-System entspricht. Dabei enstpricht das ASCII-Zeichen mit der Ordnungszahl n mit n=[0,1,..255] der Zahl n. Die Anzahl der reservierten Bytes pro Messwert (bytesize) können für jeden Messwert individuell festgelegt werden. Nach jedem Datensatz wird in eine neue Zeile gesprungen. Dies hat zum einen eine optimale Speichernutzung zur Folge, zum anderen entfällt die Notwendigkeit eines Seperationszeichen zwischen den Messwerten eines Datensatzes.
+**Namensschema:** ```YYMMDDXX```<br>
+Datum in Zweierschreibweise, zwei X für eine fortlaufende Nummerierung. Es sind maximal 100 (0..99) Messungen an einem Tag möglich.
 
-Nach der Messung können die Daten am PC m.H. von bytesize wieder wieder zerlegt werden. Danach können die Daten ausgewertet werden.
+Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's. Nach dem Header folgt eine Leerzeile und dann die Messdaten in kodierte Form.
 
 
 ## I2C
@@ -267,9 +268,22 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 ### Nebenklassen:
 1. **mfcCtrl** [[cpp]](../master/controller/src/mfcCtrl.cpp) [[h]](../master/controller/src/mfcCtrl.h):
 2. **valveCtrl** [[cpp]](../master/controller/src/valveCtrl.cpp) [[h]](../master/controller/src/valveCtrl.h):
-3. **StoreD** [[cpp]](../master/controller/src/StoreD.cpp) [[h]](../master/controller/src/StoreD.h): <br>
- Wird in main_stringBuilder erstellt und verwaltet, sorgt dafür, dass Daten auf der SD Karte gespeichert werden.
-4. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h):
+3. **mfcCom** [[cpp]](../master/controller/src/mfcCom.cpp) [[h]](../master/controller/src/mfcCom.h):
+4. **mfcCom_buerkert** [[cpp]](../master/controller/src/mfcCom_buerkert.cpp) [[h]](../master/controller/src/mfcCom_buerkert.h):
+5. **mfcCom_mks** [[cpp]](../master/controller/src/mfcCom_nks.cpp) [[h]](../master/controller/src/mfcCom_mks.h):
+6. **StoreD** [[cpp]](../master/controller/src/StoreD.cpp) [[h]](../master/controller/src/StoreD.h): <br>
+ Sorgt dafür, dass Daten auf der SD Karte gespeichert werden.
+7. **parseInput** [[cpp]](../master/controller/src/parseInput.cpp) [[h]](../master/controller/src/parseInput.h): <br>
+
+### Eigene Bibliotheken
+1. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h):
+ Zerlegt den ankommenden String und verteilt die Daten an alle Steuerungsobjekte.
+2. **inputHandler** [[cpp]](../master/controller/src/ownlibs/inputHandler.cpp) [[h]](../master/controller/src/ownlibs/inputHandler.h): <br>
+ Kümmert sich um Tastereingaben, ruft Callbackfunktionen auf. Entprellt und erkennt Flanken.
+3. **lcd_I2C** [[cpp]](../master/controller/src/ownlibs/lcd_I2C.cpp) [[h]](../master/controller/src/ownlibs/lcd_I2C.h): <br>
+ Steuert das Display an
+4. **pca9555** [[cpp]](../master/controller/src/ownlibs/pca9555.cpp) [[h]](../master/controller/src/ownlibs/pca9555.h): <br>
+ Steuert die Ventilplatine via I2C an
 
 ### Sonstige:
 1. **common** [[cpp]](../master/controller/src/ownlibs/common.cpp) [[h]](../master/controller/src/ownlibs/common.h): <br>

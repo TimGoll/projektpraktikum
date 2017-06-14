@@ -41,8 +41,6 @@ namespace communication {
         cmn::trim(newLine);
         char newLineArray[SERIAL_READ_MAX_BLOCK_AMOUNT][SERIAL_READ_MAX_BLOCK_SIZE];
 
-        srl->println('L', newLine);
-
         //zerteile String an ','
         uint8_t newLineArray_size = cmn::split(newLineArray, newLine, ',');
         //entferne Leerzeichen an Anfang und Ende

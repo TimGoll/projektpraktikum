@@ -65,14 +65,22 @@ namespace communication {
                 // temporary
                 char output[] = "    "; //4 Byte + \0 !! Wichtig für strcat()
 
+                this->newLine[0] = '\0';
+
                 // Zeit in millis()
                 // Passe currentTime so an, dass sie die relative Zeit zum Start anzeigt (rechne Schreibeverschiebnung wieder raus)
                 uint32_t currentTime = this->lastTime - ( this->startTime +  this->intervall / 2);
                 cmn::integerToByte(currentTime, 4, output);
-                srl->println('L', output);
-                strcpy(this->newLine, output);
+                strcat(this->newLine, output);
 
                 //MFC Werte
+                this->main_mfcCtrl->getMfcValueList(this->mfcValueList);
+                for (uint16_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
+                    cmn::integerToByte(this->mfcValueList[i], 4, output);
+                    strcat(this->newLine, output);
+                }
+
+                //TODO MFC IST WERTE
                 this->main_mfcCtrl->getMfcValueList(this->mfcValueList);
                 for (uint16_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
                     cmn::integerToByte(this->mfcValueList[i], 4, output);
@@ -82,21 +90,20 @@ namespace communication {
                 //Ventilwerte
                 this->main_valveCtrl->getValveValueList(valveValueList);
                 for (uint16_t i = 0; i < this->main_valveCtrl->getAmount_valve(); i++) {
-                    cmn::integerToByte(valveValueList[i], 4, output);
+                    cmn::integerToByte(valveValueList[i], 1, output);
                     strcat(this->newLine, output);
                 }
 
                 // Boschsensor
-                cmn::integerToByte(this->main_boschCom->getCurrentValue(), 4, output);
+                cmn::integerToByte(this->main_boschCom->getCurrentValue(), 2, output);
                 strcat(this->newLine, output);
 
                 // Sende String an SD
-                this->storeD->setNewLine(this->newLine);
-                this->storeD->setDate(this->dateString);  //TODO hier falsch!!
-                this->storeD->setIntervall(this->intervall);
+                this->storeD->writeNewLine(this->newLine);
+
 
                 // sende String an LabView
-                srl->println('L', this->newLine);
+                srl->println('L', this->newLine); //TODO
 
                 // (Bei SD die Funktion aufrufen, die deine Loop ersetzt (this->storeD->...) // bei lab com this->main_labCom->setNewLine(string))
                 // setze String zurueck fuer neuen String!

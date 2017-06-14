@@ -64,7 +64,7 @@ namespace cmn {
         convert32_to_8_bit = value;
 
         for (uint8_t i = 0; i < bytesize; i++) {
-            output[i] = _convert32_to_8_bit[i];
+            output[bytesize - (i+1)] = _convert32_to_8_bit[i];
         }
         output[bytesize] = '\0';
     }

@@ -19,18 +19,15 @@ namespace storage {
         StoreD();
         //Destructor
         ~StoreD();
-        //falls neue Messung gestartet wird und Dateien von voriger Messung auf SD, starte bei chronologisch logischer filenumber
-        void detFilenumber(int filenumber, char filename[]);
         //Dateiname erstellen
-        void setFilename();
+        void setFileName();
         void openFile();
         void closeFile();
-        void writeNewLine();
-        void setNewLine(char newLine[]);
+        void writeNewLine(char newLine[]);
         void setDate(char dateString[]);
         void setIntervall(int intervall);
         void setAmountMFC(int amount_MFC);
-        void setAmountValve(int amount_Valve);
+        void setAmountValve(int amount_valve);
         void setParseInputNewLineFunction(uint16_t (*parseInputNewLine) (char[]));
         void readFile(char name[]);
         uint8_t listsource(char list[][16]);
@@ -39,19 +36,15 @@ namespace storage {
         uint16_t (*parseInputNewLine) (char[]);
 
         char newLine[2000]; //MAX_LINE_SIZE?? SERIAL_READ_MAX_LINE_SIZE??
-        char dateString[16];
+        char dateString[32];
+        char fileName[16];
         int intervall;
-        char filename[50];
-        int filenumber;
-        int decplaces;
-        int decplaceshelp;
         uint8_t amount_MFC;
-        uint8_t amount_Valve;
-        char buffer[16]; //Buffer für Werte vom Messintervall, MFC-Anzahl, Ventil-Anzahl usw.
-        File myFile;
-        //Programm gestartet -> Messung gestartet -> Messung gestoppt -> Messung gestartet -> restart = true
-        bool restart = false;
+        uint8_t amount_valve;
         bool sd_available;
+
+        //Speichere Datei Objekt, damit es ueber alle Funktionen hinweg funktioniert
+        File fileStream;
     };
 }
 
