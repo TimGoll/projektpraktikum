@@ -312,7 +312,8 @@ Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausg
 
 
 ## Elektronik:
-## Pinbelegung
+### Pinbelegung
+#### Teensy
 Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer aktuellen Belegung.
 ```
                                          U
@@ -343,45 +344,6 @@ Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer 
              Uart-Bürkert - TX4 |o 32 |  D  | 33 o|
                                 +-----------------+
 ```
-
-### Hardware
-1. Schaltkizze: [[link]](../master/electronic/Schalplan.pdf)
-2. Verwendete Bauteile auf dem Haupboard:
- * **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/) <br>
-  Vorderseite [[link]](http://www.pjrc.com/teensy/beta/card9a_rev1_print.pdf) <br>
-  Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
- * **20x4 LCD Display (Buntes Backlight)** [[link]](https://www.adafruit.com/product/499) <br>
-  RGB-LCD Pin Header [[link]](https://cdn-shop.adafruit.com/datasheets/WH2004A-CFH-JT%23.pdf) <br>
-  I2C-Chip für Display (PCF8574) [[link]](http://www.sunfounder.com/wiki/images/1/18/PCF8574T_datasheet.pdf)
-3. Weitere Dinge:
- * **Wandlung "TTL" (3V3) auf RS-232** (Teensy auf RS232 für die MFCs) [[link]](http://www.ti.com/lit/ds/symlink/max232.pdf) <br>
-  Dazu ist beispielsweise der MAX232 nötig, da dieser sich selber seine +/- 12V erzeugt <br>
-  Außerdem ist ein 3V3 auf 5V Pegelwandler zwischen Teensy und MAX232 zu schalten
- * **Anschließen der Ventile** [[link]](http://www.nxp.com/documents/data_sheet/PCA9539A.pdf) <br>
-  Werden über I2C angesteuert (16bit I2C GPIO-Expander dient als Erweiterung) <br>
-  Mithilfe dessen ist es möglich mehrere dieser "x16-Ventile"-Boards anzuschließen (mit diesem IC 4, da er 4 verschiedene Adresskombinationen unterstützt)<br>
-  Dieser IC läuft auch auf 3V3, lässt sich also OHNE Pegelwandler betreiben<br>
-  Hängt mit allen anderen I2C Geräten an Bus 0
- * **Ventilansteuerung** [[link]](http://www.infineon.com/dgdl/Infineon-BTS555-DS-v01_00-en.pdf?fileId=db3a30432ba3fa6f012bd3dfdd0b3b65) <br>
-  Die Ventile brauchen 24V, 2A. Um dies zu schalten, nutzen wir diese PROFETs (Haben Kurzschluss und Überspannungsschutz eingebaut, sowie eine Schutzdiode)<br>
-  Brauchen eine Inverterschaltung mit Pull-Up Widerstand davor (die PROFETs sind active Low), hier nutzen wir den BC546 (Bipolar)<br>
-  Die x16 Platine wird an 24V, 3V3, GND, SDA und SCL angeschlossen und lässt sich mit weiteren parallel schalten.
- * **UART <-> USB** <br>
-  Integrierte Lösung: http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT
-### Schematic
-#### Ventilsteuerung (links unten)
-Jedes Ventil wird einzeln über einen digitalen Pin vom Mikorcontroller angesteuert. Zum schalten werden zur Zeit BS170 Transistoren verwendet.
-Die Versorungsspannung der Ventile liegt bei 24V.
-PINS 21 bis 36
-
-#### USB Anschlüsse (links oben)
-Aktuell sind die USB Anschlüsse noch über Pegelwandler am Board angeschlossen. Später wird noch jeweils ein Chip benltigt um die Kommunikation zu ermöglichen.
-USB1: TX1 PIN 0, RX1 PIN1
-USB2: TX3 PIN 7, RX3 PIN8
-
-#### LED Anzeigen
-
-
 #### Display
 PIN 		Belegung
 ```
@@ -406,11 +368,43 @@ V_IN_5V |o  |
     GND |o  |1
         +---+
 ```
+### Hardware
+1. Schaltkizze: [[link]](../master/electronic/Schalplan.pdf)
+2. Verwendete Bauteile auf dem Haupboard:
+ * **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/) <br>
+  Vorderseite [[link]](http://www.pjrc.com/teensy/beta/card9a_rev1_print.pdf) <br>
+  Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
+ * **20x4 LCD Display (Buntes Backlight)** [[link]](https://www.adafruit.com/product/499) <br>
+  RGB-LCD Pin Header [[link]](https://cdn-shop.adafruit.com/datasheets/WH2004A-CFH-JT%23.pdf) <br>
+  I2C-Chip für Display (PCF8574) [[link]](http://www.sunfounder.com/wiki/images/1/18/PCF8574T_datasheet.pdf)
+3. Weitere Dinge:
+ * **Wandlung "TTL" (3V3) auf RS-485** (Teensy auf RS485 für die MFCs) [[link]](https://datasheets.maximintegrated.com/en/ds/MAX14775E-MAX14776E.pdf) <br>
+ Dieser IC kann sowohl 5V als auch 3V3 als High Pegel erkennen. Dadurch werden Pegelwandler eingespart.
+ * **Anschließen der Ventile** [[link]](http://www.nxp.com/documents/data_sheet/PCA9555.pdf) <br>
+  Werden über I2C angesteuert (16bit I2C GPIO-Expander dient als Erweiterung) <br>
+  Jede Ventilplatine hat einen PCA9555DB mit 8 möglichen Adressen. Dadurch sind bis zu 8 Ventilplatinen an einem Teensy möglich<br>
+  Dieser IC läuft auch auf 3V3, lässt sich also OHNE Pegelwandler betreiben<br>
+  Hängt mit allen anderen I2C Geräten an Bus 0
+ * **Ventilansteuerung** [[link]](http://www.infineon.com/dgdl/Infineon-BTS555-DS-v01_00-en.pdf?fileId=db3a30432ba3fa6f012bd3dfdd0b3b65) <br>
+  Die Ventile brauchen 24V, 2A. Um dies zu schalten, nutzen wir diese PROFETs (Haben Kurzschluss und Überspannungsschutz eingebaut, sowie eine Schutzdiode)<br>
+  Brauchen eine Inverterschaltung mit Pull-Up Widerstand davor (die PROFETs sind active Low), hier nutzen wir den BC546 (Bipolar)<br>
+  Die x16 Platine wird an 24V, 3V3, GND, SDA und SCL angeschlossen und lässt sich mit weiteren parallel schalten.
+ * **UART <-> USB** <br>
+  Integrierte Lösung: http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT
+### Schematic
+#### Ventile
+Die Steuersignale aus dem I/O Expander werden durch einen Operationsverstärker (einer pro 4 Ventile) von den 24V Signalen getrennt.
+Ein Operationsverstärker kann 4 Transistoren unabhängig schalten welche die Ventile mit der 24V verbinden.
 
-#### PCF8547 (mitte rechts vom Teensy)
-Vom Teensy kommen über einen SDA und eine SCL PIN Daten, werden in einem Schieberegister abgelegt
-und nach erhalt von 8 Bits werden diese über die Ports P0 bis P7 weitergereicht (in diesem Fall an
-die Display Ports 4,5,6 und 11,12,13,14. 
+#### USB Anschlüsse
+USB1 (näher am Teensy) : LabView über RX1, TX1
+USB2: Debug über RX3, TX3
+
+#### LED Anzeigen
+Über den USB Anschlüssen ist die Power-LED
+Über dem Teensy Bord, neben dem Debug Schalter, ist die Debug LED.
+
+#### PCF8547
 
 ## Sonstiges:
 1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
