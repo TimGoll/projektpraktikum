@@ -379,6 +379,9 @@ V_IN_5V |o  |
   I2C-Chip für Display (PCF8574) [[link]](http://www.sunfounder.com/wiki/images/1/18/PCF8574T_datasheet.pdf)
 3. Weitere Dinge:
  * **Wandlung "TTL" (3V3) auf RS-485** (Teensy auf RS485 für die MFCs) [[link]](https://datasheets.maximintegrated.com/en/ds/MAX14775E-MAX14776E.pdf) <br>
+ Seite 3 Logic Inputs, 3V3 funktioniert
+ Seite 2 Logic Output, Vcc-0,2V
+ DE High für enable
  Dieser IC kann sowohl 5V als auch 3V3 als High Pegel erkennen. Dadurch werden Pegelwandler eingespart.
  * **Anschließen der Ventile** [[link]](http://www.nxp.com/documents/data_sheet/PCA9555.pdf) <br>
   Werden über I2C angesteuert (16bit I2C GPIO-Expander dient als Erweiterung) <br>
@@ -386,15 +389,20 @@ V_IN_5V |o  |
   Dieser IC läuft auch auf 3V3, lässt sich also OHNE Pegelwandler betreiben<br>
   Hängt mit allen anderen I2C Geräten an Bus 0
  * **Ventilansteuerung** [[link]](http://www.infineon.com/dgdl/Infineon-BTS555-DS-v01_00-en.pdf?fileId=db3a30432ba3fa6f012bd3dfdd0b3b65) <br>
-  Die Ventile brauchen 24V, 2A. Um dies zu schalten, nutzen wir diese PROFETs (Haben Kurzschluss und Überspannungsschutz eingebaut, sowie eine Schutzdiode)<br>
-  Brauchen eine Inverterschaltung mit Pull-Up Widerstand davor (die PROFETs sind active Low), hier nutzen wir den BC546 (Bipolar)<br>
-  Die x16 Platine wird an 24V, 3V3, GND, SDA und SCL angeschlossen und lässt sich mit weiteren parallel schalten.
+
  * **UART <-> USB** <br>
   Integrierte Lösung: http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT
-### Schematic
+#### MFC
+### Bürkert
+S.4 Datenblatt für die Anschlüsse am D-Sub Stecker
+
+### MKS
+S.68 Datenblatt für die Anschlüsse am D-Sub Stecker
+
 #### Ventile
 Die Steuersignale aus dem I/O Expander werden durch einen Operationsverstärker (einer pro 4 Ventile) von den 24V Signalen getrennt.
 Ein Operationsverstärker kann 4 Transistoren unabhängig schalten welche die Ventile mit der 24V verbinden.
+
 
 #### USB Anschlüsse
 USB1 (näher am Teensy) : LabView über RX1, TX1
