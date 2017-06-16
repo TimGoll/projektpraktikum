@@ -389,6 +389,7 @@ V_IN_5V |o  |
   Dieser IC läuft auch auf 3V3, lässt sich also OHNE Pegelwandler betreiben<br>
   Hängt mit allen anderen I2C Geräten an Bus 0
  * **Ventilansteuerung** [[link]](http://www.infineon.com/dgdl/Infineon-BTS555-DS-v01_00-en.pdf?fileId=db3a30432ba3fa6f012bd3dfdd0b3b65) <br>
+ ToDo: Datenblätter Op-Amp und transistoren finden
 
  * **UART <-> USB** <br>
   Integrierte Lösung: http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT
