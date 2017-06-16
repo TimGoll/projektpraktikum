@@ -43,7 +43,7 @@ Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren F
 8. ```<begin>``` Ende des Headers, Beginn mit der Eventübertragung
 9. ```<MFC oder Ventil, ID, Wert, Zeit>``` Setze Events. Hierbei müssen die Events je MFC/Ventil zeitlich sortiert sein, um eine einfachere Verarbeitung zu gewährleisten. Untereinander dürfen die Events jedoch vertauscht sein. (Zeit von MFC2 darf vor MFC1 sein, auch bei späterer Übertragung. Jedoch darf Zeit von MFC1 nicht vor der Zeit von MFC1 sein)
 10. ```<end>``` Ende der Eventübertragung, warte auf Start der Messung
-11. ```<start>``` Nicht zwigend notwendig, kann auch händisch per Taster gestartet werden
+11. ```<start>``` Nicht zwingend notwendig, kann auch händisch per Taster gestartet werden
 
 **Beispiel**:
 
@@ -81,7 +81,7 @@ srl->println('D', "Hallo Welt mit Zeilenende!"); //Natuerlich gibt es das ganze 
 ```
 Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei Typen: L, D und U für LabView, Debug und UART. Die Baudrate wird in der **config.h** eingestellt.
 
-Über den LabView Port wird nach Erfolgreicher Initialisierung des Boards ein _"ready"_ gesendet. Wurde Ein Befehl korrekt erkannt und erfolgreich verarbeitet wird ein _"ok"_ gesendet, ansonsten kommt ein Errorcode.
+Über den LabView Port wird nach erfolgreicher Initialisierung des Boards ein _"ready"_ gesendet. Wurde ein Befehl korrekt erkannt und erfolgreich verarbeitet wird ein _"ok"_ gesendet, ansonsten kommt ein Errorcode.
 
 ## Serielle Hardware
 Die Verbindung zwischen dem Teensy und dem PC über Serielle Verbindung wird mittels dem IC **CH340G** realisiert. Dieser funktioniert Plug and Play unter Windows (Windows 10 getestet) und lässt sich auch [mit einfachen Treibern](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) unter MacOS zum Laufen bringen.
@@ -92,17 +92,17 @@ Das SD System des Teensy scheint auf DOS zu beruhen, zumindest sind maximale Dat
 **Namensschema:** ```YYMMDDXX```<br>
 Datum in Zweierschreibweise, zwei X für eine fortlaufende Nummerierung. Es sind maximal 100 (0..99) Messungen an einem Tag möglich.
 
-Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's. Nach dem Header folgt eine Leerzeile und dann die Messdaten in kodierte Form.
+Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's. Nach dem Header folgt eine Leerzeile und dann die Messdaten in kodierter Form.
 
 
 ## I2C
-I2C wird von uns als Hauptkommunikationsbus verwendet. Folgende Adressen sind belegt (In der Klammer stehen die alternativen Adrerssen):
+I2C wird von uns als Hauptkommunikationsbus verwendet. Folgende Adressen sind belegt (In der Klammer stehen die alternativen Adressen):
 - Display: 0x38 (--)
 - BME280: 0x76 (0x77)
 - IO Expander (Ventilplatine, PCA9555): 0x20 (0x21 .. 0x27)
 
 ## BME280
-Der Boschsensor wird innerhalb der Klasse ```main_boschCom``` verwaltet. Dort wird ein bme-Objekt erstellt. Dieses Objekt wird geliefert von einer leicht angepassten Adafruit-Bibliothek. (Diese könnte man noch weiter ausmisten, da der ganze SPI Bereich eigentlich nicht gebraucht wird)
+Der Boschsensor wird innerhalb der Klasse ```main_boschCom``` verwaltet. Dort wird ein bme-Objekt erstellt. Dieses Objekt wird geliefert von einer leicht angepassten Adafruit-Bibliothek. (Diese könnte man noch weiter reduzieren, da der ganze SPI Bereich eigentlich nicht gebraucht wird)
 
 **Anschluss des Sensors**
 Folgende Pinbelegung ergab sich nach einigem Durchmessen mit einem Multimeter. Bisher erwies sich dieses Layout als korrekt.
@@ -177,12 +177,12 @@ Fluss: 0..500 sccm (S.16)
 
 Flusseinheit in sccm (cm^3/min), 100% ensprechen 400k
 ### allgemein:
-- Fehlermeldungen werden weitergereicht and Display und LabView
+- Fehlermeldungen werden weitergereicht an Display und LabView
 - Baudrate ist 9600
 - **Wir nehmen sccm als Standardeinheit für beide Typen!** Für Bürkert wird der Wert auf dem Board umgerechnet
 
 ## Ventile
-Die Ventilsteuerung befindet sich auf einer abgesonderten Platine. Das hat für uns die beiden Vorteile, dass zum Einen Kurzschlüsse auf der Ventilplatine keinen Schaden an der Hauptsteuerung verursachen können und zum Anderen es uns möglich ist "beliebig" viele Ventile mit einem Microcontroller zu steuern.
+Die Ventilsteuerung befindet sich auf einer eigenen Platine. Das hat für uns die beiden Vorteile, dass zum Einen Kurzschlüsse auf der Ventilplatine keinen Schaden an der Hauptsteuerung verursachen können und zum Anderen es uns möglich ist "beliebig" viele Ventile mit einem Microcontroller zu steuern.
 
 Theoretisch sind bis zu 8 Ventilplatinen mit je 16 Ventilen nötig, also insgesamt 128 Stück. Auf der Platine befindet sich ein dreipoliger DIP-Switch zum Einstellen der Adresse (Adressraum: 0x20..0x27). Die Adressen sind bei Programmstart per LabView an den Controller zu übertragen. Jede der acht Platinen hat 16 Pins (0 bis 15), die auch bei der Initailisierung so angegeben werden müssen (```<Platinen-ID Pin-ID, ...>```), intern haben die Ventile jedoch einen andere fortlaufende Numerierung.
 
@@ -213,11 +213,11 @@ Hintergrund: weiß              Hintergrund: organge/rot       Hintergrund: grü
  Zeile 1: Anzahl MFCs und Anzahl Ventile <br>
  Zeile 2: xxx <br>
  Zeile 3: Laufzeit der Software, relativ zum Messstart <br>
- Zeile 4: Letztes Event, Typ_ID-Wert-Zeit
+ Zeile 4: Letztes Event, Typ-ID-Wert-Zeit
 - **Erroranzeige:** <br>
  Zeile 1: Error ID <br>
  Zeile 2: xxx <br>
- Zeile 3+4: Kurzbeschreibung des augetretenen Fehlers
+ Zeile 3+4: Kurzbeschreibung des aufgetretenen Fehlers
 - **Endanzeige:** <br>
  Zeigt durchgängig diesen Text an, lässt sich nur zurücksetzen durch Reset des Boards
 
@@ -225,10 +225,10 @@ Hintergrund: weiß              Hintergrund: organge/rot       Hintergrund: grü
 Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgeführt, es wird jedoch eine Wiederholung der entsprechenden Zeile erwartet, daher sind diese Codes LabView-Seitig abzufangen.
 
 ### 1000:
-**Maximale Input-String-Länge überschritten.** In der _config.h_ wird eine Größe definiert, die pro Zeile gesendet werden darf. Diese Länge darf nicht überschritten werden.
+**Maximale Input-String Länge überschritten.** In der _config.h_ wird eine Größe definiert, die pro Zeile gesendet werden darf. Diese Länge darf nicht überschritten werden.
 
 ### 1001:
-**Falscher Zeilenbeginn.** Die Zeile muss mit einem öffenenden Tag ```<``` begonnen werden, damit sie als gültig akzeptiert wird. Dies dient zur Vollständigkeitsüberprüfung.
+**Falscher Zeilenbeginn.** Die Zeile muss mit einem öffnenden Tag ```<``` begonnen werden, damit sie als gültig akzeptiert wird. Dies dient zur Vollständigkeitsüberprüfung.
 
 ### 1002:
 **Falsches Zeilenende.** Die Zeile muss mit einem schließenden Tag ```>``` beendet werden, damit sie als gültig akzeptiert wird. Dabei darf man jedoch nicht vergessen, dass die Stringeingabe mit einem Zeilenumbruch ```\n``` als Vollständig markiert wird. Dies dient zur Vollständigkeitsüberprüfung.
@@ -240,7 +240,7 @@ Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgefü
 **Falsche Anzahl an Argumenten.** Bei der Übertragung von LabView an den Controller wird immer überprüft, ob die Anzahl an eingetroffenen Elementen der Anzahl an erwarteten Elementen entspricht.
 
 ### 5000:
-**Zufriff auf nicht definierte MFC/Ventil ID.** Trifft dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.
+**Zufriff auf nicht definierte MFC/Ventil ID.** Trifft dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben darauf überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.
 
 ## Programmaufbau:
 ### Hauptdatei:
@@ -290,7 +290,7 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
  Standardfunktionen, die Überall gebraucht werden (```trim()```, ```getTimeString(time, timeString)```, ...)
 
 2. **config** [[h]](../master/controller/src/config.h): <br>
- Einstellmöglichkeiten diverster Parameter.
+ Einstellmöglichkeiten diverser Parameter.
 
 3. **eventElement** [[h]](../master/controller/src/eventElement.h): <br>
  Event-Struct, welches von MFCs und Ventilen verwendet wird.
@@ -323,22 +323,22 @@ Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer 
                                 |o 02         23 o|
                                 |o 03         22 o|
                                 |o 04         21 o|
-                                |o 05         20 o|
-                                |o 06         19 o| I2C - SCL0
-                 Uart-MKS - RX3 |o 07         18 o| I2C - SDA0
-                 Uart-MKS - TX3 |o 08         17 o| EINGANG - Debug-Schalter
-                    Debug - RX2 |o 09         16 o| EINGANG - OK-Taster
-                    Debug - TX2 |o 10         15 o| EINGANG - Runter-Taster
+                                |o 05         20 o| EINGANG - Debug-Schalter
+            Debug-LED - Ausgang |o 06         19 o| I2C - SCL0
+                    Debug - RX3 |o 07         18 o| I2C - SDA0
+                    Debug - TX3 |o 08         17 o| 
+                 Uart-MKS - RX2 |o 09         16 o| EINGANG - OK-Taster
+                 Uart-MKS - TX2 |o 10         15 o| EINGANG - Runter-Taster
                                 |o 11         14 o| EINGANG - Hoch-Tater
-                                |o 12         13 o|
+                                |o 12         13 o| Abgeschlossen-LED - AUSGANG
                                 |o 3V3       GND o|
                                 |o 24            o|
                                 |o 25            o|
            Enable MKS - AUSGANG |o 26         39 o|
        Enable Bürkert - AUSGANG |o 27         38 o|
                                 |o 28         37 o| PWM - Displaybeleuchtung blau
-            Debug-LED - AUSGANG |o 29         36 o| PWM - Displaybeleuchtung grün
-    Abgeschlossen-LED - AUSGANG |o 30  _____  35 o| PWM - Displaybeleuchtung rot
+                                |o 29         36 o| PWM - Displaybeleuchtung grün
+                                |o 30  _____  35 o| PWM - Displaybeleuchtung rot
              Uart-Bürkert - RX4 |o 31 |  S  | 34 o|
              Uart-Bürkert - TX4 |o 32 |  D  | 33 o|
                                 +-----------------+
@@ -367,8 +367,7 @@ Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer 
   Brauchen eine Inverterschaltung mit Pull-Up Widerstand davor (die PROFETs sind active Low), hier nutzen wir den BC546 (Bipolar)<br>
   Die x16 Platine wird an 24V, 3V3, GND, SDA und SCL angeschlossen und lässt sich mit weiteren parallel schalten.
  * **UART <-> USB** <br>
-  Hier ist noch eine bessere Lösung, als dies aktuell der Fall ist, zu finden
-
+  Integrierte Lösung: http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT
 ### Schematic
 #### Ventilsteuerung (links unten)
 Jedes Ventil wird einzeln über einen digitalen Pin vom Mikorcontroller angesteuert. Zum schalten werden zur Zeit BS170 Transistoren verwendet.
@@ -380,36 +379,38 @@ Aktuell sind die USB Anschlüsse noch über Pegelwandler am Board angeschlossen.
 USB1: TX1 PIN 0, RX1 PIN1
 USB2: TX3 PIN 7, RX3 PIN8
 
-#### LED Anzeigen (rechts unten)
-Eine LED um eine laufende Messung anzuzeigen. Schalter auf PIN 38, LED auf PIN 40
-Eine LED um eine Debugging Session anzuzeigen. Schalter auf PIN 37, LED auf PIN 39
+#### LED Anzeigen
 
-#### Display (rechts oben)
+
+#### Display
 PIN 		Belegung
-
-1.	GND
-2.	5V VCC
-3.	Poti(Dimmer)
-4.	PCF8547 Setup
-5.	PCF8547 Setup
-6.	PCF8547 Setup
-7.	nicht angeschlossen
-8.	nicht angeschlossen
-9.	nicht angeschlossen
-10.	nicht angeschlossen
-11.	PCF8547 Data
-12.	PCF8547 Data
-13.	PCF8547 Data
-14.	PCF8547 Data
-15.	5V LED-VCC
-16.	PWM Teensy 4
-17.	PWM Teensy 3
-18.	PWM Teensy 2
+```
+        +---+
+  PWM_1 |o  |18                     
+  PWM_2 |o  |                     
+  PWM_3 |o  |                     
+ 5V_LED |o  |                     
+  I/O_3 |o  |                     
+  I/O_2 |o  |
+  I/O_1 |o  |
+  I/O_0 |o  |
+        |o  |
+        |o  |
+        |o  | 
+        |o  | 
+  I/O_4 |o  |
+  I/O_5 |o  |
+  I/O_6 |o  |
+   Poti |o  |
+V_IN_5V |o  |
+    GND |o  |1
+        +---+
+```
 
 #### PCF8547 (mitte rechts vom Teensy)
 Vom Teensy kommen über einen SDA und eine SCL PIN Daten, werden in einem Schieberegister abgelegt
 und nach erhalt von 8 Bits werden diese über die Ports P0 bis P7 weitergereicht (in diesem Fall an
-die Dispaly Ports 4,5,6 und 11,12,13,14. (Einer zu wenig?)
+die Display Ports 4,5,6 und 11,12,13,14. 
 
 ## Sonstiges:
 1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
