@@ -91,6 +91,8 @@ Das SD System des Teensy basiert auf FAT, daher sind maximale Dateinamen 8 Zeich
 
 Die SD Karte wird nur einmal beim Programmstart initialisiert. Es ist also nicht möglich, sie während der Laufzeit reinzustecken oder zu entfernen. Ersteres wird nicht erkannt, letzteres führt zu Datenverlust.
 
+Eine neue SD Karte einfach in des Leseslot stecken, alle nötigen Verzeichnisse werden automatisch erstellt. (Board muss resettet werden!)
+
 ### Messergebnisse
 **Namensschema:** ```YYMMDDXX```<br>
 Datum in Zweierschreibweise, zwei X für eine fortlaufende Nummerierung. Es sind maximal 100 (0..99) Messungen an einem Tag möglich.

@@ -109,6 +109,7 @@ void setup() {
   //lese Daten von StoreD
   char programs[32][16];
   int amount = storeD->listsource(programs);
+  cmn::sort(programs, amount);
   main_display->menu_setMenuItems(programs, amount);
 
   // STARTE PSEUDOTHREADS

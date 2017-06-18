@@ -33,6 +33,8 @@ namespace storage {
         void readFile(char name[]);
         uint8_t listsource(char list[][16]);
     private:
+        void createExample();
+
         //speichere Funktion von parseInput, um Kreisimport zu verhindern.
         uint16_t (*parseInputNewLine) (char[]);
 

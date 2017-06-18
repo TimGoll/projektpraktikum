@@ -13,7 +13,7 @@ namespace cmn {
             i++;j++;
         }
         j--; //verkleinere j um 1, da letztes Zeichen '\0' ist
-        while (buffer[j] == ' ') { //iteriere duch array rueckwaerts bis zum ersten Zeichen
+        while (j >= 0 && buffer[j] == ' ') { //iteriere duch array rueckwaerts bis zum ersten Zeichen
             j--;
         }
         buffer[j+1] = '\0';
@@ -54,6 +54,38 @@ namespace cmn {
         destination[destination_id][destination_iterator] = '\0';
 
         return destination_id+1;
+    }
+
+    void sort(char sorting[][16], uint8_t size) {
+        if (size < 2) return;
+
+        char tmp[16];
+
+        //Bubblesort
+        for (uint8_t n = size -1; n > 1; n--) {
+            for (uint8_t i = 0; i < n; i++) {
+                //vergleiche Strings Zeichen fuer Zeichen
+                uint8_t char_pos = 0;
+                while (true) {
+                    if (sorting[i][char_pos] > sorting[i+1][char_pos]) { //tauschen
+                        strcpy(tmp, sorting[i]);
+                        strcpy(sorting[i], sorting[i+1]);
+                        strcpy(sorting[i+1], tmp);
+                    }
+                    if (sorting[i][char_pos] < sorting[i+1][char_pos]) //bereits richtig positioniert
+                        break;
+
+                    //wenn beide Zeichen gleich sind, dann Schleife weiter durchlaufen
+
+                    //String-Ende Abbruchbedingungen
+                    if (sorting[i][char_pos] == '\0' || sorting[i+1][char_pos] == '\0')
+                        break;
+                    char_pos++;
+                    if (char_pos == 16)
+                        break;
+                }
+            }
+        }
     }
 
     void integerToByte(uint32_t value, uint8_t bytesize, char output[]) {

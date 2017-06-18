@@ -178,10 +178,8 @@ namespace io {
 
 
     void Main_Display::menu_setMenuItems(char items[][16], uint8_t amount) {
-        Serial1.print("Anzahl Eintraege: ");
-        Serial1.println(amount);
         this->_amount_of_items = amount +1; //+1, da noch 'ZURUECK' dazu kommt
-        strcpy(this->_items[0], "ZURUECK");
+        strcpy(this->_items[0], ".. ZURUECK");
         for (uint8_t i = 0; i < amount; i++) {
             strcpy(this->_items[i+1], items[i]);
         }
