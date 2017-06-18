@@ -20,8 +20,8 @@ namespace communication {
         void setIntervall(uint16_t intervall);
         //aktiviert den Sensor, startet Messung
         void start(uint32_t time);
-        //gibt aktuellen Messwert des Sensors zurueck
-        uint16_t getCurrentValue();
+        //gibt aktuellen Messwert des Sensors zurueck (Pointer auf Array)
+        float* getCurrentValues();
     protected:
         //Die Loop wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool loop();
@@ -30,7 +30,8 @@ namespace communication {
         bool ready;
         uint32_t lastTime;
 
-        int16_t currentValue; //TODO mehrere Werte speichern?
+        //[Temeoeratur, Luftdruck, Luftfeuchtigkeit]
+        float currentValues[3];
 
         Adafruit_BME280 *bme280;
     };

@@ -49,10 +49,7 @@ namespace communication {
         //Diese Funktion wird zu Programmstart mehrmals ausgefuehrt, bis die kompletten Daten
         //eingetroffen sind. Sie liefert bei erfolgreicher Ausfuehrung 1, ansonsten
         //einen Errorcode mit einer Fehlermeldung in der Konsole
-        int16_t readLine();
-        //Eingetroffene und vollstaendige Zeile wird an Kommata zerlegt und in Array gespeichert.
-        //Gibt nach vollstaendiger Durchfuehrung die Anzahl an Eintraegen im Array zurueck.
-        uint16_t splitLine();
+        uint16_t readLine();
 
         //Adressen der Ventil, MFC und Display Hauptobjekte zur Verteilung der Daten
         control::Main_MfcCtrl *main_mfcCtrl;

@@ -33,6 +33,8 @@ namespace communication {
         void bothQueuesFinished ();
         //speichere Datumstring
         void setDateString(char dateString[]);
+        //bekommt mfcTypen von parseInput und gibt sie an StoreD weiter
+        void setTypes(char types[][16]);
 
         //Uebergebe Objektpointer
         void setMainValveObjectPointer(control::Main_ValveCtrl *main_valveCtrl);
@@ -51,10 +53,7 @@ namespace communication {
 
         uint16_t mfcValueList[MAX_AMOUNT_MFC];
         uint16_t valveValueList[MAX_AMOUNT_VALVE];
-
-        char currentValveValue[16];
-        char currentMfcValue[16];
-        char currentBoschValue[16];
+        float* boschValues;
 
         char newLine[SERIAL_READ_MAX_LINE_SIZE];
 

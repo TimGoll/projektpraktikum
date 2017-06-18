@@ -3,7 +3,10 @@
 namespace communication {
     Main_BoschCom::Main_BoschCom() {
         this->ready = false;
-        this->currentValue = 0;
+
+        currentValues[0] = 0;
+        currentValues[1] = 0;
+        currentValues[2] = 0;
 
         this->bme280 = new Adafruit_BME280(0x76);
         if (!this->bme280->begin())
@@ -27,8 +30,8 @@ namespace communication {
         this->lastTime = time;
     }
 
-    uint16_t Main_BoschCom::getCurrentValue() {
-        return this->currentValue;
+    float* Main_BoschCom::getCurrentValues() {
+        return this->currentValues;
     }
 
 
@@ -39,17 +42,10 @@ namespace communication {
 
         if (this->ready) {
             if (millis() >= this->lastTime) {
-                //Lese Sensor aus, speichere in this->currentValue;
-                //srl->print('D', millis());
-                //srl->println('D', " Messe Boschsensor ...");
-
-                /*
-                 * Read BME280 with...
-                 * this->bme280->readTemperature()
-                 * this->bme280->readPressure()
-                 * this->bme280->readHumidity()
-                 */
-
+                //Lese Sensor aus, speichere in this->currentValues;
+                currentValues[0] = this->bme280->readTemperature();
+                currentValues[1] = this->bme280->readPressure();
+                currentValues[2] = this->bme280->readHumidity();
 
                 this->lastTime += this->intervall;
             }

@@ -38,7 +38,7 @@ namespace communication {
     }
 
     uint16_t ParseInput::parseNewLine(char newLine[]) {
-        cmn::trim(newLine);
+        //hier werden zerlegte Eingabestrings gespeichert
         char newLineArray[SERIAL_READ_MAX_BLOCK_AMOUNT][SERIAL_READ_MAX_BLOCK_SIZE];
 
         //zerteile String an ','
@@ -88,6 +88,7 @@ namespace communication {
                     return 1004;
                 }
                 this->main_mfcCtrl->setTypes(newLineArray);
+                this->main_stringBuilder->setTypes(newLineArray);
 
                 this->_headerLineCounter = 3;
                 srl->println('L', "ok"); //Sende 'Befehl ok' an LabView

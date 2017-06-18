@@ -19,6 +19,8 @@ namespace communication {
         this->ready = true;
         this->startTime = time;
         this->lastTime = time + this->intervall / 2; //addiere halbes Intervall um versetzt zur Messung zu speichern
+
+        this->storeD->setIntervall(this->intervall);
         this->storeD->setAmountMFC(this->main_mfcCtrl->getAmount_MFC());
         this->storeD->setAmountValve(this->main_valveCtrl->getAmount_valve());
         this->storeD->openFile();
@@ -34,6 +36,10 @@ namespace communication {
     void Main_StringBuilder::setDateString(char dateString[]) {
         strcpy(this->dateString, dateString);
         this->storeD->setDate(this->dateString);
+    }
+
+    void Main_StringBuilder::setTypes(char types[][16]) {
+        this->storeD->setTypes(types);
     }
 
 
@@ -60,50 +66,62 @@ namespace communication {
 
         if (this->ready) {
             if (millis() >= this->lastTime) {
-                //TODO strcat/cpy funktioniert hier scheinbar nicht?
-
                 // temporary
-                char output[] = "    "; //4 Byte + \0 !! Wichtig für strcat()
+                char output[16]; //4 Byte + \0 !! Wichtig für strcat()
 
                 this->newLine[0] = '\0';
 
                 // Zeit in millis()
                 // Passe currentTime so an, dass sie die relative Zeit zum Start anzeigt (rechne Schreibeverschiebnung wieder raus)
                 uint32_t currentTime = this->lastTime - ( this->startTime +  this->intervall / 2);
-                cmn::integerToByte(currentTime, 4, output);
+                //cmn::integerToByte(currentTime, 4, output);
+                sprintf(output, "%lu", currentTime);
                 strcat(this->newLine, output);
+                strcat(this->newLine, " ");
 
                 //MFC Werte
                 this->main_mfcCtrl->getMfcValueList(this->mfcValueList);
-                for (uint16_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
-                    cmn::integerToByte(this->mfcValueList[i], 4, output);
+                for (uint8_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
+                    //cmn::integerToByte(this->mfcValueList[i], 4, output);
+                    sprintf(output, "%d", this->mfcValueList[i]);
                     strcat(this->newLine, output);
+                    strcat(this->newLine, " ");
                 }
 
                 //TODO MFC IST WERTE
                 this->main_mfcCtrl->getMfcValueList(this->mfcValueList);
-                for (uint16_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
-                    cmn::integerToByte(this->mfcValueList[i], 4, output);
+                for (uint8_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
+                    //cmn::integerToByte(this->mfcValueList[i], 4, output);
+                    sprintf(output, "%d", this->mfcValueList[i]);
                     strcat(this->newLine, output);
+                    strcat(this->newLine, " ");
                 }
 
                 //Ventilwerte
                 this->main_valveCtrl->getValveValueList(valveValueList);
-                for (uint16_t i = 0; i < this->main_valveCtrl->getAmount_valve(); i++) {
-                    cmn::integerToByte(valveValueList[i], 1, output);
+                for (uint8_t i = 0; i < this->main_valveCtrl->getAmount_valve(); i++) {
+                    //cmn::integerToByte(valveValueList[i], 1, output);
+                    sprintf(output, "%d", this->valveValueList[i]);
                     strcat(this->newLine, output);
+                    strcat(this->newLine, " ");
                 }
 
                 // Boschsensor
-                cmn::integerToByte(this->main_boschCom->getCurrentValue(), 2, output);
-                strcat(this->newLine, output);
+                //cmn::integerToByte(this->main_boschCom->getCurrentValue(), 2, output);
+                this->boschValues = this->main_boschCom->getCurrentValues();
+                for (uint8_t i = 0; i < 3; i++) {
+                    sprintf(output, "%f", this->boschValues[i]);
+                    strcat(this->newLine, output);
+                    strcat(this->newLine, " ");
+                }
+
 
                 // Sende String an SD
                 this->storeD->writeNewLine(this->newLine);
 
 
                 // sende String an LabView
-                srl->println('L', this->newLine); //TODO
+                srl->println('L', this->newLine);
 
                 // (Bei SD die Funktion aufrufen, die deine Loop ersetzt (this->storeD->...) // bei lab com this->main_labCom->setNewLine(string))
                 // setze String zurueck fuer neuen String!

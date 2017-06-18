@@ -43,9 +43,7 @@ namespace communication {
       this->parseInput=parseInput;
     }
 
-    int16_t Main_LabCom::readLine() {
-        srl->println('L', "Lese neue Zeile............");
-
+    uint16_t Main_LabCom::readLine() {
         this->bufferCharIndex = 0; //setze index auf Startposition zurueck
         uint32_t startTime = millis();
 
@@ -57,9 +55,6 @@ namespace communication {
                 //UEBERPRUEFUNG
                 if (this->bufferCharIndex == 0) {
                     if (this->inDataBuffer[this->bufferCharIndex] != '<') { //erstes Zeichen muss oeffnender Tag sein
-                        if (this->inDataBuffer[this->bufferCharIndex] == '\n') //Sortiere Strings ohne Inhalt aus
-                            return -1;
-
                         srl->println('D', "ERROR - Falscher Zeilenbeginn");
                         //lese String dennoch bis Zum Ende um mehrfache "Falscher Beginn" Meldung zu verhindern
                         char searchForEnd = ' ';
@@ -101,35 +96,6 @@ namespace communication {
         srl->println('D', this->inDataBuffer);
         return ERR_SERIAL_READ_TIMEOUT; //Timeout
     }
-
-/*
-    uint16_t Main_LabCom::splitLine() {
-        uint16_t currentCharIndex = 0;
-        uint16_t endCharIndex = this->bufferCharIndex -1; //da letztes Zeichen '>' ist
-
-        //Schleife, die durch die Ziel-Array-Indexe navigiert
-        for (uint16_t arrayIndex = 0; arrayIndex < SERIAL_READ_MAX_BLOCK_AMOUNT; arrayIndex++) {
-            //Schleife, die durch die Char-Positionen eines Ziel-Array-Eintrags navigiert
-            for (uint16_t arrayCharIndex = 0; arrayCharIndex < SERIAL_READ_MAX_BLOCK_SIZE; arrayCharIndex++) {
-                currentCharIndex++; //Wird anfangs um 1 erhoet, Zeichen 1 ist zu ignorieren ('<')
-
-                if (this->inDataBuffer[currentCharIndex] == ',') { //Eintrag zu ende
-                    this->inDataArray[arrayIndex][arrayCharIndex] = '\0';
-                    cmn::trim(this->inDataArray[arrayIndex]);
-                    break;
-                }
-
-                if (currentCharIndex == endCharIndex) { //Zeilenende erreicht
-                    this->inDataArray[arrayIndex][arrayCharIndex] = '\0';
-                    cmn::trim(this->inDataArray[arrayIndex]);
-                    return arrayIndex +1; //Index und Groesse sind immer um 1 verschieden
-                }
-
-                this->inDataArray[arrayIndex][arrayCharIndex] = this->inDataBuffer[currentCharIndex];
-            }
-        }
-        return 0;
-    }*/
 
     void Main_LabCom::start() {
         if (this->parseInput->get_headerLineCounter() == 9) { //erwarte 'start'
@@ -178,15 +144,18 @@ namespace communication {
         // den Input Parser weiter gegeben.
         if (this->reading) { //Empfange Messprogramm
             if (srl->available('L') > 0) {
-                int16_t errCode = this->readLine();
+                uint16_t errCode = this->readLine();
                 if (errCode == 1) {
                     //Uebergebe gelesene Zeile, verarbeite zurueck gegebenen ErrorCode
-                    uint16_t parserErrCode = this->parseInput->parseNewLine(this->inDataBuffer);
+                    cmn::trim(this->inDataBuffer);
+                    if (this->inDataBuffer[0] != '\n') {
+                        uint16_t parserErrCode = this->parseInput->parseNewLine(this->inDataBuffer);
 
-                    if (parserErrCode >= 1000)
-                        this->main_display->throwError(parserErrCode);
-                    else if (parserErrCode == 1)
-                        this->start();
+                        if (parserErrCode >= 1000)
+                            this->main_display->throwError(parserErrCode);
+                        else if (parserErrCode == 1)
+                            this->start();
+                        }
 
                 } else if (errCode > 1) {
                     //ErrorCode wird auf Display angezeigt

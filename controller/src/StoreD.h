@@ -25,6 +25,7 @@ namespace storage {
         void closeFile();
         void writeNewLine(char newLine[]);
         void setDate(char dateString[]);
+        void setTypes(char types[][16]);
         void setIntervall(int intervall);
         void setAmountMFC(int amount_MFC);
         void setAmountValve(int amount_valve);
@@ -35,7 +36,8 @@ namespace storage {
         //speichere Funktion von parseInput, um Kreisimport zu verhindern.
         uint16_t (*parseInputNewLine) (char[]);
 
-        char newLine[2000]; //MAX_LINE_SIZE?? SERIAL_READ_MAX_LINE_SIZE??
+        char newLine[SERIAL_READ_MAX_LINE_SIZE];
+        char mfcTypeList[MAX_AMOUNT_MFC][16];
         char dateString[32];
         char fileName[16];
         int intervall;

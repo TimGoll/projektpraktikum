@@ -276,10 +276,15 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 7. **parseInput** [[cpp]](../master/controller/src/parseInput.cpp) [[h]](../master/controller/src/parseInput.h): <br>
 
 ### Eigene Bibliotheken
-1. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h):
- Zerlegt den ankommenden String und verteilt die Daten an alle Steuerungsobjekte.
+1. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h): <br>
+ Überklasse zu Arduino Serial. Verteilt Eingaben anhand der Parameter automatisch auf die verschiendenen Seriellen Ports, die sich auch dort komplett deaktivieren lassen. 
 2. **inputHandler** [[cpp]](../master/controller/src/ownlibs/inputHandler.cpp) [[h]](../master/controller/src/ownlibs/inputHandler.h): <br>
- Kümmert sich um Tastereingaben, ruft Callbackfunktionen auf. Entprellt und erkennt Flanken.
+ Kümmert sich um Tastereingaben, ruft Callbackfunktionen auf. Entprellt und erkennt Flanken. <br>
+ Ermöglicht außerdem Dauerpulse zu senden, indem man zwei weitere Werte im Aufruf hinzufügt. Die Klasse initialisiert den entsprechenden Button dann automatisch.
+ ```cpp
+ inputHandler->addInterrupt(PIN_ID, FUNCTION, BUTTON_STATE);
+ inputHandler->addInterrupt(PIN_ID, FUNCTION, BUTTON_STATE, MIN_PRESS_TIME, PUSH_INTERVAL);
+ ```
 3. **lcd_I2C** [[cpp]](../master/controller/src/ownlibs/lcd_I2C.cpp) [[h]](../master/controller/src/ownlibs/lcd_I2C.h): <br>
  Steuert das Display an
 4. **pca9555** [[cpp]](../master/controller/src/ownlibs/pca9555.cpp) [[h]](../master/controller/src/ownlibs/pca9555.h): <br>
@@ -327,7 +332,7 @@ Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer 
                                 |o 05         20 o| EINGANG - Debug-Schalter
             Debug-LED - Ausgang |o 06         19 o| I2C - SCL0
                     Debug - RX3 |o 07         18 o| I2C - SDA0
-                    Debug - TX3 |o 08         17 o| 
+                    Debug - TX3 |o 08         17 o|
                  Uart-MKS - RX2 |o 09         16 o| EINGANG - OK-Taster
                  Uart-MKS - TX2 |o 10         15 o| EINGANG - Runter-Taster
                                 |o 11         14 o| EINGANG - Hoch-Tater
@@ -358,8 +363,8 @@ PIN 		Belegung
   I/O_0 |o  |
         |o  |
         |o  |
-        |o  | 
-        |o  | 
+        |o  |
+        |o  |
   I/O_4 |o  |
   I/O_5 |o  |
   I/O_6 |o  |

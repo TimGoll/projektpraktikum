@@ -131,8 +131,8 @@ void setup() {
   pinMode(PIN_DOWNBUTTON, INPUT_PULLDOWN);
   inputHandler->addInterrupt(PIN_DEBUGSWITCH, debug, CHANGE);
   inputHandler->addInterrupt(PIN_OKBUTTON, ok_start, RISING);
-  inputHandler->addInterrupt(PIN_UPBUTTON, button_up, RISING);
-  inputHandler->addInterrupt(PIN_DOWNBUTTON, button_down, RISING);
+  inputHandler->addInterrupt(PIN_UPBUTTON, button_up, RISING, 350, 75);
+  inputHandler->addInterrupt(PIN_DOWNBUTTON, button_down, RISING, 350, 75);
 
   // INIT SWITCH
   srl->activateDebug(digitalRead(PIN_DEBUGSWITCH));

@@ -20,6 +20,10 @@ namespace storage {
 
         this->setFileName();
     }
+    void StoreD::setTypes(char types[][16]) {
+        for (uint8_t i = 0; i < MAX_AMOUNT_MFC; i++)
+            strcpy(this->mfcTypeList[i], types[i]); //kopiere gesamte Liste, da wir Anzahl nicht kennen
+    }
     void StoreD::setIntervall(int intervall){
         this->intervall = intervall;
     }
@@ -103,7 +107,9 @@ namespace storage {
                     line[counter] = newchar;
                     counter++;
                 }
-                this->parseInputNewLine(line);
+                cmn::trim(line);
+                if (line[0] != '\n') //sortiere leere Zeilen aus
+                    this->parseInputNewLine(line);
             }
             file.close();
         }
@@ -127,20 +133,17 @@ namespace storage {
             //HEADER schreiben
             this->fileStream.print("Messung am:     ");   this->fileStream.println(this->dateString);
             this->fileStream.print("Messintervall:  ");   this->fileStream.println(this->intervall);
-            this->fileStream.print("Anzahl MFCs:    ");   this->fileStream.println(this->amount_MFC);
             this->fileStream.print("Anzahl Ventile: ");   this->fileStream.println(this->amount_valve);
-            this->fileStream.println("");
+            this->fileStream.print("Anzahl MFCs:    ");   this->fileStream.println(this->amount_MFC);
+            this->fileStream.print("Typen der MFCs: ");
+            for (uint8_t i = 0; i < this->amount_MFC; i++) {
+                this->fileStream.print(this->mfcTypeList[i]);
+                this->fileStream.print(" ");
+            }
+            this->fileStream.println("");this->fileStream.println("");
 
-            this->fileStream.print("Bytesortierung: ");   this->fileStream.println("Time, MFC Soll, MFC Ist, Ventil Soll, Bosch");
-            this->fileStream.print("Bytecode:       ");
-            this->fileStream.print("4");
-            for (uint8_t i = 0; i < this->amount_MFC; i++)
-                this->fileStream.print("4");
-            for (uint8_t i = 0; i < this->amount_MFC; i++)
-                this->fileStream.print("4");
-            for (uint8_t i = 0; i < this->amount_valve; i++)
-                this->fileStream.print("1");
-            this->fileStream.print("2");this->fileStream.print("2");this->fileStream.println("2");
+            this->fileStream.print("Wertsortierung: ");   this->fileStream.println("Laufzeit (ms), MFC Soll, MFC Ist, Ventil Soll, Bosch (Temp /C, Druck /Pa, Feucht /%)");
+            this->fileStream.println("");
         }
     }
 
