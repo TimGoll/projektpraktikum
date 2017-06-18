@@ -178,10 +178,12 @@ namespace io {
 
 
     void Main_Display::menu_setMenuItems(char items[][16], uint8_t amount) {
-        this->_amount_of_items = amount;
+        Serial1.print("Anzahl Eintraege: ");
+        Serial1.println(amount);
+        this->_amount_of_items = amount +1; //+1, da noch 'ZURUECK' dazu kommt
         strcpy(this->_items[0], "ZURUECK");
         for (uint8_t i = 0; i < amount; i++) {
-            strcpy(this->_items[i+1], items[i+1]);
+            strcpy(this->_items[i+1], items[i]);
         }
     }
 
@@ -210,17 +212,12 @@ namespace io {
                 this->_cursor_position = max(this->_cursor_position, 0);
                 this->_selected_item--;
                 this->_selected_item = max(this->_selected_item, 0);
-                srl->println('D', "up");
             } else if (direction == 1) { //nach unten
                 this->_cursor_position++;
-                this->_cursor_position = min(this->_cursor_position, (this->_amount_of_items < 3) ? this->_amount_of_items : 3);
+                this->_cursor_position = min(this->_cursor_position, (this->_amount_of_items -1 < 3) ? this->_amount_of_items -1 : 3);
                 this->_selected_item++;
-                this->_selected_item = min(this->_selected_item, this->_amount_of_items -1); //TODO bug bei weniger als 3
-                srl->println('D', "down");
+                this->_selected_item = min(this->_selected_item, this->_amount_of_items -1);
             }
-
-            srl->println('D', this->_cursor_position);
-            srl->println('D', this->_selected_item);
 
             this->menu_drawMenu();
             this->display->setSymbol(0, 2,this->_cursor_position);
@@ -234,11 +231,11 @@ namespace io {
         strcpy(displayText[0], "M| ");
         strcat(displayText[0], this->_items[first_line_id]);
         strcpy(displayText[1], "E| ");
-        if (this->_amount_of_items > 0) strcat(displayText[1], this->_items[first_line_id + 1]);
+        if (this->_amount_of_items > 1) strcat(displayText[1], this->_items[first_line_id + 1]);
         strcpy(displayText[2], "N| ");
-        if (this->_amount_of_items > 1) strcat(displayText[2], this->_items[first_line_id + 2]);
+        if (this->_amount_of_items > 2) strcat(displayText[2], this->_items[first_line_id + 2]);
         strcpy(displayText[3], "U| ");
-        if (this->_amount_of_items > 2) strcat(displayText[3], this->_items[first_line_id + 3]);
+        if (this->_amount_of_items > 3) strcat(displayText[3], this->_items[first_line_id + 3]);
 
         this->display->updateDisplayMatrix(
             displayText[0],

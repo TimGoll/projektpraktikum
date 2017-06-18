@@ -87,12 +87,22 @@ Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei
 Die Verbindung zwischen dem Teensy und dem PC über Serielle Verbindung wird mittels dem IC **CH340G** realisiert. Dieser funktioniert Plug and Play unter Windows (Windows 10 getestet) und lässt sich auch [mit einfachen Treibern](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) unter MacOS zum Laufen bringen.
 
 ## SD Karte
-Das SD System des Teensy scheint auf DOS zu beruhen, zumindest sind maximale Dateinamen 4 Zeichen lang (Großbuchstaben), Dateinamen, die länger als diese acht Zeichen sind, werden automatisch gekürzt. Beim Speichern in eine Datei ist es jedoch wichtig, dass der Dateiname maximal 8 Zeichen hat, ansonsten tritt ein Fehler auf.
+Das SD System des Teensy basiert auf FAT, daher sind maximale Dateinamen 8 Zeichen lang (Großbuchstaben), Dateinamen, die länger als diese acht Zeichen sind, werden automatisch gekürzt (8.3 Format). Beim Speichern in eine Datei ist es jedoch wichtig, dass der Dateiname maximal 8 Zeichen hat, ansonsten tritt ein Fehler auf.
 
+Die SD Karte wird nur einmal beim Programmstart initialisiert. Es ist also nicht möglich, sie während der Laufzeit reinzustecken oder zu entfernen. Ersteres wird nicht erkannt, letzteres führt zu Datenverlust.
+
+### Messergebnisse
 **Namensschema:** ```YYMMDDXX```<br>
 Datum in Zweierschreibweise, zwei X für eine fortlaufende Nummerierung. Es sind maximal 100 (0..99) Messungen an einem Tag möglich.
 
 Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's. Nach dem Header folgt eine Leerzeile und dann die Messdaten in kodierter Form.
+
+### Programme
+1. Einzelne Befehlzeilen werden mit einem ```\n``` (Zeilenumbruch) voneinander getrennt.
+2. Die Befehlzeilen werden bei Dateien **nicht** mit ```<``` und ```>``` umschlossen.
+3. Leerzeilen und Leerzeichen werden ignoriert
+4. Dateinamen sind im 8.3 Format udnd dürfen nicht mit ```.``` oder ```_``` beginnen.
+5. Programme müssen sich im Ordner ```programs``` auf der SD Karte befinden.
 
 
 ## I2C
@@ -277,7 +287,7 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 
 ### Eigene Bibliotheken
 1. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h): <br>
- Überklasse zu Arduino Serial. Verteilt Eingaben anhand der Parameter automatisch auf die verschiendenen Seriellen Ports, die sich auch dort komplett deaktivieren lassen. 
+ Überklasse zu Arduino Serial. Verteilt Eingaben anhand der Parameter automatisch auf die verschiendenen Seriellen Ports, die sich auch dort komplett deaktivieren lassen.
 2. **inputHandler** [[cpp]](../master/controller/src/ownlibs/inputHandler.cpp) [[h]](../master/controller/src/ownlibs/inputHandler.h): <br>
  Kümmert sich um Tastereingaben, ruft Callbackfunktionen auf. Entprellt und erkennt Flanken. <br>
  Ermöglicht außerdem Dauerpulse zu senden, indem man zwei weitere Werte im Aufruf hinzufügt. Die Klasse initialisiert den entsprechenden Button dann automatisch.
@@ -357,7 +367,7 @@ PIN 		Belegung
   PWM_2 |o  |                     
   PWM_3 |o  |                     
  5V_LED |o  |                     
-  I/O_3 |o  |                     
+  I/O_3 |o  |                      
   I/O_2 |o  |
   I/O_1 |o  |
   I/O_0 |o  |

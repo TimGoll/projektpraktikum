@@ -78,11 +78,11 @@ namespace storage {
                     break;
                 }
                 if (!entry.isDirectory()) {
-                    srl->println('D', entry.name());
                     strcpy(list[counter], entry.name());
+                    if (list[counter][0] != '_' && list[counter][0] != '.') //ignoriere Systemdateien
+                        counter++;
                 }
                 entry.close();
-                counter++;
             }
             dir.close();
             return counter;
