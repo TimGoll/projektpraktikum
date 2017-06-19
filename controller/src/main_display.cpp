@@ -23,7 +23,7 @@ namespace io {
         this->display->init();
         this->display->clear();
         this->display->backlight_setColor(255,255,255);
-        uint8_t customChar[8] = {
+        uint8_t cc_arrow[8] = {
             0b00000,
             0b00000,
             0b01000,
@@ -33,17 +33,36 @@ namespace io {
             0b01000,
             0b00000
         };
-        this->display->createChar(0, customChar);
+        this->display->createChar(0, cc_arrow);
+        uint8_t cc_sdcard[8] = {
+            0b00000,
+        	0b01111,
+        	0b01001,
+        	0b10001,
+        	0b10001,
+        	0b10101,
+        	0b11111,
+        	0b00000
+        };
+        this->display->createChar(1, cc_sdcard);
 
         this->_cursor_position = 0;
         this->_selected_item = 0;
         this->_menu_open = false;
+
+        this->sd_available = false;
 
         //Zeige an, dass Objekt erzeugt wurde und Board bereit ist
         this->boardIsReady();
     }
     Main_Display::~Main_Display() {
 
+    }
+
+    void Main_Display::foundSDcard(bool found) {
+        this->sd_available = found;
+        if (this->sd_available)
+            this->display->setSymbol(1, 0,0);
     }
 
     void Main_Display::setReadFileFunction(void (*readFile) (char[])) {
@@ -78,6 +97,8 @@ namespace io {
 
             this->afterErrorTime = millis() + ERR_5000_TIME;
         }
+
+        if (this->sd_available) this->display->setSymbol(1, 0,0);
     }
 
     void Main_Display::boardIsReady() {
@@ -87,6 +108,7 @@ namespace io {
             "  Uebertrage Daten  ",
             " oder oeffne Menue  "
         );
+        if (this->sd_available) this->display->setSymbol(1, 0,0);
     }
 
     void Main_Display::header_started(uint16_t amount_MFC, uint16_t amount_valve) {
@@ -101,6 +123,7 @@ namespace io {
             "     Uebertrage     ",
             "       Header       "
         );
+        if (this->sd_available) this->display->setSymbol(1, 0,0);
     }
 
     void Main_Display::event_started() {
@@ -110,15 +133,17 @@ namespace io {
             "     Uebertrage     ",
             "     Eventliste     "
         );
+        if (this->sd_available) this->display->setSymbol(1, 0,0);
     }
 
     void Main_Display::event_finished() {
         this->display->updateDisplayMatrix(
-            " EVENTLISTE KOMPLETT",
+            "    ABGESCHLOSSEN   ",
             "                    ",
             "   Warte auf Start  ",
             "     der Messung    "
         );
+        if (this->sd_available) this->display->setSymbol(1, 0,0);
     }
 
     void Main_Display::start(uint32_t startTime) {
@@ -127,10 +152,11 @@ namespace io {
 
         this->display->updateDisplayMatrix(
             "                    ",
-            " MESSUNG  GESTARTET ",
-            "                    ",
+            "       MESSUNG      ",
+            "      GESTARTET     ",
             "                    "
         );
+        if (this->sd_available) this->display->setSymbol(1, 0,0);
 
         //setze diese Meldung als Error, um Displayuasgabe fuer Zeit zu sperren
         this->afterErrorTime = millis() + 500;
@@ -172,6 +198,7 @@ namespace io {
             displayText[2],
             displayText[3]
         );
+        if (this->sd_available) this->display->setSymbol(1, 0,0);
 
         this->afterErrorTime = 4294967295; //maximale Zeit in uint32_t
     }
@@ -269,6 +296,11 @@ namespace io {
                 sprintf(displayText[1], "                    ");
                 sprintf(displayText[2], "LAUFZEIT:%s", currentTime_string);
                 sprintf(displayText[3], "%c%02d-%04d-%s", this->lastEvent_type, this->lastEvent_id, this->lastEvent_value, lastEventTime_string);
+
+                // ~ ist ein Platzhalter fuer customChars
+                // wenn eine SD Karte verfuegbar ist, dann soll das Display an dieser Stelle
+                // nicht weiter aktualisiert werden, damit das Zeichen dort bleibt.
+                if (this->sd_available) displayText[0][0] = '~';
 
                 this->display->updateDisplayMatrix(
                     displayText[0],

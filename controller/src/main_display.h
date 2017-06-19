@@ -37,6 +37,9 @@ namespace io {
         //angezeigt
         void bothQueuesFinished ();
 
+        //setze Flag, ob SD Karte gefunden wurde
+        void foundSDcard(bool found);
+
         //setze Funktionspointer
         void setReadFileFunction(void (*readFile) (char[]));
 
@@ -72,6 +75,9 @@ namespace io {
         int8_t _selected_item;
         uint8_t _amount_of_items;
         bool _menu_open;
+
+
+        bool sd_available;
 
         LiquidCrystal_I2C *display; //LCD-Write-Class
         void (*readFile) (char[]); //speichere Funktionspointer

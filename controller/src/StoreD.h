@@ -31,6 +31,7 @@ namespace storage {
         void setAmountValve(int amount_valve);
         void setParseInputNewLineFunction(uint16_t (*parseInputNewLine) (char[]));
         void readFile(char name[]);
+        bool foundSDcard();
         uint8_t listsource(char list[][16]);
     private:
         void createExample();

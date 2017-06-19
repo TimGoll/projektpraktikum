@@ -176,6 +176,10 @@ namespace storage {
         }
     }
 
+    bool StoreD::foundSDcard() {
+        return this->sd_available;
+    }
+
 
 
 

@@ -22,14 +22,15 @@ _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
   Ansteuerung des Boschsensors (Die Version im Repo ist leicht verändert).
 
 ## Programmablauf:
-1. Programm startet nach Öffnen der Seriellen Verbindung (Reset erfolgt automatisch auf dem Arduino; zu schauen, wie dies auf dem Teensy zu erreichen ist, eventuell Reset-Pin vom USB<->UART-Chip abgreifen (sofern vorhanden)?)
-2. Programm empfängt Daten (werden überprüft) und startet nach einem Tasterdruck/"Start"-Befehl
-3. Alternativ kommt man, bevor man eine Übertragung gestartet hat, mit einem Tastendruck in ein Menü, von wo aus man Programme, die auf der SD-Karte gespeichert sind, auswählen und starten kann.
+1. Programm startet automatisch nach Herstellung der Stromversorgung
+2. Es kann ein Programm per USB von LabView übertragen werden, oder - falls eine SD Karte eingesteckt ist - ein Programm von der SD-Karte aus starten
+3. Programm ließt Daten (werden überprüft) und startet nach einem Tasterdruck/"Start"-Befehl
 4. Arbeitet Eventlisten ab, gibt Debug-Informationen aus, sofern über Schalter aktiviert, während der Laufzeit Einstellbar
-5. Im Idle-Modus nach Vollständiger Abarbeitung aller Events; nach Abschluss des Programms leuchtet eine LED und das Display färbt sich rot
+5. Im Idle-Modus nach Vollständiger Abarbeitung aller Events; nach Abschluss des Programms leuchtet eine LED und das Display färbt sich grün
+6. Für weiteres Programm muss Board resettet werden
 
 ## Übertragungsprotokoll (LabView -> Microcontroller):
-Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren Format. Als Anfangs und Endzeichen dienen zur Überprüfung der Vollständigkeit jeweils ein öffnender und schließender Tag. Alle Zeitangaben sind in Millisekunden, es gibt nur ganzzahliger Integerwerte. Die IDs beginnen bei 0.
+Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren Format. Als Anfangs und Endzeichen dienen zur Überprüfung der Vollständigkeit jeweils ein öffnender und schließender Tag. Alle Zeitangaben sind in Millisekunden, es gibt nur ganzzahliger Integerwerte.
 
 **Zeilenweise Betrachtung der Übertragung**:
 
@@ -38,7 +39,7 @@ Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren F
 3. ```<Typ MFC 0, Typ MFC 1, ...>```
 4. ```<Ventilplatinenadresse1, ...>``` Hexadezimale Ventilplatinenadressen
 5. ```<Platinen-ID Ventil-Pin-ID, Platinen-ID Ventil-Pin-ID, ...>```
-6. ```<Messintervall>```
+6. ```<Messintervall>``` Mess- und Speicherintervall in Millisekunden
 7. ```<Datum + Zeit>``` Aktuelles Datum & Uhrzeit. Wird im Header der Messung gespeichert, relativ dazu wird gemessen
 8. ```<begin>``` Ende des Headers, Beginn mit der Eventübertragung
 9. ```<MFC oder Ventil, ID, Wert, Zeit>``` Setze Events. Hierbei müssen die Events je MFC/Ventil zeitlich sortiert sein, um eine einfachere Verarbeitung zu gewährleisten. Untereinander dürfen die Events jedoch vertauscht sein. (Zeit von MFC2 darf vor MFC1 sein, auch bei späterer Übertragung. Jedoch darf Zeit von MFC1 nicht vor der Zeit von MFC1 sein)
@@ -89,7 +90,7 @@ Die Verbindung zwischen dem Teensy und dem PC über Serielle Verbindung wird mit
 ## SD Karte
 Das SD System des Teensy basiert auf FAT, daher sind maximale Dateinamen 8 Zeichen lang (Großbuchstaben), Dateinamen, die länger als diese acht Zeichen sind, werden automatisch gekürzt (8.3 Format). Beim Speichern in eine Datei ist es jedoch wichtig, dass der Dateiname maximal 8 Zeichen hat, ansonsten tritt ein Fehler auf.
 
-Die SD Karte wird nur einmal beim Programmstart initialisiert. Es ist also nicht möglich, sie während der Laufzeit reinzustecken oder zu entfernen. Ersteres wird nicht erkannt, letzteres führt zu Datenverlust.
+Die SD Karte wird nur einmal beim Programmstart initialisiert. Es ist also nicht möglich, sie während der Laufzeit reinzustecken oder zu entfernen. Ersteres wird nicht erkannt, letzteres führt zu Datenverlust. Wenn eine SD Karte beim Programmstart erkannt wird, so wird dies durch ein Zeichen in der linken oberen Ecke gezeigt.
 
 Eine neue SD Karte einfach in des Leseslot stecken, alle nötigen Verzeichnisse werden automatisch erstellt. (Board muss resettet werden!)
 
@@ -97,14 +98,15 @@ Eine neue SD Karte einfach in des Leseslot stecken, alle nötigen Verzeichnisse 
 **Namensschema:** ```YYMMDDXX```<br>
 Datum in Zweierschreibweise, zwei X für eine fortlaufende Nummerierung. Es sind maximal 100 (0..99) Messungen an einem Tag möglich.
 
-Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's. Nach dem Header folgt eine Leerzeile und dann die Messdaten in kodierter Form.
+Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit (diese stammt aus dem Header des Programms) der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's.
 
 ### Programme
 1. Einzelne Befehlzeilen werden mit einem ```\n``` (Zeilenumbruch) voneinander getrennt.
 2. Die Befehlzeilen werden bei Dateien **nicht** mit ```<``` und ```>``` umschlossen.
 3. Leerzeilen und Leerzeichen werden ignoriert
-4. Dateinamen sind im 8.3 Format udnd dürfen nicht mit ```.``` oder ```_``` beginnen.
-5. Programme müssen sich im Ordner ```programs``` auf der SD Karte befinden.
+4. Ebenso wird alles in einer Zeile nach einem ```#``` ignoriert, somit sind also Kommentare möglich
+5. Dateinamen sind im FAT 8.3 Format udnd dürfen nicht mit ```.``` oder ```_``` beginnen.
+6. Programme müssen sich im Ordner ```programs``` auf der SD Karte befinden.
 
 
 ## I2C
@@ -142,6 +144,67 @@ Den Sensor auslesen kann man in der besagten ```main_boschCom``` mittels folgend
 this->bme280->readTemperature();
 this->bme280->readPressure();
 this->bme280->readHumidity();
+
+## Ventile
+Die Ventilsteuerung befindet sich auf einer eigenen Platine. Das hat für uns die beiden Vorteile, dass zum Einen Kurzschlüsse auf der Ventilplatine keinen Schaden an der Hauptsteuerung verursachen können und zum Anderen es uns möglich ist "beliebig" viele Ventile mit einem Microcontroller zu steuern.
+
+Theoretisch sind bis zu 8 Ventilplatinen mit je 16 Ventilen nötig, also insgesamt 128 Stück. Auf der Platine befindet sich ein dreipoliger DIP-Switch zum Einstellen der Adresse (Adressraum: 0x20..0x27). Die Adressen sind bei Programmstart per LabView an den Controller zu übertragen. Jede der acht Platinen hat 16 Pins (0 bis 15), die auch bei der Initailisierung so angegeben werden müssen (```<Platinen-ID Pin-ID, ...>```), intern haben die Ventile jedoch einen andere fortlaufende Numerierung.
+
+Die softwareseitige Ansteuerung wird mittels einer kleinen von uns geschriebenen Bibiliothek namens ```pca9555``` (Name des I2C ICs) realisiert. Angelehnt an die Syntax von der Arduino-Umgebung gibt es auch hier eine ```digitalWrite(pinNumber)```-Funktion, der Einfachheit halber haben wir jedoch auf weitere Funktionen verzichtet und bei Porgammstart werden automatisch alle Pins als Ausgang definiert.
+
+## Display:
+Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden. <br>
+Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gibt es:
+
+- **Unkritische Fehler**: Error Code Level 1000; Dies sind Fehler, die beispielsweise bei der Kommunikation auftreten, aber keinen Programmabbruch benötigen. Sie werden auf dem Display für 2 Sekunden angezeigt. Farbe: _orange_
+- **Kritische Fehler**: Error Code Level 5000; Diese Fehler führen zu einem Absturz des Programms und werden auf dem Display angezeigt bis der Fehler behoben wurde. Farbe: _rot_
+
+Standardmäßig werden auf dem Display aktuelle Daten zum Programmstatus angezeigt.
+
+**Beispielanzeige**:
+```
+STANDARD:                      ERRORBEISPIEL:                 ENDANZEIGE:
++----------------------+       +----------------------+       +----------------------+
+|          #M:04 #V:07 |       |      ERROR 1001      |       |          #M:04 #V:07 |
+|                      |       |                      |       |                      |
+| LAUFZEIT:00:01:34:17 |       |       Falscher       |       |    ABGESCHLOSSEN     |
+| V03-0001-00:01:16:22 |       |     Zeilenbeginn     |       |     02:05:24:34      |
++----------------------+       +----------------------+       +----------------------+
+Hintergrund: weiß              Hintergrund: organge/rot       Hintergrund: grün
+```
+
+- **Standardanzeige:** <br>
+ Zeile 1: Anzahl MFCs und Anzahl Ventile <br>
+ Zeile 2: xxx <br>
+ Zeile 3: Laufzeit der Software, relativ zum Messstart <br>
+ Zeile 4: Letztes Event, Typ-ID-Wert-Zeit
+- **Erroranzeige:** <br>
+ Zeile 1: Error ID <br>
+ Zeile 2: xxx <br>
+ Zeile 3+4: Kurzbeschreibung des aufgetretenen Fehlers
+- **Endanzeige:** <br>
+ Zeigt durchgängig diesen Text an, lässt sich nur zurücksetzen durch Reset des Boards
+
+## Errormeldungen:
+Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgeführt, es wird jedoch eine Wiederholung der entsprechenden Zeile erwartet, daher sind diese Codes LabView-Seitig abzufangen.
+
+### 1000:
+**Maximale Input-String Länge überschritten.** In der _config.h_ wird eine Größe definiert, die pro Zeile gesendet werden darf. Diese Länge darf nicht überschritten werden.
+
+### 1001:
+**Falscher Zeilenbeginn.** Die Zeile muss mit einem öffnenden Tag ```<``` begonnen werden, damit sie als gültig akzeptiert wird. Dies dient zur Vollständigkeitsüberprüfung.
+
+### 1002:
+**Falsches Zeilenende.** Die Zeile muss mit einem schließenden Tag ```>``` beendet werden, damit sie als gültig akzeptiert wird. Dabei darf man jedoch nicht vergessen, dass die Stringeingabe mit einem Zeilenumbruch ```\n``` als Vollständig markiert wird. Dies dient zur Vollständigkeitsüberprüfung.
+
+### 1003:
+**Lese-Timeout überschritten.** In der _config.h_ wird eine maximale Lesezeit pro String definiert. Wird diese Zeit überschritten, wird das Lesen des Strings an dieser Stelle abgebrochen.
+
+### 1004:
+**Falsche Anzahl an Argumenten.** Bei der Übertragung von LabView an den Controller wird immer überprüft, ob die Anzahl an eingetroffenen Elementen der Anzahl an erwarteten Elementen entspricht.
+
+### 5000:
+**Zufriff auf nicht definierte MFC/Ventil ID.** Trifft dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben darauf überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.
 ```
 
 ## MFCs
@@ -192,67 +255,6 @@ Flusseinheit in sccm (cm^3/min), 100% ensprechen 400k
 - Fehlermeldungen werden weitergereicht an Display und LabView
 - Baudrate ist 9600
 - **Wir nehmen sccm als Standardeinheit für beide Typen!** Für Bürkert wird der Wert auf dem Board umgerechnet
-
-## Ventile
-Die Ventilsteuerung befindet sich auf einer eigenen Platine. Das hat für uns die beiden Vorteile, dass zum Einen Kurzschlüsse auf der Ventilplatine keinen Schaden an der Hauptsteuerung verursachen können und zum Anderen es uns möglich ist "beliebig" viele Ventile mit einem Microcontroller zu steuern.
-
-Theoretisch sind bis zu 8 Ventilplatinen mit je 16 Ventilen nötig, also insgesamt 128 Stück. Auf der Platine befindet sich ein dreipoliger DIP-Switch zum Einstellen der Adresse (Adressraum: 0x20..0x27). Die Adressen sind bei Programmstart per LabView an den Controller zu übertragen. Jede der acht Platinen hat 16 Pins (0 bis 15), die auch bei der Initailisierung so angegeben werden müssen (```<Platinen-ID Pin-ID, ...>```), intern haben die Ventile jedoch einen andere fortlaufende Numerierung.
-
-Die softwareseitige Ansteuerung wird mittels einer kleinen von uns geschriebenen Bibiliothek namens ```pca9555``` (Name des I2C ICs) realisiert. Angelehnt an die Syntax von der Arduino-Umgebung gibt es auch hier eine ```digitalWrite(pinNumber)```-Funktion, der Einfachheit halber haben wir jedoch auf weitere Funktionen verzichtet und bei Porgammstart werden automatisch alle Pins als Ausgang definiert.
-
-## Display:
-Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden. <br>
-Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gibt es:
-
-- **Unkritische Fehler**: Error Code Level 1000; Dies sind Fehler, die beispielsweise bei der Kommunikation auftreten, aber keinen Programmabbruch benötigen. Sie werden auf dem Display für 2 Sekunden angezeigt. Farbe: _gelb_
-- **Kritische Fehler**: Error Code Level 5000; Diese Fehler führen zu einem Absturz des Programms und werden auf dem Display angezeigt bis der Fehler behoben wurde. Farbe: _rot_
-
-Standardmäßig werden auf dem Display aktuelle Daten zum Programmstatus angezeigt.
-
-**Beispielanzeige**:
-```
-STANDARD:                      ERRORBEISPIEL:                 ENDANZEIGE:
-+----------------------+       +----------------------+       +----------------------+
-|          #M:04 #V:07 |       |      ERROR 1001      |       |          #M:04 #V:07 |
-|                      |       |                      |       |                      |
-| LAUFZEIT:00:01:34:17 |       |       Falscher       |       |    ABGESCHLOSSEN     |
-| V03-0001-00:01:16:22 |       |     Zeilenbeginn     |       |     02:05:24:34      |
-+----------------------+       +----------------------+       +----------------------+
-Hintergrund: weiß              Hintergrund: organge/rot       Hintergrund: grün
-```
-
-- **Standardanzeige:** <br>
- Zeile 1: Anzahl MFCs und Anzahl Ventile <br>
- Zeile 2: xxx <br>
- Zeile 3: Laufzeit der Software, relativ zum Messstart <br>
- Zeile 4: Letztes Event, Typ-ID-Wert-Zeit
-- **Erroranzeige:** <br>
- Zeile 1: Error ID <br>
- Zeile 2: xxx <br>
- Zeile 3+4: Kurzbeschreibung des aufgetretenen Fehlers
-- **Endanzeige:** <br>
- Zeigt durchgängig diesen Text an, lässt sich nur zurücksetzen durch Reset des Boards
-
-## Errormeldungen:
-Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgeführt, es wird jedoch eine Wiederholung der entsprechenden Zeile erwartet, daher sind diese Codes LabView-Seitig abzufangen.
-
-### 1000:
-**Maximale Input-String Länge überschritten.** In der _config.h_ wird eine Größe definiert, die pro Zeile gesendet werden darf. Diese Länge darf nicht überschritten werden.
-
-### 1001:
-**Falscher Zeilenbeginn.** Die Zeile muss mit einem öffnenden Tag ```<``` begonnen werden, damit sie als gültig akzeptiert wird. Dies dient zur Vollständigkeitsüberprüfung.
-
-### 1002:
-**Falsches Zeilenende.** Die Zeile muss mit einem schließenden Tag ```>``` beendet werden, damit sie als gültig akzeptiert wird. Dabei darf man jedoch nicht vergessen, dass die Stringeingabe mit einem Zeilenumbruch ```\n``` als Vollständig markiert wird. Dies dient zur Vollständigkeitsüberprüfung.
-
-### 1003:
-**Lese-Timeout überschritten.** In der _config.h_ wird eine maximale Lesezeit pro String definiert. Wird diese Zeit überschritten, wird das Lesen des Strings an dieser Stelle abgebrochen.
-
-### 1004:
-**Falsche Anzahl an Argumenten.** Bei der Übertragung von LabView an den Controller wird immer überprüft, ob die Anzahl an eingetroffenen Elementen der Anzahl an erwarteten Elementen entspricht.
-
-### 5000:
-**Zufriff auf nicht definierte MFC/Ventil ID.** Trifft dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben darauf überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.
 
 ## Programmaufbau:
 ### Hauptdatei:

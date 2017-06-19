@@ -112,6 +112,9 @@ void setup() {
   cmn::sort(programs, amount);
   main_display->menu_setMenuItems(programs, amount);
 
+  //setze SD Card flag
+  main_display->foundSDcard(storeD->foundSDcard());
+
   // STARTE PSEUDOTHREADS
   main_thread_list -> add_thread(main_display);
   main_thread_list -> add_thread(inputHandler);
