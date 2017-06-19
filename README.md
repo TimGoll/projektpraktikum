@@ -144,6 +144,7 @@ Den Sensor auslesen kann man in der besagten ```main_boschCom``` mittels folgend
 this->bme280->readTemperature();
 this->bme280->readPressure();
 this->bme280->readHumidity();
+```
 
 ## Ventile
 Die Ventilsteuerung befindet sich auf einer eigenen Platine. Das hat für uns die beiden Vorteile, dass zum Einen Kurzschlüsse auf der Ventilplatine keinen Schaden an der Hauptsteuerung verursachen können und zum Anderen es uns möglich ist "beliebig" viele Ventile mit einem Microcontroller zu steuern.
@@ -205,7 +206,6 @@ Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgefü
 
 ### 5000:
 **Zufriff auf nicht definierte MFC/Ventil ID.** Trifft dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben darauf überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.
-```
 
 ## MFCs
 Bei unserem Aufbau verwenden wir zwei verschiedene Typen von MFCs. **Bürkert** und **MKS** sind die beiden Hersteller, dazu gibt es noch alte analoge MFCs, die von einer anderen Projektgruppe digitalisiert wurden. Diese basieren dadurch auch auf dem **Bürkert** Protokoll. <br>
