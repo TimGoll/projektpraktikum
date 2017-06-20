@@ -53,7 +53,7 @@ namespace io {
         this->sd_available = false;
 
         //Zeige an, dass Objekt erzeugt wurde und Board bereit ist
-        this->boardIsReady();
+        this->loading();
     }
     Main_Display::~Main_Display() {
 
@@ -99,6 +99,15 @@ namespace io {
         }
 
         if (this->sd_available) this->display->setSymbol(1, 0,0);
+    }
+
+    void Main_Display::loading() {
+        this->display->updateDisplayMatrix(
+            "                    ",
+            "      LADE ...      ",
+            "                    ",
+            "                    "
+        );
     }
 
     void Main_Display::boardIsReady() {

@@ -63,12 +63,14 @@ void readFile_withoutClass(char name[]) {
   storeD->readFile(name);
 }
 
+void start_withoutClass() {
+  main_labCom->start();
+}
+
 void setup() {
   // ERSTELLE SERIELLE VERBINDUNGEN
   srl->setSerial(&Serial1, &Serial2, &Serial3); //labview / debug / uart
-
-  srl->println('D', "HALLO WELT");
-
+  
   // ERSTELLE GEBRAUCHTE OBJEKTE
   main_display       = new io::Main_Display();
   inputHandler       = new io::InputHandler();
@@ -105,15 +107,13 @@ void setup() {
 
   storeD->setParseInputNewLineFunction(parseNewLine_withoutClass);
   main_display->setReadFileFunction(readFile_withoutClass);
+  parseInput->set_startFunction(start_withoutClass);
 
-  //lese Daten von StoreD
+  // GENERIERE PROGRAMMLISTE
   char programs[32][16];
   int amount = storeD->listsource(programs);
   cmn::sort(programs, amount);
   main_display->menu_setMenuItems(programs, amount);
-
-  //setze SD Card flag
-  main_display->foundSDcard(storeD->foundSDcard());
 
   // STARTE PSEUDOTHREADS
   main_thread_list -> add_thread(main_display);
@@ -145,4 +145,9 @@ void setup() {
   // MFC RS CHIP-ENABLES
   pinMode(PIN_ENABLE_MKS, OUTPUT);
   pinMode(PIN_ENABLE_BRK, OUTPUT);
+
+  // INIT ANGESCHOSSEN
+  main_display->foundSDcard(storeD->foundSDcard()); //setze SD-Card Flag
+  main_display->boardIsReady(); //zeige "Board bereit" an
+  srl->println('L', "ready"); //Sende Startbefehl an LabView
 }

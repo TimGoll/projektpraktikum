@@ -21,6 +21,8 @@ namespace io {
         ~Main_Display();
         //verarbeite Error Nummer und gebe Displayausgabe
         void throwError(uint16_t errorNumber);
+        //zeige an, dass Software am Laden ist
+        void loading();
         //zeige auf dem Display an, dass Uebertragung gestartet werden kann
         void boardIsReady();
         //Zeige an, dass Header-Uebertragung gestartet wurde

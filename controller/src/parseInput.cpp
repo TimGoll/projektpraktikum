@@ -29,6 +29,10 @@ namespace communication {
         this->main_stringBuilder = main_stringBuilder;
     }
 
+    void ParseInput::set_startFunction(void (*startFunction) ()) {
+        this->startFunction = startFunction;
+    }
+
     uint8_t ParseInput::get_headerLineCounter() {
         return this->_headerLineCounter;
     }
@@ -202,9 +206,9 @@ namespace communication {
                     return 1004;
                 }
                 if (strcmp(newLineArray[0], "start") == 0) {
-                    return 1; //Teile LabCom mit, dass die Messung zu starten ist
+                    this->startFunction(); //Teile LabCom mit, dass die Messung zu starten ist
+                    return 0;
                 }
-                srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                 break;
         }
         return 0;

@@ -103,16 +103,19 @@ namespace storage {
             char filepath[32] = "/PROGRAMS/";
             strcat(filepath, name);
             File file = SD.open(filepath, FILE_READ);
-            while (file.available() > 0){
+            while (file.available() > 0) {
                 uint16_t counter = 0;
                 char line[SERIAL_READ_MAX_LINE_SIZE];
-                while (true){
+                // INFO:
+                // auch die beiden inneren Schleifen haben ein "file.available() > 0",
+                // da sonst das Programm sich aufhängt, wenn die letzte Zeile nicht mit \n endet
+                while (file.available() > 0){
                     char newchar = file.read();
                     if (newchar == '\n') { //zeile normal zuende
                         line[counter] = '\0';
                         break;
                     } else if (newchar == '#') { //Kommenarteile bis zum Ende ignorieren
-                        while(true) { //lese Zeile bis zum Ende aus Stream
+                        while(file.available() > 0) { //lese Zeile bis zum Ende aus Stream
                             newchar = file.read();
                             if (newchar == '\n')
                                 break;

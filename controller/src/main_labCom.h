@@ -73,6 +73,8 @@ namespace communication {
         uint16_t amount_valve;
 
         bool finished;
+        bool mfc_finished;
+        bool valve_finished;
     };
 }
 

@@ -36,12 +36,16 @@ namespace communication {
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
 
         void setMainStringBuilderObjectPointer(communication::Main_StringBuilder *main_stringBuilder);
+
+        void set_startFunction(void (*startFunction) ());
     private:
         control::Main_MfcCtrl *main_mfcCtrl;
         control::Main_ValveCtrl *main_valveCtrl;
         communication::Main_BoschCom *main_boschCom;
         io::Main_Display *main_display;
         communication::Main_StringBuilder *main_stringBuilder;
+
+        void (*startFunction) ();
 
         uint8_t _headerLineCounter;
         uint8_t amount_MFC;

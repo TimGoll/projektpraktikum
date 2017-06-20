@@ -6,13 +6,15 @@ namespace communication {
         this->sending = false;
         this->finished = false;
 
+        this->mfc_finished = false;
+        this->valve_finished = false;
+
         this->amount_valve = 0;
         this->amount_MFC = 0;
 
         this->headerLineCounter = 0;
 
         srl->println('D', "LabCom erstellt.");
-        srl->println('L', "ready"); //Sende Startbefehl an LabView
     }
     Main_LabCom::~Main_LabCom() {
 
@@ -127,6 +129,8 @@ namespace communication {
             srl->print('D', startTime);
             srl->println('D', "] Messung gestartet.");
 
+            srl->println('L', "start"); //Sende 'Befehl ok' an LabView
+
             //verhindere weitere Start-Eingaben:
             this->parseInput->set_headerLineCounter(10);
         }
@@ -153,9 +157,7 @@ namespace communication {
 
                         if (parserErrCode >= 1000)
                             this->main_display->throwError(parserErrCode);
-                        else if (parserErrCode == 1)
-                            this->start();
-                        }
+                    }
 
                 } else if (errCode > 1) {
                     //ErrorCode wird auf Display angezeigt
@@ -165,9 +167,16 @@ namespace communication {
             }
         }
 
-        if (this->sending) { //Sende Messwerte parallel zur Messung
-            //ueberpruefe kontinuierlich, ob Eventliste noch Inhalt hat
-            if (this->main_mfcCtrl->getQueueFinished() && this->main_valveCtrl->getQueueFinished() && !this->finished) {
+        if (this->sending) {
+            // ueberpruefe kontinuierlich, ob Eventliste noch Inhalt hat
+            // Diese Ueberpruefung ist dafuer da, damit der Fehler, dass sich komplett lere Eventilisten
+            // resetten nicht auftritt.
+            if (!this->mfc_finished)
+                this->mfc_finished = this->main_mfcCtrl->getQueueFinished();
+            if (!this->valve_finished)
+                this->valve_finished = this->main_valveCtrl->getQueueFinished();
+
+            if (this->mfc_finished && this->valve_finished && !this->finished) {
                 this->finished = true;
                 this->main_display->bothQueuesFinished();
                 this->main_stringBuilder->bothQueuesFinished();
