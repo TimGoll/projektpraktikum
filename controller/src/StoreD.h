@@ -30,6 +30,7 @@ namespace storage {
         void setAmountMFC(int amount_MFC);
         void setAmountValve(int amount_valve);
         void setParseInputNewLineFunction(uint16_t (*parseInputNewLine) (char[]));
+        void setLoadingProgressFunction(void (*setLaodingProgress) (int8_t));
         void readFile(char name[]);
         bool foundSDcard();
         uint8_t listsource(char list[][16]);
@@ -38,6 +39,8 @@ namespace storage {
 
         //speichere Funktion von parseInput, um Kreisimport zu verhindern.
         uint16_t (*parseInputNewLine) (char[]);
+        //speichere Funktion von mainDisplay, um Ladefortschritt anzuzeigen
+        void (*setLaodingProgress) (int8_t);
 
         char newLine[SERIAL_READ_MAX_LINE_SIZE];
         char mfcTypeList[MAX_AMOUNT_MFC][16];

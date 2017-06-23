@@ -67,6 +67,10 @@ void start_withoutClass() {
   main_labCom->start();
 }
 
+void setLaodingProgress_withoutClass(int8_t loadingProgress) {
+  main_display->setLaodingProgress(loadingProgress);
+}
+
 void setup() {
   // ERSTELLE SERIELLE VERBINDUNGEN
   srl->setSerial(&Serial1, &Serial2, &Serial3); //labview / debug / uart
@@ -106,6 +110,7 @@ void setup() {
   main_stringBuilder->setStoreDObjectPointer(storeD);
 
   storeD->setParseInputNewLineFunction(parseNewLine_withoutClass);
+  storeD->setLoadingProgressFunction(setLaodingProgress_withoutClass);
   main_display->setReadFileFunction(readFile_withoutClass);
   parseInput->set_startFunction(start_withoutClass);
 
@@ -150,4 +155,7 @@ void setup() {
   main_display->foundSDcard(storeD->foundSDcard()); //setze SD-Card Flag
   main_display->boardIsReady(); //zeige "Board bereit" an
   srl->println('L', "ready"); //Sende Startbefehl an LabView
+
+  // SETZE I2C CLOCK SPEED VON 100MHZ auf 200MHZ
+  Wire.setClock(200000); //sollte Uebertragungsverzoerungen verhindern, mehr als 200kHz unterstuetzt das Display nicht
 }

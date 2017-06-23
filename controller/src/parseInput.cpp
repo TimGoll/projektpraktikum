@@ -149,7 +149,7 @@ namespace communication {
                     srl->println('D', "Header vollstaendig.");
 
                     //Sage Display, dass Header vollstaendig und Events beginnen
-                    this->main_display->event_started();
+                    this->main_display->loading_data();
 
                     srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                     this->_headerLineCounter = 8;
@@ -193,7 +193,7 @@ namespace communication {
                     srl->println('D', "Uebertragung abgeschlossen.");
 
                     //Sage Display, dass Event-Uebertragung abgeschlossen ist
-                    this->main_display->event_finished();
+                    this->main_display->loading_finished();
 
                     this->_headerLineCounter = 9;
                 }

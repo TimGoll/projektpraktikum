@@ -12,6 +12,8 @@
 #define SERIAL_READ_MAX_BLOCK_SIZE 16 //Maximale Laenge eines Eintrages (Zerlegter Uebertragungsstring)
 #define SERIAL_READ_MAX_BLOCK_AMOUNT 64 //Maximale Anzahl an Eintraegen pro Zeile
 
+#define SDCARD_READ_TIMEOUT 250
+
 #define MAX_AMOUNT_MFC 32
 #define MAX_AMOUNT_VALVE 32
 #define MAX_AMOUNT_VALVE_PCB 8

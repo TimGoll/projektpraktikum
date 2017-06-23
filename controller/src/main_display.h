@@ -21,16 +21,18 @@ namespace io {
         ~Main_Display();
         //verarbeite Error Nummer und gebe Displayausgabe
         void throwError(uint16_t errorNumber);
+        //aktualisere Ladeanzeige von SD Karte
+        void setLaodingProgress(int8_t loadingProgress);
         //zeige an, dass Software am Laden ist
         void loading();
         //zeige auf dem Display an, dass Uebertragung gestartet werden kann
         void boardIsReady();
-        //Zeige an, dass Header-Uebertragung gestartet wurde
+        //Zeige an, dass Uebertragung gestartet wurde, Setze Anzahl Ventile+MFCs
         void header_started(uint16_t amount_MFC, uint16_t amount_valve);
-        //Zeige an, dass Header vollstanedig + Event-Uebertragung gestartet
-        void event_started();
+        //Zeige Uebertragungsstaus an
+        void loading_data();
         //Zeige an, dass Event-Uebertragung dertig und Mess-Start erwartet wird
-        void event_finished();
+        void loading_finished();
         //Messung gestartet, beginne Live-Ausgabe
         void start(uint32_t startTime);
         //setze letzt ausgefuehrtes Event zur Displayausgabe
@@ -78,8 +80,8 @@ namespace io {
         uint8_t _amount_of_items;
         bool _menu_open;
 
-
         bool sd_available;
+        int8_t loadingProgress;
 
         LiquidCrystal_I2C *display; //LCD-Write-Class
         void (*readFile) (char[]); //speichere Funktionspointer

@@ -46,6 +46,10 @@ namespace storage {
         this->parseInputNewLine=parseInputNewLine;
     }
 
+    void StoreD::setLoadingProgressFunction(void (*setLaodingProgress) (int8_t)) {
+        this->setLaodingProgress = setLaodingProgress;
+    }
+
     void StoreD::setFileName() {
         //setze sechstelliges Datum
         this->fileName[0] = this->dateString[8];
@@ -103,13 +107,30 @@ namespace storage {
             char filepath[32] = "/PROGRAMS/";
             strcat(filepath, name);
             File file = SD.open(filepath, FILE_READ);
+
+            //Dateigroesse in Bytes
+            uint32_t filesize = file.available();
+
             while (file.available() > 0) {
+                //setze Einlesfortschritt an Display, +0.5 zum Runden
+                this->setLaodingProgress((int8_t) (100 - ( (float) file.available() / (float) filesize * 100.0 + 0.5 )));
+
+                //neue Zeile: speichere Startzeit um Timeouts abzufangen
+                uint32_t line_start_time = millis();
+
                 uint16_t counter = 0;
                 char line[SERIAL_READ_MAX_LINE_SIZE];
                 // INFO:
                 // auch die beiden inneren Schleifen haben ein "file.available() > 0",
                 // da sonst das Programm sich aufhängt, wenn die letzte Zeile nicht mit \n endet
                 while (file.available() > 0){
+                    //timeout
+                    if (millis() - line_start_time > SDCARD_READ_TIMEOUT) {
+                        //schiesse Zeile ab und beende Lesevorgang dieser Zeile
+                        line[counter] = '\0';
+                        break;
+                    }
+
                     char newchar = file.read();
                     if (newchar == '\n') { //zeile normal zuende
                         line[counter] = '\0';
@@ -126,6 +147,10 @@ namespace storage {
                     line[counter] = newchar;
                     counter++;
                 }
+                //SONDERFALL: Wenn Datei abgeschlossen ist, fuege als letztes Zeichen '\0' ein
+                if (file.available() == 0)
+                    line[counter] = '\0';
+
                 //sortiere leere Zeilen und Kommentare aus
                 cmn::trim(line);
                 //line[0] != 13: 13 = vertical Tab, leere Zeile

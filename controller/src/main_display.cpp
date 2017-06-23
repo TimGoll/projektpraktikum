@@ -17,6 +17,7 @@ namespace io {
         this->lastEvent_time  = 0;
 
         this->started_transmission = false;
+        this->loadingProgress = -1;
 
         this->display         = new LiquidCrystal_I2C(0x38, 35, 36, 37, 4, 20);
 
@@ -101,6 +102,13 @@ namespace io {
         if (this->sd_available) this->display->setSymbol(1, 0,0);
     }
 
+    void Main_Display::setLaodingProgress(int8_t loadingProgress) {
+        if (this->loadingProgress != loadingProgress) {
+            this->loadingProgress = loadingProgress;
+            this->loading_data(); //aktualisiere Anzeige
+        }
+    }
+
     void Main_Display::loading() {
         this->display->updateDisplayMatrix(
             "                    ",
@@ -124,28 +132,30 @@ namespace io {
         this->amount_MFC   = amount_MFC;
         this->amount_valve = amount_valve;
 
-        this->started_transmission = true;
+        this->loading_data();
+    }
+
+    void Main_Display::loading_data() {
+        char displayText[DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //Eins groesser, da '\0'
+        sprintf(displayText[0], "  DATENUEBERTRAGUNG ");
+        sprintf(displayText[1], "                    ");
+        if (this->loadingProgress == -1)
+            sprintf(displayText[2], "    Lade: LBVW     ");
+        else
+            sprintf(displayText[2], "    Lade: %03d%%     ", this->loadingProgress);
+        sprintf(displayText[3], "                    ");
 
         this->display->updateDisplayMatrix(
-            "   DATEN GESTARTET  ",
-            "                    ",
-            "     Uebertrage     ",
-            "       Header       "
+            displayText[0],
+            displayText[1],
+            displayText[2],
+            displayText[3]
         );
+
         if (this->sd_available) this->display->setSymbol(1, 0,0);
     }
 
-    void Main_Display::event_started() {
-        this->display->updateDisplayMatrix(
-            "   HEADER KOMPLETT  ",
-            "                    ",
-            "     Uebertrage     ",
-            "     Eventliste     "
-        );
-        if (this->sd_available) this->display->setSymbol(1, 0,0);
-    }
-
-    void Main_Display::event_finished() {
+    void Main_Display::loading_finished() {
         this->display->updateDisplayMatrix(
             "    ABGESCHLOSSEN   ",
             "                    ",
@@ -233,7 +243,6 @@ namespace io {
                     this->boardIsReady();
                 } else {
                     this->readFile(this->_items[this->_selected_item]); //lese Datei ein
-                    this->event_finished();
                 }
             }
         }
