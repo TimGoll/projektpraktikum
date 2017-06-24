@@ -136,11 +136,14 @@ namespace io {
     }
 
     void Main_Display::loading_data() {
+        //sobald die Uebertragung begonnen hat werden Tastereingaben ignoriert
+        this->started_transmission = true;
+
         char displayText[DISPLAY_SIZE_HEIGHT][DISPLAY_SIZE_WIDTH +1]; //Eins groesser, da '\0'
         sprintf(displayText[0], "  DATENUEBERTRAGUNG ");
         sprintf(displayText[1], "                    ");
         if (this->loadingProgress == -1)
-            sprintf(displayText[2], "    Lade: LBVW     ");
+            sprintf(displayText[2], "    von LabView     ");
         else
             sprintf(displayText[2], "    Lade: %03d%%     ", this->loadingProgress);
         sprintf(displayText[3], "                    ");

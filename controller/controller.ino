@@ -155,7 +155,4 @@ void setup() {
   main_display->foundSDcard(storeD->foundSDcard()); //setze SD-Card Flag
   main_display->boardIsReady(); //zeige "Board bereit" an
   srl->println('L', "ready"); //Sende Startbefehl an LabView
-
-  // SETZE I2C CLOCK SPEED VON 100MHZ auf 200MHZ
-  Wire.setClock(200000); //sollte Uebertragungsverzoerungen verhindern, mehr als 200kHz unterstuetzt das Display nicht
 }

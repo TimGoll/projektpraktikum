@@ -109,11 +109,12 @@ namespace storage {
             File file = SD.open(filepath, FILE_READ);
 
             //Dateigroesse in Bytes
-            uint32_t filesize = file.available();
+            uint32_t filesize = file.size();
+            uint32_t bytes_read = 0;
 
             while (file.available() > 0) {
-                //setze Einlesfortschritt an Display, +0.5 zum Runden
-                this->setLaodingProgress((int8_t) (100 - ( (float) file.available() / (float) filesize * 100.0 + 0.5 )));
+                //setze Einlesfortschritt an Display; +0.5 zum Runden
+                this->setLaodingProgress((int8_t) ( (float) bytes_read / (float) filesize * 100.0 + 0.5 ) );
 
                 //neue Zeile: speichere Startzeit um Timeouts abzufangen
                 uint32_t line_start_time = millis();
@@ -124,7 +125,7 @@ namespace storage {
                 // auch die beiden inneren Schleifen haben ein "file.available() > 0",
                 // da sonst das Programm sich aufhängt, wenn die letzte Zeile nicht mit \n endet
                 while (file.available() > 0){
-                    //timeout
+                    //Timeout
                     if (millis() - line_start_time > SDCARD_READ_TIMEOUT) {
                         //schiesse Zeile ab und beende Lesevorgang dieser Zeile
                         line[counter] = '\0';
@@ -132,12 +133,16 @@ namespace storage {
                     }
 
                     char newchar = file.read();
+                    bytes_read++;
+
                     if (newchar == '\n') { //zeile normal zuende
                         line[counter] = '\0';
                         break;
                     } else if (newchar == '#') { //Kommenarteile bis zum Ende ignorieren
-                        while(file.available() > 0) { //lese Zeile bis zum Ende aus Stream
+                        while(file.available() > 0) { //lese Zeile bis zum Ende aus Stream; Zeichen werden nicht gespeichert
                             newchar = file.read();
+                            bytes_read++;
+
                             if (newchar == '\n')
                                 break;
                         }
