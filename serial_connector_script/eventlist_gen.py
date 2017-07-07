@@ -4,8 +4,8 @@ import random, os.path
 
 amount_mfc = 10
 amount_valve = 16
-runtime = 43200000 #ms
-amount_events = 10000
+runtime = 432000000 #ms
+amount_events = 12000
 
 ### EVENTPARAMETER ENDE
 

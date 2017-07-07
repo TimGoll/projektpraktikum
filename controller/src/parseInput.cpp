@@ -56,8 +56,8 @@ namespace communication {
             case 0: //ZEILE 0: MFC+Ventilanzahl
                 if (newLineArray_size != 2) {
                     srl->println('D', "Zeile 0: Falsche Anzahl an Eintraegen.");
-                    srl->println('L', "1004");
-                    return 1004;
+                    srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
+                    return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
                 }
                 this->amount_MFC   = atoi(newLineArray[0]);
                 this->amount_valve = atoi(newLineArray[1]);
@@ -77,8 +77,8 @@ namespace communication {
             case 1: //ZEILE 1: MFC-Adressen
                 if (newLineArray_size != this->amount_MFC) {
                     srl->println('D', "Zeile 1: Anzahl der gegebenen Adressen stimmt nicht mit Anzahl der MFCs ueberein.");
-                    srl->println('L', "1004");
-                    return 1004;
+                    srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
+                    return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
                 }
                 this->main_mfcCtrl->setAddresses(newLineArray);
 
@@ -88,8 +88,8 @@ namespace communication {
             case 2: //ZEILE 2: MFC-Typen
                 if (newLineArray_size != this->amount_MFC) {
                     srl->println('D', "Zeile 2: Anzahl der gegebenen Typen stimmt nicht mit Anzahl der MFCs ueberein.");
-                    srl->println('L', "1004");
-                    return 1004;
+                    srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
+                    return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
                 }
                 this->main_mfcCtrl->setTypes(newLineArray);
                 this->main_stringBuilder->setTypes(newLineArray);
@@ -100,8 +100,8 @@ namespace communication {
             case 3: //ZEILE 3: Ventil PCB Adressen
                 if (newLineArray_size == 0 || newLineArray_size > MAX_AMOUNT_VALVE_PCB) {
                     srl->println('D', "Zeile 3: Anzahl der Adressen ist nicht korrekt.");
-                    srl->println('L', "1004");
-                    return 1004;
+                    srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
+                    return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
                 }
                 this->main_valveCtrl->setPcbAddresses(newLineArray_size, newLineArray);
 
@@ -111,8 +111,8 @@ namespace communication {
             case 4: //ZEILE 4: Ventil-Pins
                 if (newLineArray_size != this->amount_valve) {
                     srl->println('D', "Zeile 4: Anzahl der gegebenen Pin-Nummern stimmt nicht mit Anzahl der Ventile ueberein.");
-                    srl->println('L', "1004");
-                    return 1004;
+                    srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
+                    return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
                 }
                 this->main_valveCtrl->setPins(newLineArray);
 
@@ -122,8 +122,8 @@ namespace communication {
             case 5: //ZEILE 5: Messaufloesung wird gesetzt
                 if (newLineArray_size != 1) {
                     srl->println('D', "Zeile 5: Intervallgroesse besteht aus einem Wert.");
-                    srl->println('L', "1004");
-                    return 1004;
+                    srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
+                    return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
                 }
                 //StringBuilder, sowie BoschCom arbeiten mit dem selben Intervall
                 //Ersterer ist jedoch um eine halbe Periode in der Zeit verschoben
@@ -136,8 +136,8 @@ namespace communication {
             case 6: //ZEILE 6: DateString wird gesetzt
                 if (newLineArray_size != 1) {
                     srl->println('D', "Zeile 6: Datum besteht aus einem Wert.");
-                    srl->println('L', "1004");
-                    return 1004;
+                    srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
+                    return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
                 }
                 this->main_stringBuilder->setDateString(newLineArray[0]);
 
@@ -155,15 +155,15 @@ namespace communication {
                     this->_headerLineCounter = 8;
                 } else {
                     srl->println('D', "Zeile 7: Es wird ein 'begin' erwartet");
-                    srl->println('L', "1004");
-                    return 1004;
+                    srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
+                    return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
                 }
                 break;
             case 8: //ZEILE 8: Eventliste
                 if (newLineArray_size != 4 && strcmp(newLineArray[0], "end") != 0) {
                     srl->println('D', "Zeile 8: Events bestehen aus 4 Elementen, ansonsten wird ein 'end' erwartet.");
-                    srl->println('L', "1004");
-                    return 1004;
+                    srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
+                    return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
                 }
                 if (strcmp(newLineArray[0], "M") == 0) { //MFC
                     if (atoi(newLineArray[1]) < this->amount_MFC) {
@@ -202,8 +202,8 @@ namespace communication {
             case 9: //ZEILE 9: Warte auf Start (kann auch durch Button aufgerufen werden)
                 if (newLineArray_size != 1) {
                     srl->println('D', "Zeile 9: Es wird ein 'start' erwartet.");
-                    srl->println('L', "1004");
-                    return 1004;
+                    srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
+                    return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
                 }
                 if (strcmp(newLineArray[0], "start") == 0) {
                     this->startFunction(); //Teile LabCom mit, dass die Messung zu starten ist

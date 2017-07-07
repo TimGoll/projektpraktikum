@@ -19,7 +19,14 @@ namespace io {
         this->started_transmission = false;
         this->loadingProgress = -1;
 
-        this->display         = new LiquidCrystal_I2C(0x38, 35, 36, 37, 4, 20);
+        this->display         = new LiquidCrystal_I2C(
+            ADDRESS_I2C_DISPLAY,
+            PIN_DISPLAY_RED,
+            PIN_DISPLAY_GREEN,
+            PIN_DISPLAY_BLUE,
+            DISPLAY_SIZE_HEIGHT,
+            DISPLAY_SIZE_WIDTH
+        );
 
         this->display->init();
         this->display->clear();

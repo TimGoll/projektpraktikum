@@ -7,14 +7,16 @@ SerialCommunication::~SerialCommunication() {
 
 }
 
-void SerialCommunication::setSerial(HardwareSerial *serial_labView, HardwareSerial *serial_debug, HardwareSerial* serial_uart) {
-    this->serial_labView = serial_labView;
-    this->serial_debug   = serial_debug;
-    this->serial_uart    = serial_uart;
+void SerialCommunication::setSerial(HardwareSerial *serial_labView, HardwareSerial *serial_debug, HardwareSerial *serial_mks, HardwareSerial *serial_buerkert) {
+    this->serial_labView  = serial_labView;
+    this->serial_debug    = serial_debug;
+    this->serial_mks      = serial_mks;
+    this->serial_buerkert = serial_buerkert;
 
     this->serial_labView->begin(SERIAL_LABVIEW_BAUDRATE);
     this->serial_debug->begin(SERIAL_DEBUG_BAUDRATE);
-    this->serial_uart->begin(SERIAL_UART_BAUDRATE);
+    this->serial_mks->begin(SERIAL_MKS_BAUDRATE);
+    this->serial_buerkert->begin(SERIAL_BUERKERT_BAUDRATE);
 }
 
 void SerialCommunication::activateDebug(bool activate) {
@@ -28,11 +30,13 @@ HardwareSerial *SerialCommunication::getType(const char type) {
         this_serial = this->serial_labView;
     } else if (type == 'D') {
         this_serial = this->serial_debug;
-    } else if (type == 'U') {
-        this_serial = this->serial_uart;
+    } else if (type == 'M') {
+        this_serial = this->serial_mks;
+    } else if (type == 'B') {
+        this_serial = this->serial_buerkert;
     } else {
         this_serial = this->serial_debug;
-        this->serial_debug->println("ERROR - Falscher Typ gewaehlt");
+        this->serial_debug->println("ERROR - Ungueltigen Typ gewaehlt");
     }
 
     return this_serial;

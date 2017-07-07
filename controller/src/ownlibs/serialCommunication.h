@@ -11,7 +11,7 @@ public:
     //Destructor
     ~SerialCommunication();
 
-    void setSerial(HardwareSerial *serial_labView, HardwareSerial *serial_debug, HardwareSerial* serial_uart);
+    void setSerial(HardwareSerial *serial_labView, HardwareSerial *serial_debug, HardwareSerial *serial_mks, HardwareSerial *serial_buerkert);
     void activateDebug(bool activate);
 
     int available(char type); //returns number of bytes in buffer
@@ -42,7 +42,8 @@ private:
     HardwareSerial *getType(const char type);
     HardwareSerial *serial_labView;
     HardwareSerial *serial_debug;
-    HardwareSerial *serial_uart;
+    HardwareSerial *serial_mks;
+    HardwareSerial *serial_buerkert;
 
     bool debug_activated;
 };

@@ -73,7 +73,7 @@ void setLaodingProgress_withoutClass(int8_t loadingProgress) {
 
 void setup() {
   // ERSTELLE SERIELLE VERBINDUNGEN
-  srl->setSerial(&Serial1, &Serial2, &Serial3); //labview / debug / uart
+  srl->setSerial(&Serial1, &Serial3, &Serial2, &Serial4); //labview / debug / mks / buerkert
   
   // ERSTELLE GEBRAUCHTE OBJEKTE
   main_display       = new io::Main_Display();

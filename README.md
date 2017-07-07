@@ -28,6 +28,7 @@ _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
 4. Arbeitet Eventlisten ab, gibt Debug-Informationen aus, sofern über Schalter aktiviert, während der Laufzeit Einstellbar
 5. Im Idle-Modus nach Vollständiger Abarbeitung aller Events; nach Abschluss des Programms leuchtet eine LED und das Display färbt sich grün
 6. Für weiteres Programm muss Board resettet werden
+7. Es sind maximal 14.000 Events auf dem Board möglich. Dann ist der Speicher voll
 
 ## Übertragungsprotokoll (LabView -> Microcontroller):
 Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren Format. Als Anfangs und Endzeichen dienen zur Überprüfung der Vollständigkeit jeweils ein öffnender und schließender Tag. Alle Zeitangaben sind in Millisekunden, es gibt nur ganzzahliger Integerwerte.
@@ -344,13 +345,13 @@ Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer 
                                 |o 03         22 o|
                                 |o 04         21 o|
                                 |o 05         20 o| EINGANG - Debug-Schalter
-            Debug-LED - Ausgang |o 06         19 o| I2C - SCL0
+            Debug-LED - AUSGANG |o 06         19 o| I2C - SCL0
                     Debug - RX3 |o 07         18 o| I2C - SDA0
                     Debug - TX3 |o 08         17 o|
                  Uart-MKS - RX2 |o 09         16 o| EINGANG - OK-Taster
                  Uart-MKS - TX2 |o 10         15 o| EINGANG - Runter-Taster
                                 |o 11         14 o| EINGANG - Hoch-Tater
-                                |o 12         13 o| Abgeschlossen-LED - AUSGANG
+                                |o 12         13 o| AUSGANG - Abgeschlossen-LED
                                 |o 3V3       GND o|
                                 |o 24            o|
                                 |o 25            o|
@@ -433,6 +434,11 @@ USB2: Debug über RX3, TX3
 Über dem Teensy Bord, neben dem Debug Schalter, ist die Debug LED.
 
 #### PCF8547
+
+## Ausblick:
+### RTC
+
+### Software Reset via 'reset' Befehl
 
 ## Sonstiges:
 1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)

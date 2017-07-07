@@ -26,19 +26,19 @@ namespace communication {
 
         //Uebertrage Daten
         digitalWrite(PIN_ENABLE_BRK, HIGH); //TODO kurzes Dalay hiernach?
-        srl->print('U', this->_preambel);
-        srl->print('U', this->_preambel);
-        srl->print('U', this->_preambel);
-        srl->print('U', this->_startsign);
-        srl->print('U', this->_address);
-        srl->print('U', this->_command);
-        srl->print('U', 0x05); //5 byte folgen (nur daten, keine Antwort)
-        srl->print('U', 0x01); //Externer Soll-Wert
-        srl->print('U', this->_data);
-        srl->print('U', this->_checksum);
+        srl->print('B', this->_preambel);
+        srl->print('B', this->_preambel);
+        srl->print('B', this->_preambel);
+        srl->print('B', this->_startsign);
+        srl->print('B', this->_address);
+        srl->print('B', this->_command);
+        srl->print('B', 0x05); //5 byte folgen (nur daten, keine Antwort)
+        srl->print('B', 0x01); //Externer Soll-Wert
+        srl->print('B', this->_data);
+        srl->print('B', this->_checksum);
         digitalWrite(PIN_ENABLE_BRK, LOW);
 
-        srl->println('U', ""); //DEBUG: zeilenumbruch
+        srl->println('B', ""); //DEBUG: zeilenumbruch
 
         return 0; //TODO
     }

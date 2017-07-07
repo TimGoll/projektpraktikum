@@ -14,13 +14,13 @@ namespace communication {
         strcpy(this->_address, address);
         //TODO this->_value auf Form: x.xxxxx (1.5)
 
-        srl->print('U', "@");
-        srl->print('U', this->_address);
-        srl->print('U', "S"); //Setze Fluss
-        srl->print('U', this->_value);
-        srl->print('U', '\r'); //Termimierung
+        srl->print('M', "@");
+        srl->print('M', this->_address);
+        srl->print('M', "S"); //Setze Fluss
+        srl->print('M', this->_value);
+        srl->print('M', '\r'); //Termimierung
 
-        srl->println('U', ""); //DEBUG: zeilenumbruch
+        srl->println('M', ""); //DEBUG: zeilenumbruch
 
         return 0;
     }
@@ -29,10 +29,10 @@ namespace communication {
         //sprintf(this->_address, "%02d", address);
         strcpy(this->_address, address);
 
-        srl->print('U', "@");
-        srl->print('U', this->_address);
-        srl->print('U', "F"); //Setze Fluss
-        srl->print('U', '\r'); //Termimierung
+        srl->print('M', "@");
+        srl->print('M', this->_address);
+        srl->print('M', "F"); //Setze Fluss
+        srl->print('M', '\r'); //Termimierung
 
         //TODO verarbeite Antwort
         return 0;

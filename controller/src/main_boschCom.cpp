@@ -8,7 +8,7 @@ namespace communication {
         currentValues[1] = 0;
         currentValues[2] = 0;
 
-        this->bme280 = new Adafruit_BME280(0x76);
+        this->bme280 = new Adafruit_BME280(ADDRESS_I2C_BOSCH);
         if (!this->bme280->begin())
             srl->println('D', "BME280 nicht gefunden.");
         else
