@@ -18,6 +18,7 @@ namespace io {
 
         this->started_transmission = false;
         this->loadingProgress = -1;
+        this->backlight       = true;
 
         this->display         = new LiquidCrystal_I2C(
             ADDRESS_I2C_DISPLAY,
@@ -254,6 +255,15 @@ namespace io {
                 } else {
                     this->readFile(this->_items[this->_selected_item]); //lese Datei ein
                 }
+            }
+        }
+        if (this->ready && millis() > this->startTime) { //schalte Hintergrundbeleuchtung während Messung an/aus
+            if (this->backlight) {
+                this->display->backlight_off();
+                this->backlight = false;
+            } else {
+                this->display->backlight_on();
+                this->backlight = true;
             }
         }
     }

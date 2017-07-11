@@ -34,6 +34,10 @@ LiquidCrystal_I2C::LiquidCrystal_I2C(uint8_t lcd_Addr, uint8_t i_red_pin, uint8_
     _brightness = 255;
     _backlight = true;
 
+    _r = 255;
+    _g = 255;
+    _b = 255;
+
     pinMode(_red_pin, OUTPUT);
     pinMode(_green_pin, OUTPUT);
     pinMode(_blue_pin, OUTPUT);
@@ -123,34 +127,43 @@ void LiquidCrystal_I2C::backlight_brightness(uint8_t brightness) {
 
 void LiquidCrystal_I2C::backlight_off() {
 	this->_backlight = false;
-	this->backlight_setColor(0,0,0);
+	this->backlight_drawColor(0, 0, 0);
 }
 
 void LiquidCrystal_I2C::backlight_on() {
 	this->_backlight = true;
-	this->backlight_setColor(255,255,255);
+	this->backlight_drawColor(this->_r, this->_g, this->_b);
 }
 
 void LiquidCrystal_I2C::backlight_setColor(uint8_t r, uint8_t g, uint8_t b) {
-	if (this->_backlight) {
-		//mische Farben zueinander ab
-		r = map(r, 0, 255, 0, 255);
-		g = map(g, 0, 255, 0, 110);
-		b = map(b, 0, 255, 0, 115);
+    this->_r = r;
+    this->_g = g;
+    this->_b = b;
 
-		r = map(r, 0, 255, 0, _brightness);
-		g = map(g, 0, 255, 0, _brightness);
-		b = map(b, 0, 255, 0, _brightness);
+	if (!this->_backlight)
+        this->backlight_drawColor(0, 0, 0);
+    else
+        this->backlight_drawColor(this->_r, this->_g, this->_b);
+}
 
-		//Input ist Anode --> Wert invertieren
-		r = map(r, 0, 255, 255, 0);
-		g = map(g, 0, 255, 255, 0);
-		b = map(b, 0, 255, 255, 0);
+void LiquidCrystal_I2C::backlight_drawColor(uint8_t r, uint8_t g, uint8_t b) {
+    //mische Farben zueinander ab
+    r = map(r, 0, 255, 0, 255);
+    g = map(g, 0, 255, 0, 110);
+    b = map(b, 0, 255, 0, 115);
 
-		analogWrite(_red_pin, r);
-		analogWrite(_green_pin, g);
-		analogWrite(_blue_pin, b);
-	}
+    r = map(r, 0, 255, 0, _brightness);
+    g = map(g, 0, 255, 0, _brightness);
+    b = map(b, 0, 255, 0, _brightness);
+
+    //Input ist Anode --> Wert invertieren
+    r = map(r, 0, 255, 255, 0);
+    g = map(g, 0, 255, 255, 0);
+    b = map(b, 0, 255, 255, 0);
+
+    analogWrite(_red_pin, r);
+    analogWrite(_green_pin, g);
+    analogWrite(_blue_pin, b);
 }
 
 /*

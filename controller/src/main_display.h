@@ -82,6 +82,7 @@ namespace io {
 
         bool sd_available;
         int8_t loadingProgress;
+        bool backlight;
 
         LiquidCrystal_I2C *display; //LCD-Write-Class
         void (*readFile) (char[]); //speichere Funktionspointer

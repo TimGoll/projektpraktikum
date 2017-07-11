@@ -14,8 +14,9 @@ public:
     void setSerial(HardwareSerial *serial_labView, HardwareSerial *serial_debug, HardwareSerial *serial_mks, HardwareSerial *serial_buerkert);
     void activateDebug(bool activate);
 
-    int available(char type); //returns number of bytes in buffer
-    int read(char type); //Returns the first byte of incoming serial data available (or -1 if no data is available)
+    void flush(const char type); //waits until transmission is finished
+    int available(const char type); //returns number of bytes in buffer
+    int read(const char type); //Returns the first byte of incoming serial data available (or -1 if no data is available)
 
     //Serial_print Funktionen fuer alle Datentypen
     void print(const char type, String &input);

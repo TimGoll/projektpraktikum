@@ -122,6 +122,10 @@ private:
 
     void changeSingleChars(const char new_dm[21], char last_dm[21], int line);
 
+    //Ergaenzungen
+    void backlight_drawColor(uint8_t r, uint8_t g, uint8_t b);
+    //Ergaenzungen Ende
+
     uint8_t _Addr;
     uint8_t _displayfunction;
     uint8_t _displaycontrol;
@@ -131,16 +135,21 @@ private:
     uint8_t _rows;
     uint8_t _backlightval;
 
+    //Ergaenzungen
     uint8_t _red_pin;
     uint8_t _green_pin;
     uint8_t _blue_pin;
     uint8_t _brightness;
     uint8_t _backlight;
+    uint8_t _r;
+    uint8_t _g;
+    uint8_t _b;
 
     char last_dm0[21];
     char last_dm1[21];
     char last_dm2[21];
     char last_dm3[21];
+    //Ergaenzungen Ende
 };
 
 #endif

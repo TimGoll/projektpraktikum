@@ -6,7 +6,7 @@
 //SERIAL BAUDRATES
 #define SERIAL_LABVIEW_BAUDRATE 115200
 #define SERIAL_DEBUG_BAUDRATE 115200
-#define SERIAL_MKS_BAUDRATE 9600
+#define SERIAL_MKS_BAUDRATE 115200
 #define SERIAL_BUERKERT_BAUDRATE 9600
 
 //SERIAL READ CONFIGS
@@ -27,6 +27,9 @@
 #define DISPLAY_SIZE_WIDTH 20
 #define DISPLAY_SIZE_HEIGHT 4
 #define DISPLAY_REDRAW_INTERVALL 50 //ms, Bestimmt Häufigkeit der Bildaktualisierung, Errors ausgenommen
+#define PIN_DISPLAY_RED 37 //pwm
+#define PIN_DISPLAY_GREEN 36 //pwm
+#define PIN_DISPLAY_BLUE 35 //pwm
 
 //MENU AND BUTTONS
 #define MENU_MAX_AMOUNT_ENTRIES 32
@@ -40,12 +43,16 @@
 #define PIN_DEBUGLED 6 //output
 #define PIN_FINISHLED 13 //output
 
-#define PIN_ENABLE_MKS 26 //input
-#define PIN_ENABLE_BRK 27 //input
+#define PIN_ENABLE_MKS 26 //output
+#define PIN_ENABLE_BRK 27 //output
 
-#define PIN_DISPLAY_RED 35 //pwm
-#define PIN_DISPLAY_GREEN 36 //pwm
-#define PIN_DISPLAY_BLUE 37 //pwm
+#define PIN_SOFTWARE_RESET 23 //output
+
+//MFC COMMUNICATION TIMINGS
+#define MKS_WRITEENABLE_WAIT_TIME 5 //microseconds
+#define MKS_READENABLE_WAIT_TIME 5 //microseconds
+#define MKS_READ_START_TIME 250 //microseconds
+#define MKS_READ_TIMEOUT 5 //milliseconds
 
 //ADDRESSES
 #define ADDRESS_I2C_BOSCH 0x76

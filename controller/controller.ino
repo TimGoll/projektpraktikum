@@ -74,7 +74,7 @@ void setLaodingProgress_withoutClass(int8_t loadingProgress) {
 void setup() {
   // ERSTELLE SERIELLE VERBINDUNGEN
   srl->setSerial(&Serial1, &Serial3, &Serial2, &Serial4); //labview / debug / mks / buerkert
-  
+
   // ERSTELLE GEBRAUCHTE OBJEKTE
   main_display       = new io::Main_Display();
   inputHandler       = new io::InputHandler();
@@ -150,6 +150,9 @@ void setup() {
   // MFC RS CHIP-ENABLES
   pinMode(PIN_ENABLE_MKS, OUTPUT);
   pinMode(PIN_ENABLE_BRK, OUTPUT);
+
+  // SOFTWARE RESET INIT
+  pinMode(PIN_SOFTWARE_RESET, OUTPUT);
 
   // INIT ANGESCHOSSEN
   main_display->foundSDcard(storeD->foundSDcard()); //setze SD-Card Flag

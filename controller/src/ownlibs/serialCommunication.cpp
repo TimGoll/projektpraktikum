@@ -50,7 +50,9 @@ int SerialCommunication::read(const char type) {
     return this->getType(type)->read();
 }
 
-
+void SerialCommunication::flush(const char type) {
+    this->getType(type)->flush();
+}
 
 
 

@@ -69,6 +69,8 @@ Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren F
 <start>
 ```
 
+**Softwarereset**: Es ist auch möglich das Board per Software neu zu starten. Dafür muss ein ```reset``` Befehl übertragen werden, woraufhin das Board neu startet und anschließend wieder ein ```ready``` ausgibt. (Hardwareimplementierung noch ausstehend).
+
 ## Serielle Kommunikation:
 Drei Ports des Boards werden verwendet. Port 0 dient zur Kommunikation mit LabView (IN/OUT), Port 1 gibt Debug-Nachrichten aus, sofern der Debug-Schalter am Board aktiviert ist. Zur Kommunikation mit den MFCs dient Port 2.
 
@@ -341,7 +343,7 @@ Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer 
                                 |o GND |_B_| VIN o|
                   Labview - RX1 |o 00        GND o|
                   LabView - TX1 |o 01        3V3 o|
-                                |o 02         23 o|
+                                |o 02         23 o| AUSGANG - Software Reset
                                 |o 03         22 o|
                                 |o 04         21 o|
                                 |o 05         20 o| EINGANG - Debug-Schalter
@@ -357,9 +359,9 @@ Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer 
                                 |o 25            o|
            Enable MKS - AUSGANG |o 26         39 o|
        Enable Bürkert - AUSGANG |o 27         38 o|
-                                |o 28         37 o| PWM - Displaybeleuchtung blau
+                                |o 28         37 o| PWM - Displaybeleuchtung rot
                                 |o 29         36 o| PWM - Displaybeleuchtung grün
-                                |o 30  _____  35 o| PWM - Displaybeleuchtung rot
+                                |o 30  _____  35 o| PWM - Displaybeleuchtung blau
              Uart-Bürkert - RX4 |o 31 |  S  | 34 o|
              Uart-Bürkert - TX4 |o 32 |  D  | 33 o|
                                 +-----------------+
@@ -437,8 +439,14 @@ USB2: Debug über RX3, TX3
 
 ## Ausblick:
 ### RTC
+Aktuell wird das Datum und die Uhrzeit von LabView aus übertragen. Insbesondere bei Messungen von der SD Karte ist dies jedoch eher unpraktisch. Man könnte daher den Datumstring (in parseInput) mithilfe einer RTC bilden. Da schon eine RTC inklusive Quarz auf dem Teensy verbaut ist, muss man nur eine Knopfbatterie an entsprechende Pins anschließen, um dieses Feature zu nutzen.
 
 ### Software Reset via 'reset' Befehl
+Wenn per LabView der Befehl "reset" kommt, dann wird ein Pin auf HIGH gezogen, wodurch ein Transistor (evtl mit Kondensator) zu Ground durchschaltet und damit den Reset-Pin auf Ground zieht. Dies hat den Vorteil, dass das Board von LabView aus neu gestartet werden kann, wodurch alle Parameter zurück gesetzt werden. <br>
+Dieses Feature ist softwareseitig bereits implementiert.
+
+### Kommunikaationscontroller
+Aktuell haben wir einige Timingprobleme mit der Seriellen Kommunikation des Teensyboards, da wir das Programm blockieren müssen, bis Daten gesendet sind und eine Antwort erhalten wurde. Sinnvoller wäre es, einen weiteren Microcontroller (beispielsweise einen Arduino Nano) zuzuschalten, welcher per SPI (sehr schnell) mit dem Teensy kommuniziert und die Serielle Steuerung abarbeitet. Dadurch treten Verzögerungen auf dem Hauptcontroller nicht auf.
 
 ## Sonstiges:
 1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)

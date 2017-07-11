@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 
+#include "config.h"
 #include "ownlibs/serialCommunication.h"
 
 namespace communication {
@@ -19,6 +20,7 @@ namespace communication {
     private:
         char _address[3];
         char _value[8];
+        char _response[16];
     };
 }
 

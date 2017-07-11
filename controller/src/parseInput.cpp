@@ -51,6 +51,12 @@ namespace communication {
         for (uint8_t i = 0; i < newLineArray_size; i++)
             cmn::trim(newLineArray[i]);
 
+        //Sonderfall: Softwarereset
+        if (strcmp(newLineArray[0], "reset") == 0) {
+            digitalWrite(PIN_SOFTWARE_RESET, HIGH);
+            return 0;
+        }
+
         //verarbeite Input
         switch (this->_headerLineCounter) {
             case 0: //ZEILE 0: MFC+Ventilanzahl
