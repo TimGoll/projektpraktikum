@@ -14,12 +14,10 @@ namespace communication {
         //Destructor
         ~MfcCom();
         //schreibe Soll-Wert an MFC, gebe Fehlercode zurueck, falls voranden
-        uint8_t writeValue(char type[], char address[], float value);
+        bool writeValue(char type[], char address[], float value, float *destination);
         //lese Wert eines MFCs
-        uint32_t readValue(char type[], char address[]);
+        bool readValue(char type[], char address[], float *destination);
     private:
-        MfcCom_Mks *_mks;
-        MfcCom_Buerkert *_buerkert;
     };
 
     extern MfcCom *mfcCom;

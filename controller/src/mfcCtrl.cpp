@@ -64,7 +64,7 @@ namespace control {
         this->main_display = main_display;
     }
 
-    uint16_t MfcCtrl::getCurrentValue() {
+    float MfcCtrl::getCurrentValue() {
         return this->currentValue;
     }
 
@@ -76,37 +76,44 @@ namespace control {
     bool MfcCtrl::compute() {
         if (this->ready) {
             if (this->nextEvent.value == -1) { //lade erstes Event in nextEvent
-                if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
+                if (eventList.isEmpty()) //beende den Thread, wenn alle Events abgearbeitet sind
                     return false;
                 nextEvent = eventList.pop();
             }
 
             if (millis() >= this->startTime + this->nextEvent.time) {
-                //set MFC to this->nextEvent->value
-                communication::mfcCom->writeValue(this->type, this->address, this->nextEvent.value);
+                //TODO Ist-Wert getaktet auslesen
+                bool write_success = communication::mfcCom->writeValue(this->type, this->address, this->nextEvent.value, &this->currentValue);
 
-                uint32_t currentTime = millis();
+                //Wenn Schreiben der Daten erfolgreich war, gebe Debugnachrichten aus und lade neues Event. Ansonsten soll es in der
+                //Queue behalten werden, bis Uebertragung angenommen wird.
+                //Fehlerhafte Uebertragungen fuehren nicht zu einem Neustart. Es wird nur darauf geachtet, ob die Leitung gerade frei ist
+                if (write_success) {
+                    uint32_t currentTime = millis();
 
-                srl->print('D', "MFC\t");
-                srl->print('D', this->id);
-                srl->print('D', " gesetzt auf: ");
-                srl->print('D', this->nextEvent.value);
-                srl->print('D', "\t\tSchaltzeit:\t");
-                srl->print('D', currentTime);
-                srl->print('D', "\terwartet:\t");
-                srl->print('D', this->startTime + this->nextEvent.time);
-                srl->print('D', "\t( Rel.Zeit: ");
-                srl->print('D', this->nextEvent.time);
-                srl->print('D', " )\t( ");
-                srl->print('D', currentTime - (this->startTime + this->nextEvent.time));
-                srl->println('D', "\tms Verzoegerung )");
+                    srl->print('D', "MFC\t");
+                    srl->print('D', this->id);
+                    srl->print('D', " gesetzt auf: ");
+                    srl->print('D', this->nextEvent.value);
+                    srl->print('D', "\t\tSchaltzeit:\t");
+                    srl->print('D', currentTime);
+                    srl->print('D', "\terwartet:\t");
+                    srl->print('D', this->startTime + this->nextEvent.time);
+                    srl->print('D', "\t( Rel.Zeit: ");
+                    srl->print('D', this->nextEvent.time);
+                    srl->print('D', " )\t( ");
+                    srl->print('D', currentTime - (this->startTime + this->nextEvent.time));
+                    srl->println('D', "\tms Verzoegerung )");
 
-                this->main_display->setLastEvent('M', this->id, this->nextEvent.value, this->nextEvent.time);
-                this->currentValue = this->nextEvent.value;
+                    this->main_display->setLastEvent('M', this->id, this->nextEvent.value, this->nextEvent.time);
+                    this->currentValue = this->nextEvent.value;
 
-                if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
-                    return false;
-                nextEvent = eventList.pop();
+                    if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
+                        return false;
+                    nextEvent = eventList.pop();
+                } else {
+                    srl->println('D', "Port belegt, versuche erneut...");
+                }
             }
         }
         return true;

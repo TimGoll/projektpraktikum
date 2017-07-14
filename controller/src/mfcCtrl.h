@@ -34,8 +34,8 @@ namespace control {
         void start(uint32_t startTime);
         //Gebe Adresse des Displayobjektes an diesen MFC, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
-        //Gibt den aktuellen Soll-Wert des MFCs zurueck
-        uint16_t getCurrentValue();
+        //Gibt den aktuellen Ist-Wert des MFCs zurueck
+        float getCurrentValue();
         //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool compute();
         //schreibt den Typ dieses MFCs in einen String
@@ -46,7 +46,7 @@ namespace control {
         char address[16];
         bool ready;
         uint32_t startTime;
-        int16_t currentValue;
+        float currentValue;
 
         QueueList <eventElement> eventList;
         eventElement nextEvent;

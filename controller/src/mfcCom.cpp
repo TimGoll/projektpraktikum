@@ -2,30 +2,34 @@
 
 namespace communication {
     MfcCom::MfcCom() {
-        this->_mks      = new MfcCom_Mks();
-        this->_buerkert = new MfcCom_Buerkert();
+        //this->_mks      = new MfcCom_Mks();
+        Mks::init();
+        //this->_buerkert = new MfcCom_Buerkert();
     }
 
     MfcCom::~MfcCom() {
 
     }
 
-    uint8_t MfcCom::writeValue(char type[], char address[], float value) {
+    bool MfcCom::writeValue(char type[], char address[], float value, float *destination) {
         if (strcmp(type, "MKS") == 0)
-            return this->_mks->writeValue(address, value);
-        else if (strcmp(type, "Buerkert") == 0)
-            return this->_buerkert->writeValue(address, value);
-        else
-            return 100; //TODO errorcode
+            //return this->_mks->writeValue(address, value);
+            return Mks::writeValue(address, value, destination);
+        //else if (strcmp(type, "Buerkert") == 0)
+            //return this->_buerkert->writeValue(address, value);
+        //else
+            //return 100; //TODO errorcode
+        return false;
     }
 
-    uint32_t MfcCom::readValue(char type[], char address[]) {
-        if (strcmp(type, "MKS") == 0)
-            return this->_mks->readValue(address);
-        else if (strcmp(type, "Buerkert") == 0)
-            return this->_buerkert->readValue(address);
-        else
-            return 100; //TODO errorcode
+    bool MfcCom::readValue(char type[], char address[], float *destination) {
+        //if (strcmp(type, "MKS") == 0)
+            //return this->_mks->readValue(address);
+        //else if (strcmp(type, "Buerkert") == 0)
+            //return this->_buerkert->readValue(address);
+        //else
+
+        return false;
     }
 
     // Initialisiere die Kommunikation mit den MFCs

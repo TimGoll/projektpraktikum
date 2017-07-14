@@ -49,10 +49,9 @@
 #define PIN_SOFTWARE_RESET 23 //output
 
 //MFC COMMUNICATION TIMINGS
-#define MKS_WRITEENABLE_WAIT_TIME 5 //microseconds
-#define MKS_READENABLE_WAIT_TIME 5 //microseconds
 #define MKS_READ_START_TIME 250 //microseconds
-#define MKS_READ_TIMEOUT 5 //milliseconds
+#define MKS_ANSWER_TIMEOUT 5 //milliseconds
+#define MKS_READ_TIMEOUT 2 //milliseconds
 
 //ADDRESSES
 #define ADDRESS_I2C_BOSCH 0x76

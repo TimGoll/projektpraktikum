@@ -7,21 +7,22 @@
 #include "ownlibs/serialCommunication.h"
 
 namespace communication {
-    class MfcCom_Mks {
-    public:
-        //Defaultconstructor
-        MfcCom_Mks();
-        //Destructor
-        ~MfcCom_Mks();
-        //schreibe Soll-Wert an MFC, gebe Fehlercode zurueck, falls voranden
-        uint8_t writeValue(char address[], float value);
-        //lese Wert eines MFCs
-        uint32_t readValue(char address[]);
-    private:
-        char _address[3];
-        char _value[8];
-        char _response[16];
-    };
+    namespace Mks {
+        //"public" functions
+        void init();
+
+        //setzt einen Schreibauftrag an einen MFC auf. Mittels Interrupts wird die
+        //zeitliche Steuerung garantiert. Der destination Pointer dient dazu um
+        //asynchron den Wert des MFCs zurueck zu geben.
+        //Die Funktion gibt false zurueck, wenn sie gerade noch beschaeftig ist,
+        //der Befehl muss dann erneut gesendet werden.
+        bool writeValue(char address[], float value, float *destination);
+        bool readValue(char address[], float *destination);
+
+        //"private" functions
+        void _writeValue_changeEnable();
+        void _writeValue_readAnswer();
+    }
 }
 
 #endif
