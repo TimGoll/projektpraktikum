@@ -88,6 +88,7 @@ namespace cmn {
         }
     }
 
+    //Funktioniert, wird aber derzeit nicht genutzt
     void integerToByte(uint32_t value, uint8_t bytesize, char output[]) {
         union {
             uint8_t _convert32_to_8_bit[4];

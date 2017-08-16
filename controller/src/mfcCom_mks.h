@@ -20,8 +20,9 @@ namespace communication {
         bool readValue(char address[], float *destination);
 
         //"private" functions
-        void _writeValue_changeEnable();
-        void _writeValue_readAnswer();
+        bool _writeCommand(char address[], char command, char value_string[]);
+        void _writeCommand_changeEnable();
+        void _writeCommand_readAnswer();
     }
 }
 

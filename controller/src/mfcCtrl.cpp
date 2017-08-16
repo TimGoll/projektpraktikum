@@ -65,7 +65,12 @@ namespace control {
     }
 
     float MfcCtrl::getCurrentValue() {
-        return this->currentValue;
+        //waehrend man auf eine Variable zugreift, die in einem Interrupt bearbeitet werden kann
+        //muss man dafuer sorgen, dass sie sich im Lesevorgang nicht aendern kann
+        noInterrupts();
+        float tmp_currentValue = this->currentValue;
+        interrupts();
+        return tmp_currentValue;
     }
 
     void MfcCtrl::getType(char type[]) {

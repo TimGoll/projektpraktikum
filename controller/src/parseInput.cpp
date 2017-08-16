@@ -81,7 +81,7 @@ namespace communication {
                 srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                 break;
             case 1: //ZEILE 1: MFC-Adressen
-                if (newLineArray_size != this->amount_MFC) {
+                if (this->amount_MFC > 0 && newLineArray_size != this->amount_MFC) {
                     srl->println('D', "Zeile 1: Anzahl der gegebenen Adressen stimmt nicht mit Anzahl der MFCs ueberein.");
                     srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
                     return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
@@ -92,7 +92,7 @@ namespace communication {
                 srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                 break;
             case 2: //ZEILE 2: MFC-Typen
-                if (newLineArray_size != this->amount_MFC) {
+                if (this->amount_MFC > 0 && newLineArray_size != this->amount_MFC) {
                     srl->println('D', "Zeile 2: Anzahl der gegebenen Typen stimmt nicht mit Anzahl der MFCs ueberein.");
                     srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
                     return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;
@@ -115,7 +115,7 @@ namespace communication {
                 srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                 break;
             case 4: //ZEILE 4: Ventil-Pins
-                if (newLineArray_size != this->amount_valve) {
+                if (this->amount_valve > 0 && newLineArray_size != this->amount_valve) {
                     srl->println('D', "Zeile 4: Anzahl der gegebenen Pin-Nummern stimmt nicht mit Anzahl der Ventile ueberein.");
                     srl->println('L', ERR_SERIAL_COMMANDS_WRONG_AMOUNT);
                     return ERR_SERIAL_COMMANDS_WRONG_AMOUNT;

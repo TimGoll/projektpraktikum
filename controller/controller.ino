@@ -147,11 +147,7 @@ void setup() {
   srl->activateDebug(digitalRead(PIN_DEBUGSWITCH));
   digitalWrite(PIN_DEBUGLED, digitalRead(PIN_DEBUGSWITCH));
 
-  // MFC RS CHIP-ENABLES
-  pinMode(PIN_ENABLE_MKS, OUTPUT);
-  pinMode(PIN_ENABLE_BRK, OUTPUT);
-
-  // SOFTWARE RESET INIT
+  // SOFTWARE RESET INIT //TODO
   pinMode(PIN_SOFTWARE_RESET, OUTPUT);
 
   // INIT ANGESCHOSSEN

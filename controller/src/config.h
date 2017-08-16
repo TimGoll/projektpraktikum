@@ -44,14 +44,18 @@
 #define PIN_FINISHLED 13 //output
 
 #define PIN_ENABLE_MKS 26 //output
-#define PIN_ENABLE_BRK 27 //output
+#define PIN_ENABLE_BUERKERT 27 //output
 
 #define PIN_SOFTWARE_RESET 23 //output
 
 //MFC COMMUNICATION TIMINGS
-#define MKS_READ_START_TIME 250 //microseconds
+#define MKS_READ_START_TIME 1000 //microseconds
 #define MKS_ANSWER_TIMEOUT 5 //milliseconds
-#define MKS_READ_TIMEOUT 2 //milliseconds
+#define MKS_READ_TIMEOUT 5 //milliseconds
+
+#define BUERKERT_READ_START_TIME 1000 //microseconds
+#define BUERKERT_ANSWER_TIMEOUT 25 //milliseconds
+#define BUERKERT_READ_TIMEOUT 25 //milliseconds
 
 //ADDRESSES
 #define ADDRESS_I2C_BOSCH 0x76

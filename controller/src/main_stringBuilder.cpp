@@ -74,7 +74,6 @@ namespace communication {
                 // Zeit in millis()
                 // Passe currentTime so an, dass sie die relative Zeit zum Start anzeigt (rechne Schreibeverschiebnung wieder raus)
                 uint32_t currentTime = this->lastTime - ( this->startTime +  this->intervall / 2);
-                //cmn::integerToByte(currentTime, 4, output);
                 sprintf(output, "%lu", currentTime);
                 strcat(this->newLine, output);
                 strcat(this->newLine, " ");
@@ -82,16 +81,13 @@ namespace communication {
                 //MFC Werte
                 this->main_mfcCtrl->getMfcValueList(this->mfcValueList);
                 for (uint8_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
-                    //cmn::integerToByte(this->mfcValueList[i], 4, output);
                     sprintf(output, "%d", this->mfcValueList[i]);
                     strcat(this->newLine, output);
                     strcat(this->newLine, " ");
                 }
 
-                //TODO MFC IST WERTE
                 this->main_mfcCtrl->getMfcValueList(this->mfcValueList);
                 for (uint8_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
-                    //cmn::integerToByte(this->mfcValueList[i], 4, output);
                     sprintf(output, "%d", this->mfcValueList[i]);
                     strcat(this->newLine, output);
                     strcat(this->newLine, " ");
@@ -100,14 +96,12 @@ namespace communication {
                 //Ventilwerte
                 this->main_valveCtrl->getValveValueList(valveValueList);
                 for (uint8_t i = 0; i < this->main_valveCtrl->getAmount_valve(); i++) {
-                    //cmn::integerToByte(valveValueList[i], 1, output);
                     sprintf(output, "%d", this->valveValueList[i]);
                     strcat(this->newLine, output);
                     strcat(this->newLine, " ");
                 }
 
                 // Boschsensor
-                //cmn::integerToByte(this->main_boschCom->getCurrentValue(), 2, output);
                 this->boschValues = this->main_boschCom->getCurrentValues();
                 for (uint8_t i = 0; i < 3; i++) {
                     sprintf(output, "%f", this->boschValues[i]);
@@ -122,9 +116,6 @@ namespace communication {
 
                 // sende String an LabView
                 srl->println('L', this->newLine);
-
-                // (Bei SD die Funktion aufrufen, die deine Loop ersetzt (this->storeD->...) // bei lab com this->main_labCom->setNewLine(string))
-                // setze String zurueck fuer neuen String!
 
                 //addiere intervall zur letzten Zeit und NICHT zur aktuellen Zeit, um
                 //Zeitungenauigkeiten durch Verzoegerungen vorzubeugen

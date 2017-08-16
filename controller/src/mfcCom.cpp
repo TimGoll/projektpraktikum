@@ -2,9 +2,8 @@
 
 namespace communication {
     MfcCom::MfcCom() {
-        //this->_mks      = new MfcCom_Mks();
         Mks::init();
-        //this->_buerkert = new MfcCom_Buerkert();
+        Buerkert::init();
     }
 
     MfcCom::~MfcCom() {
@@ -13,22 +12,17 @@ namespace communication {
 
     bool MfcCom::writeValue(char type[], char address[], float value, float *destination) {
         if (strcmp(type, "MKS") == 0)
-            //return this->_mks->writeValue(address, value);
             return Mks::writeValue(address, value, destination);
-        //else if (strcmp(type, "Buerkert") == 0)
-            //return this->_buerkert->writeValue(address, value);
-        //else
-            //return 100; //TODO errorcode
+        else if (strcmp(type, "Buerkert") == 0)
+            return Buerkert::writeValue(address, value, destination);
         return false;
     }
 
     bool MfcCom::readValue(char type[], char address[], float *destination) {
-        //if (strcmp(type, "MKS") == 0)
-            //return this->_mks->readValue(address);
-        //else if (strcmp(type, "Buerkert") == 0)
-            //return this->_buerkert->readValue(address);
-        //else
-
+        if (strcmp(type, "MKS") == 0)
+            return Mks::readValue(address, destination);
+        else if (strcmp(type, "Buerkert") == 0)
+            return Buerkert::readValue(address, destination);
         return false;
     }
 
