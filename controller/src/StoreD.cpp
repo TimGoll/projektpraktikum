@@ -72,6 +72,17 @@ namespace storage {
             strcat(tmp_path, ".TXT");
             if (SD.exists(tmp_path)) {
                 number++;
+            } else if (number >= 100) {
+                //Sonderfall, wenn 100 Messungen an einem Tag erreicht wurden
+                sprintf(num_buf, "%s", "xx");
+                strcpy(tmp_path, "/RESULTS/");
+                strcat(tmp_path, this->fileName);
+                strcat(tmp_path, num_buf);
+                strcat(tmp_path, ".TXT");
+
+                strcat(this->fileName, num_buf);
+                strcat(this->fileName, ".TXT");
+                break;
             } else {
                 strcat(this->fileName, num_buf);
                 strcat(this->fileName, ".TXT");

@@ -18,6 +18,7 @@ namespace communication {
             estimated_answer_length = 0;
 
             pinMode(PIN_ENABLE_MKS, OUTPUT);
+            digitalWrite(PIN_ENABLE_MKS, HIGH);
         }
 
         bool writeValue(char address[], float value, float *destination) {
@@ -98,13 +99,13 @@ namespace communication {
             eventTimer->begin(_writeCommand_readAnswer, transmission_time);
         }
 
-        void _writeCommand_readAnswer() { //TODO Antwort muss korrekt verarbeitet werden - Hardwarefehler?
+        void _writeCommand_readAnswer() {
             //Lesen nachdem Serielle Uebertragung der Antwort abgeschlossen ist
             eventTimer->end(); //Timer soll nur einmal ausgefuehrt werden
             busy = false; //COM Modul ist nach Abarbeitung dieses Auftrags wieder fuer neue Befehle bereit
 
             uint8_t charId = 0;
-            uint32_t read_startTime = 0;
+            uint32_t read_startTime = millis();
             char response[16];
             while (millis() - read_startTime < MKS_READ_TIMEOUT) {
                  //warte, wenn gerade kein Zeichen in Buffer, aber String nicht abgeschlossen
@@ -118,11 +119,21 @@ namespace communication {
                 response[charId] = newChar;
                 charId++;
             }
+            digitalWrite(PIN_ENABLE_MKS, HIGH); //setze Pin wieder HIGH, damit writeEnable aktiviert ist
 
-            //TODO: verarbeite Antwort
-            srl->println('L', response);
+            if (response[0] == '@' && response[1] == '-') {
+                char response_new[16];
+                uint8_t i = 4;
+                for (i; response[i] != '\0'; i++) {
+                    response_new[i-4] = response[i];
+                }
+                response_new[i-4] = '\0';
 
-            *destination_value_ptr = atoi(response); //TODO anpassen
+                *destination_value_ptr = cmn::charArrayToFloat(response_new);
+            } else {
+                *destination_value_ptr = 0.0;
+                srl->println('D', "MFC Antwortet inkorrekt.");
+            }
         }
     }
 }

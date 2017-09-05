@@ -6,6 +6,12 @@ namespace control {
         this->amount_of_finished_mfcs = 0;
 
         this->queueFinished = false;
+
+        this->lastReadEventSuccess = true;
+        this->nextReadEvent_time = 0;
+        this->nextMfcId = 0;
+
+        this->ready = false;
     }
     Main_MfcCtrl::~Main_MfcCtrl() {
 
@@ -32,11 +38,14 @@ namespace control {
         }
     }
 
-    void Main_MfcCtrl::setEvent(uint16_t mfcID, uint16_t value, uint32_t time) {
+    void Main_MfcCtrl::setEvent(uint16_t mfcID, float value, uint32_t time) {
         this->mfc_list[mfcID]->setEvent(value, time);
     }
 
     void Main_MfcCtrl::start(uint32_t startTime) {
+        this->ready = true;
+        this->nextReadEvent_time = millis() + MFC_READ_TIMING;
+
         for (uint16_t i = 0; i < this->amount_MFC; i++) {
             this->mfc_list[i]->start(startTime);
         }
@@ -46,9 +55,15 @@ namespace control {
         this->main_display = main_display;
     }
 
-    void Main_MfcCtrl::getMfcValueList(uint16_t mfcValueList[]) {
+    void Main_MfcCtrl::getMfcValueList(float mfcValueList[]) {
         for (uint16_t i = 0; i < this->amount_MFC; i++) {
             mfcValueList[i] = this->mfc_list[i]->getCurrentValue();
+        }
+    }
+
+    void Main_MfcCtrl::getMfcDestinationList(float mfcDestinationList[]) {
+        for (uint16_t i = 0; i < this->amount_MFC; i++) {
+            mfcDestinationList[i] = this->mfc_list[i]->getDestinationValue();
         }
     }
 
@@ -85,6 +100,16 @@ namespace control {
                     srl->print('D', i);
                     srl->println('D', " abgearbeitet.");
                 }
+            }
+        }
+
+
+        if (this->ready && (millis() >= this->nextReadEvent_time || !this->lastReadEventSuccess)) {
+            this->lastReadEventSuccess = this->mfc_list[this->nextMfcId]->readCurrentValue();
+
+            if (this->lastReadEventSuccess) {
+                this->nextReadEvent_time += MFC_READ_TIMING;
+                this->nextMfcId = ++this->nextMfcId % this->amount_MFC;
             }
         }
 

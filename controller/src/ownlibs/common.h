@@ -12,6 +12,8 @@ namespace cmn {
     uint8_t split(char destination[][16], char source[], char symbol);
     //sortiert string array
     void sort(char sorting[][16], uint8_t size);
+    //wandelt chararray in float um
+    float charArrayToFloat(char input[]);
     //bekommt ein x <= 256^n und gibt n Byte großen String zurueck
     void integerToByte(uint32_t value, uint8_t bytesize, char output[]);
 };

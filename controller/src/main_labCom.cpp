@@ -180,6 +180,8 @@ namespace communication {
                 this->finished = true;
                 this->main_display->bothQueuesFinished();
                 this->main_stringBuilder->bothQueuesFinished();
+                delay(1); //Delay stoert hier nicht, da Messung zu ende und read() per Interrupt laeuft
+                srl->println('L', "finished");
             }
         }
 

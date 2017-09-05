@@ -30,7 +30,7 @@ namespace control {
         //Gebe Adresse des Displayobjektes an dieses Ventil, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
         //Gibt den aktuellen Soll-Wert des Ventils zurueck
-        uint16_t getCurrentValue();
+        uint8_t getCurrentValue();
         //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool compute();
     private:
@@ -38,10 +38,10 @@ namespace control {
         uint16_t pin;
         bool     ready;
         uint32_t startTime;
-        int16_t  currentValue;
+        int8_t   currentValue;
 
-        QueueList <eventElement> eventList;
-        eventElement nextEvent;
+        QueueList <eventElement_valve> eventList;
+        eventElement_valve nextEvent;
 
         io::Main_Display *main_display;
         Pca9555 *pca9555;

@@ -79,16 +79,16 @@ namespace communication {
                 strcat(this->newLine, " ");
 
                 //MFC Werte
-                this->main_mfcCtrl->getMfcValueList(this->mfcValueList);
+                this->main_mfcCtrl->getMfcDestinationList(this->mfcDestinationList);
                 for (uint8_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
-                    sprintf(output, "%d", this->mfcValueList[i]);
+                    dtostrf(this->mfcDestinationList[i], 8, 5, output); //float to string mit mehr als zwei Nachkommastellen
                     strcat(this->newLine, output);
                     strcat(this->newLine, " ");
                 }
 
                 this->main_mfcCtrl->getMfcValueList(this->mfcValueList);
                 for (uint8_t i = 0; i < this->main_mfcCtrl->getAmount_MFC(); i++) {
-                    sprintf(output, "%d", this->mfcValueList[i]);
+                    dtostrf(this->mfcValueList[i], 8, 5, output); //float to string mit mehr als zwei Nachkommastellen
                     strcat(this->newLine, output);
                     strcat(this->newLine, " ");
                 }

@@ -29,17 +29,22 @@ namespace control {
         void setAddress(char address[]);
         //Stellwerte fuer die MFCs koennen als Pseudoevents gesetzt werden. Die Ereignisse
         //werden in einer Queue gespeichert und bei gegebenen Zeitpunkt ausgefuehrt
-        void setEvent(uint16_t value, uint32_t time);
+        void setEvent(float value, uint32_t time);
         //sobald diese Funktion ausgefuehrt wird, beginnt das Programm mit der Ansteuerung
         void start(uint32_t startTime);
         //Gebe Adresse des Displayobjektes an diesen MFC, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
         //Gibt den aktuellen Ist-Wert des MFCs zurueck
         float getCurrentValue();
+        //Gibt den aktuellen Soll-Wert des MFCs zurueck
+        float getDestinationValue();
         //Die compute()-Function wird kontinuierlich aufgerufen und vollstaendig ausgefuehrt
         bool compute();
         //schreibt den Typ dieses MFCs in einen String
         void getType(char type[]);
+        //main_mfcCtrl ruft die MFCs nacheinander auf und schaut die IST Werte an
+        bool readCurrentValue();
+
     private:
         uint16_t id; //kontunierliche MFC-Id
         char type[16];
@@ -47,9 +52,10 @@ namespace control {
         bool ready;
         uint32_t startTime;
         float currentValue;
+        float destinationValue;
 
-        QueueList <eventElement> eventList;
-        eventElement nextEvent;
+        QueueList <eventElement_mfc> eventList;
+        eventElement_mfc nextEvent;
 
         io::Main_Display *main_display;
     };

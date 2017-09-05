@@ -34,7 +34,7 @@ namespace control {
     }
 
     void ValveCtrl::setEvent(uint16_t value, uint32_t time) {
-        eventElement newEvent; //Erstelle neue Datenstruktur
+        eventElement_valve newEvent; //Erstelle neue Datenstruktur
         newEvent.value = value;
         newEvent.time  = time;
 
@@ -57,14 +57,16 @@ namespace control {
         this->main_display = main_display;
     }
 
-    uint16_t ValveCtrl::getCurrentValue() {
+    uint8_t ValveCtrl::getCurrentValue() {
+        if (eventList.isEmpty())
+            return 0;
         return this->currentValue;
     }
 
     bool ValveCtrl::compute() {
         if (this->ready) {
             if (this->nextEvent.value == -1) { //lade erstes Event in nextEvent
-                if (eventList.isEmpty()) //beende den thread, wenn alle Events abgearbeitet sind
+                if (eventList.isEmpty()) //beende den Thread, wenn alle Events abgearbeitet sind
                     return false;
                 nextEvent = eventList.pop();
             }

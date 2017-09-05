@@ -11,6 +11,7 @@ namespace control {
         this->ready = false;
 
         this->currentValue = 0;
+        this->destinationValue = 0;
 
         srl->print('D', "MFC ");
         srl->print('D', this->id);
@@ -40,8 +41,8 @@ namespace control {
         srl->println('D', this->address);
     }
 
-    void MfcCtrl::setEvent(uint16_t value, uint32_t time) {
-        eventElement newEvent; //Erstelle neue Datenstruktur
+    void MfcCtrl::setEvent(float value, uint32_t time) {
+        eventElement_mfc newEvent; //Erstelle neue Datenstruktur
         newEvent.value = value;
         newEvent.time  = time;
 
@@ -73,8 +74,18 @@ namespace control {
         return tmp_currentValue;
     }
 
+    float MfcCtrl::getDestinationValue() {
+        return this->destinationValue;
+    }
+
     void MfcCtrl::getType(char type[]) {
         strcpy(type, this->type);
+    }
+
+    bool MfcCtrl::readCurrentValue() {
+        if (this->ready)
+            return communication::mfcCom->readValue(this->type, this->address, &this->currentValue);
+        return true;
     }
 
     //HAUPTSCHLEIFE
@@ -87,8 +98,9 @@ namespace control {
             }
 
             if (millis() >= this->startTime + this->nextEvent.time) {
-                //TODO Ist-Wert getaktet auslesen
                 bool write_success = communication::mfcCom->writeValue(this->type, this->address, this->nextEvent.value, &this->currentValue);
+
+                this->destinationValue = this->nextEvent.value;
 
                 //Wenn Schreiben der Daten erfolgreich war, gebe Debugnachrichten aus und lade neues Event. Ansonsten soll es in der
                 //Queue behalten werden, bis Uebertragung angenommen wird.

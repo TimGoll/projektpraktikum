@@ -5,6 +5,7 @@
 
 #include "config.h"
 #include "ownlibs/serialCommunication.h"
+#include "ownlibs/common.h"
 
 namespace communication {
     namespace Mks {

@@ -10,7 +10,7 @@ _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
 ## Verwendete Bibliotheken:
 1. [**mThread**](http://www.kwartzlab.ca/2010/09/arduino-multi-threading-librar/): <br>
  Erstellt Pseudothreads auf dem Board, die nacheinander ausgeführt werden. Jeder Thread hat seine eigene ```loop()```. <br>
- Threads werden hinzugefügt mittels ```main_thread_list -> add_thread(CLASSNAME)```, anschließend laufen sie unbegrenzt weiter. **Hinweis:** Es sind scheinbar maximal nur 10 Threads möglich.
+ Threads werden hinzugefügt mittels ```main_thread_list -> add_thread(CLASSNAME)```, anschließend laufen sie unbegrenzt weiter. **Hinweis:** Es sind anscheinend maximal 10 Threads möglich.
 
 2. [**newdel**](https://github.com/jlamothe/newdel): <br>
  Fügt die Keywörter ```new``` und ```delete``` hinzu. Wird für mThread benötigt und musste leicht angepasst werden, damit sie auf neueren Arduino-Boards funktioniert.
@@ -23,15 +23,18 @@ _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
 
 ## Programmablauf:
 1. Programm startet automatisch nach Herstellung der Stromversorgung
-2. Es kann ein Programm per USB von LabView übertragen werden, oder - falls eine SD Karte eingesteckt ist - ein Programm von der SD-Karte aus starten
-3. Programm ließt Daten (werden überprüft) und startet nach einem Tasterdruck/"Start"-Befehl
-4. Arbeitet Eventlisten ab, gibt Debug-Informationen aus, sofern über Schalter aktiviert, während der Laufzeit Einstellbar
-5. Im Idle-Modus nach Vollständiger Abarbeitung aller Events; nach Abschluss des Programms leuchtet eine LED und das Display färbt sich grün
+2. Es kann ein Programm per USB von LabView übertragen werden, oder - falls eine SD-Karte eingesteckt ist - ein Programm von der SD-Karte aus starten
+3. Programm liest Daten (werden überprüft) und startet nach einem Tasterdruck/"Start"-Befehl
+4. Arbeitet Eventlisten ab, gibt Debug-Informationen aus, sofern über Schalter aktiviert, während der Laufzeit einstellbar
+5. Im Idle-Modus nach vollständiger Abarbeitung aller Events; nach Abschluss des Programms leuchtet eine LED und das Display färbt sich grün
 6. Für weiteres Programm muss Board resettet werden
 7. Es sind maximal 14.000 Events auf dem Board möglich. Dann ist der Speicher voll
+8. Für eine korrekte Steuerung muss **mindestens ein Ventil und ein MFC** existieren, sonst kommt es zu Fehlern. Falls in der Steuerung kein MFC/Ventil gebraucht wird, dann kann man auch einen leeres pseudo MFC/Ventil hinzufügen, das keine Events hat. Dafür muss nicht mal Hardware angeschlossen sein.
 
 ## Übertragungsprotokoll (LabView -> Microcontroller):
-Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren Format. Als Anfangs und Endzeichen dienen zur Überprüfung der Vollständigkeit jeweils ein öffnender und schließender Tag. Alle Zeitangaben sind in Millisekunden, es gibt nur ganzzahliger Integerwerte.
+Die Übertragung erfolgt Zeilenweise in einem möglichst übertragungssicheren Format. Als Anfangs und Endzeichen dienen zur Überprüfung der Vollständigkeit jeweils eine öffnende und schließende spitze Klammer. Alle Zeitangaben sind in Millisekunden, es gibt nur ganzzahlige Integerwerte.
+
+Die IDs der MFCs und Ventile ergeben sich jeweils aus der gegebenen Reihenfolge startend bei null.
 
 **Zeilenweise Betrachtung der Übertragung**:
 
@@ -69,51 +72,94 @@ Die Übertragung erfolgt Zeilenweise in einem möglichst Übertragungssicheren F
 <start>
 ```
 
-**Softwarereset**: Es ist auch möglich das Board per Software neu zu starten. Dafür muss ein ```reset``` Befehl übertragen werden, woraufhin das Board neu startet und anschließend wieder ein ```ready``` ausgibt. (Hardwareimplementierung noch ausstehend).
+**Softwarereset**: Es ist auch möglich das Board per Software neu zu starten. Dafür muss ein ```reset``` Befehl übertragen werden, woraufhin das Board neu startet und anschließend wieder ein ```ready``` ausgibt. (Hardwareimplementierung noch ausstehend). Mehr siehe Ausblick.
 
 ## Serielle Kommunikation:
-Drei Ports des Boards werden verwendet. Port 0 dient zur Kommunikation mit LabView (IN/OUT), Port 1 gibt Debug-Nachrichten aus, sofern der Debug-Schalter am Board aktiviert ist. Zur Kommunikation mit den MFCs dient Port 2.
+Vier Ports des Boards werden verwendet. Port 0 dient zur Kommunikation mit LabView (IN/OUT), Port 1 gibt Debug-Nachrichten aus, sofern der Debug-Schalter am Board aktiviert ist. Zur Kommunikation mit den MFCs dient Port 2.
 
-Es gibt eine extra Klasse namens ```serialCommunication```, welche die Kommunikation über die 3 Ports verwaltet. Zu beginn muss in der ```setup()```-Funktion der Hauptino die Klasse initialisiert werden:
+Es gibt eine extra Klasse namens ```serialCommunication```, welche die Kommunikation über die vier Ports verwaltet. Zu Beginn muss in der ```setup()```-Funktion der Hauptino das Objekt initialisiert werden:
 ```cpp
-srl->setSerial(&Serial, &Serial1, &Serial2); //labview / debug / uart
+srl->setSerial(&Serial1, &Serial3, &Serial2, &Serial4); //labview / debug / mks / buerkert
 ```
 Anschließend kann man an beliebiger Stelle im Programm diese Klasse einfach nutzen:
 ```cpp
-srl->print('D', "Hallo Welt!"); //(Typ: L, D, U / Ausgabetext)
+srl->print('D', "Hallo Welt!"); //(Typ: L, D, M, B / Ausgabetext)
 srl->println('D', "Hallo Welt mit Zeilenende!"); //Natuerlich gibt es das ganze auch mit Linebreak
 ```
-Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei Typen: L, D und U für LabView, Debug und UART. Die Baudrate wird in der **config.h** eingestellt.
+Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei Typen: L, D und M, B für LabView, Debug MKS und Bürkert. Die Baudrate wird in der **config.h** eingestellt.
 
-Über den LabView Port wird nach erfolgreicher Initialisierung des Boards ein _"ready"_ gesendet. Wurde ein Befehl korrekt erkannt und erfolgreich verarbeitet wird ein _"ok"_ gesendet, ansonsten kommt ein Errorcode.
+Über den LabView-Port wird nach erfolgreicher Initialisierung des Boards ein _"ready"_ gesendet. Wurde ein Befehl korrekt erkannt und erfolgreich verarbeitet wird ein _"ok"_ gesendet, ansonsten kommt ein Errorcode. Nach Abschluss einer Messung wird eine _"finished"_ Zeile übertragen.
 
 ## Serielle Hardware
 Die Verbindung zwischen dem Teensy und dem PC über Serielle Verbindung wird mittels dem IC **CH340G** realisiert. Dieser funktioniert Plug and Play unter Windows (Windows 10 getestet) und lässt sich auch [mit einfachen Treibern](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) unter MacOS zum Laufen bringen.
 
 ## SD Karte
-Das SD System des Teensy basiert auf FAT, daher sind maximale Dateinamen 8 Zeichen lang (Großbuchstaben), Dateinamen, die länger als diese acht Zeichen sind, werden automatisch gekürzt (8.3 Format). Beim Speichern in eine Datei ist es jedoch wichtig, dass der Dateiname maximal 8 Zeichen hat, ansonsten tritt ein Fehler auf.
+Das SD-System des Teensy basiert auf FAT, daher sind Dateinamen maximal acht Zeichen lang (Großbuchstaben). Dateinamen, die länger als diese acht Zeichen sind, werden automatisch gekürzt (8.3 Format). Beim Speichern in eine Datei ist es jedoch wichtig, dass der Dateiname maximal 8 Zeichen hat, ansonsten tritt ein Fehler auf.
 
-Die SD Karte wird nur einmal beim Programmstart initialisiert. Es ist also nicht möglich, sie während der Laufzeit reinzustecken oder zu entfernen. Ersteres wird nicht erkannt, letzteres führt zu Datenverlust. Wenn eine SD Karte beim Programmstart erkannt wird, so wird dies durch ein Zeichen in der linken oberen Ecke gezeigt.
+Die SD-Karte wird nur einmal beim Programmstart initialisiert. Es ist also nicht möglich, sie während der Laufzeit einzustecken oder zu entfernen. Ersteres wird nicht erkannt, letzteres führt zu Datenverlust. Wenn eine SD-Karte beim Programmstart erkannt wird, so wird dies durch ein Zeichen in der linken oberen Ecke gezeigt.
 
-Eine neue SD Karte einfach in des Leseslot stecken, alle nötigen Verzeichnisse werden automatisch erstellt. (Board muss resettet werden!)
+Eine neue SD-Karte kann einfach in den Leseslot gesteckt werden, alle nötigen Verzeichnisse werden automatisch erstellt. (Board muss resettet werden!)
 
 ### Messergebnisse
 **Namensschema:** ```YYMMDDXX```<br>
-Datum in Zweierschreibweise, zwei X für eine fortlaufende Nummerierung. Es sind maximal 100 (0..99) Messungen an einem Tag möglich.
+Datum in Zweierschreibweise, zwei X für eine fortlaufende Nummerierung. Es sind maximal 100 (0..99) Messungen an einem Tag möglich. Falls der Zähler die 100 Überschreitet, werden kontinuierlich Messungen unter der Nummer _"xx"_ abgespeichert und überschrieben.
 
 Beim Speichern auf der SD-Karte wird eine Datei mit einem Dateinamen, der das Datum und die Messungsnummer (falls mehrere Messungen pro Tag) enthält, erzeugt. Im gleichen Zuge wird in der txt-Datei ein Header in Klartext erstellt. Dieser enthält wesentliche Informationen wie die Startuhrzeit (diese stammt aus dem Header des Programms) der Messungen, die Anzahl der MFC's und Ventile, sowie die Typen der MFC's.
+
+#### Beispielmessung
+```
+Messung am:     17.03.2017-22:12:46
+Messintervall:  100
+Anzahl Ventile: 6
+Anzahl MFCs:    4
+Typen der MFCs: MKS MKS MKS MKS
+
+Wertsortierung: Laufzeit (ms), MFC Soll, MFC Ist, Ventil Soll, Bosch (Temp /C, Druck /Pa, Feucht /%)
+
+0   0 0 0 0 0 0 0 0 0 0 0 0 0 0 22.520000 99050.312500 53.992188
+100 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22.520000 99050.312500 53.992188
+200 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22.520000 99048.062500 54.057617
+300 0 0 0 0 0 0 0 0 0 0 0 0 0 0 22.520000 99042.750000 54.057617
+.........
+```
 
 ### Programme
 1. Einzelne Befehlzeilen werden mit einem ```\n``` (Zeilenumbruch) voneinander getrennt.
 2. Die Befehlzeilen werden bei Dateien **nicht** mit ```<``` und ```>``` umschlossen.
 3. Leerzeilen und Leerzeichen werden ignoriert
 4. Ebenso wird alles in einer Zeile nach einem ```#``` ignoriert, somit sind also Kommentare möglich
-5. Dateinamen sind im FAT 8.3 Format udnd dürfen nicht mit ```.``` oder ```_``` beginnen.
+5. Dateinamen sind im FAT 8.3 Format und dürfen nicht mit ```.``` oder ```_``` beginnen.
 6. Programme müssen sich im Ordner ```programs``` auf der SD Karte befinden.
 
+#### Beispielprogramm
+Nach dem Einstecken einer neuen SD Karrte und dem Neustart des Boards wird eine Beispielprogrammdatei auf der SD Karte erstellt, die wie folgt aussieht:
+
+```
+# DIES IST EINE BEISPIELDATEI.
+# Dateinmane duerfen nicht mit '.' oder '_' beginnen, sonst werden sie ignoriert.
+# Im Gegensatz zu einer LabView Uebertragung sind hier Kommentare moeglich.
+# leere Zeilen und Leerzeichen werden ignoriert.
+
+4,16 #(MFCs, Ventile) in Dateien werden keine Tags benutzt
+01,21,07,14 #(MFC Adressen)
+Buerkert,Buerkert,MKS,MKS #(MFC Typen)
+0x20 #(Ventilplatinen Adressen)
+0 0, 0 1, 0 2, 0 3, 0 4, 0 5, 0 6, 0 7, 0 8, 0 9, 0 10, 0 11, 0 12, 0 13, 0 14, 0 15 #(Ventil Pins)
+250 #(Messintervall)
+08.02.2017-13:03:29 #(Datumstring)
+
+begin #Ende Header, uebertrage Eventliste
+
+M,0,120,1000
+V,0,1,1000
+V,1,1,750
+
+end #Uebertragung abgeschlossen
+start #Optionaler automatischer Programmstart
+```
 
 ## I2C
-I2C wird von uns als Hauptkommunikationsbus verwendet. Folgende Adressen sind belegt (In der Klammer stehen die alternativen Adressen):
+I2C wird von Hauptkommunikationsbus verwendet. Folgende Adressen sind belegt (In der Klammer stehen die alternativen Adressen):
 - Display: 0x38 (--)
 - BME280: 0x76 (0x77)
 - IO Expander (Ventilplatine, PCA9555): 0x20 (0x21 .. 0x27)
@@ -121,7 +167,7 @@ I2C wird von uns als Hauptkommunikationsbus verwendet. Folgende Adressen sind be
 ## BME280
 Der Boschsensor wird innerhalb der Klasse ```main_boschCom``` verwaltet. Dort wird ein bme-Objekt erstellt. Dieses Objekt wird geliefert von einer leicht angepassten Adafruit-Bibliothek. (Diese könnte man noch weiter reduzieren, da der ganze SPI Bereich eigentlich nicht gebraucht wird)
 
-**Anschluss des Sensors**
+**Anschluss des Sensors:**<br>
 Folgende Pinbelegung ergab sich nach einigem Durchmessen mit einem Multimeter. Bisher erwies sich dieses Layout als korrekt.
 ```
         +----\_/----+
@@ -150,18 +196,18 @@ this->bme280->readHumidity();
 ```
 
 ## Ventile
-Die Ventilsteuerung befindet sich auf einer eigenen Platine. Das hat für uns die beiden Vorteile, dass zum Einen Kurzschlüsse auf der Ventilplatine keinen Schaden an der Hauptsteuerung verursachen können und zum Anderen es uns möglich ist "beliebig" viele Ventile mit einem Microcontroller zu steuern.
+Die Ventilsteuerung befindet sich auf einer eigenen Platine. Das hat die beiden Vorteile, dass zum einen Kurzschlüsse auf der Ventilplatine keinen Schaden an der Hauptsteuerung verursachen können und es zum nderen möglich ist, "beliebig" viele Ventile mit einem Microcontroller zu steuern.
 
-Theoretisch sind bis zu 8 Ventilplatinen mit je 16 Ventilen nötig, also insgesamt 128 Stück. Auf der Platine befindet sich ein dreipoliger DIP-Switch zum Einstellen der Adresse (Adressraum: 0x20..0x27). Die Adressen sind bei Programmstart per LabView an den Controller zu übertragen. Jede der acht Platinen hat 16 Pins (0 bis 15), die auch bei der Initailisierung so angegeben werden müssen (```<Platinen-ID Pin-ID, ...>```), intern haben die Ventile jedoch einen andere fortlaufende Numerierung.
+Theoretisch sind bis zu 8 Ventilplatinen mit je 16 Ventilen möglich, also insgesamt 128 Stück. Auf der Platine befindet sich ein dreipoliger DIP-Switch zum Einstellen der Adresse (Adressraum: 0x20..0x27). Die Adressen sind bei Programmstart per LabView an den Controller zu übertragen. Jede der acht Platinen hat 16 Pins (0 bis 15), die auch bei der Initailisierung so angegeben werden müssen (```<Platinen-ID Pin-ID, ...>```), intern haben die Ventile jedoch einen andere fortlaufende Numerierung (siehe Übertragungsprotokoll).
 
 Die softwareseitige Ansteuerung wird mittels einer kleinen von uns geschriebenen Bibiliothek namens ```pca9555``` (Name des I2C ICs) realisiert. Angelehnt an die Syntax von der Arduino-Umgebung gibt es auch hier eine ```digitalWrite(pinNumber)```-Funktion, der Einfachheit halber haben wir jedoch auf weitere Funktionen verzichtet und bei Porgammstart werden automatisch alle Pins als Ausgang definiert.
 
 ## Display:
-Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels 3 PWM Anschlüssen für je eine Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden. <br>
+Das Display ist via I2C mit dem Board verbunden, die Hintergrundbeleuchtung funktioniert mittels drei PWM Anschlüssen einer für jede Grundfarbe. Daraus können beliebige Hintergrundfarben gemischt werden. <br>
 Je nach Meldungstyp ist die Hintergrundfarbe unterschiedlich. Folgende Typen gibt es:
 
 - **Unkritische Fehler**: Error Code Level 1000; Dies sind Fehler, die beispielsweise bei der Kommunikation auftreten, aber keinen Programmabbruch benötigen. Sie werden auf dem Display für 2 Sekunden angezeigt. Farbe: _orange_
-- **Kritische Fehler**: Error Code Level 5000; Diese Fehler führen zu einem Absturz des Programms und werden auf dem Display angezeigt bis der Fehler behoben wurde. Farbe: _rot_
+- **Kritische Fehler**: Error Code Level 5000; Diese Fehler führen zu einem Abbruch des Programms und werden auf dem Display angezeigt bis der Fehler behoben wurde. Farbe: _rot_
 
 Standardmäßig werden auf dem Display aktuelle Daten zum Programmstatus angezeigt.
 
@@ -190,16 +236,16 @@ Hintergrund: weiß              Hintergrund: organge/rot       Hintergrund: grü
  Zeigt durchgängig diesen Text an, lässt sich nur zurücksetzen durch Reset des Boards
 
 ## Errormeldungen:
-Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgeführt, es wird jedoch eine Wiederholung der entsprechenden Zeile erwartet, daher sind diese Codes LabView-Seitig abzufangen.
+Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgeführt, es wird jedoch eine Wiederholung der entsprechenden Zeile erwartet, daher sind diese Codes LabView-seitig abzufangen.
 
 ### 1000:
-**Maximale Input-String Länge überschritten.** In der _config.h_ wird eine Größe definiert, die pro Zeile gesendet werden darf. Diese Länge darf nicht überschritten werden.
+**Maximale Input-String Länge überschritten.** In der _config.h_ wird eine Zeichenahnzahl definiert, die pro Zeile gesendet werden darf. Diese Länge darf nicht überschritten werden.
 
 ### 1001:
-**Falscher Zeilenbeginn.** Die Zeile muss mit einem öffnenden Tag ```<``` begonnen werden, damit sie als gültig akzeptiert wird. Dies dient zur Vollständigkeitsüberprüfung.
+**Falscher Zeilenbeginn.** Die Zeile muss mit einer öffnenden spitzen Klammer ```<``` begonnen werden, damit sie als gültig akzeptiert wird. Dies dient der Vollständigkeitsüberprüfung.
 
 ### 1002:
-**Falsches Zeilenende.** Die Zeile muss mit einem schließenden Tag ```>``` beendet werden, damit sie als gültig akzeptiert wird. Dabei darf man jedoch nicht vergessen, dass die Stringeingabe mit einem Zeilenumbruch ```\n``` als Vollständig markiert wird. Dies dient zur Vollständigkeitsüberprüfung.
+**Falsches Zeilenende.** Die Zeile muss mit einer schließenden spitzen Klammer ```>``` beendet werden, damit sie als gültig akzeptiert wird. Dabei darf man jedoch nicht vergessen, dass die Stringeingabe mit einem Zeilenumbruch ```\n``` als Vollständig markiert wird. Dies dient der Vollständigkeitsüberprüfung.
 
 ### 1003:
 **Lese-Timeout überschritten.** In der _config.h_ wird eine maximale Lesezeit pro String definiert. Wird diese Zeit überschritten, wird das Lesen des Strings an dieser Stelle abgebrochen.
@@ -208,14 +254,17 @@ Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgefü
 **Falsche Anzahl an Argumenten.** Bei der Übertragung von LabView an den Controller wird immer überprüft, ob die Anzahl an eingetroffenen Elementen der Anzahl an erwarteten Elementen entspricht.
 
 ### 5000:
-**Zufriff auf nicht definierte MFC/Ventil ID.** Trifft dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben darauf überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.
+**Zugriff auf nicht definierte MFC/Ventil ID.** Tritt dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben darauf überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.
 
 ## MFCs
 Bei unserem Aufbau verwenden wir zwei verschiedene Typen von MFCs. **Bürkert** und **MKS** sind die beiden Hersteller, dazu gibt es noch alte analoge MFCs, die von einer anderen Projektgruppe digitalisiert wurden. Diese basieren dadurch auch auf dem **Bürkert** Protokoll. <br>
-Von uns angesteuert werden alle MFCs von ihrer jeweiligen Klasse, je nach Typ bekommen sie bei der Initialisierung jedoch ein anderes Kommunikationsobjekt übergeben. Dieses Objekt führt verschiedene Befehle aus und gibt gegebenefalls Daten an die MFC Klasse zurück.
+Von uns angesteuert werden alle MFCs von ihrer jeweiligen Klasse, je nach Typ bekommen sie bei der Initialisierung jedoch ein anderes Kommunikationsobjekt übergeben. Dieses Objekt führt verschiedene Befehle aus und gibt gegebenenfalls Daten an die MFC-Objekt zurück.
 
-### Bürkert [[Handbuch]](https://www.buerkert.de/de/Media/plm/MAN/MA/MA8006-Supplem.MFC-DE-DE.pdf)
-Hier die für uns interessanten Informationen rausgeschrieben, siehe Seite 8ff.
+Um Verzögerungen zu verringern wird die Übertragung mittels zeitlichen Interrupts gesteuert. Sowohl mfcCom_mks, als auch mfcCom_buerkert besitzen einen ```IntervalTimer```, der Microsekunden genau Callbackfunktionen ausführen kann. Zum Start der Befehlsübertragung wird die Übertragungs- und Antwortzeit berechnet, sowie die erwartete Pause zwischen den beiden Übertragungen. Nach dem Schieben des Strings in den seriellen Outputbuffer wird ein Interrupt gesetzt auf den Augenblick nach der Übertragung. Die aufgerufene Funktion setzt den Enablepin des RS-485 Chip und einen weiteren Interrupt auf den erwarteten Zeitpunkt nach kompletten Eintreffen der Antwort. Anschließend wird der erhaltene Wert der Antwort in einem vorher gesetzten Pointer gespeichert und der Port wieder frei gegeben. Es gibt einen Lesetimeout, der in der _config.h_ eingestellt werden kann. <br>
+Während einer Übertagung (Befehl senden und Antwort erhalten) ist der Port gesperrt und weitere Befehle werden zurückgewiesen. Unsere Steuerung registriert dies aber und sendet den Befehl anschließend erneut.
+
+### Bürkert [[Handbuch]](../master/dokus/MA8006-Supplem.MFC-DE-DE.pdf)
+Hier sind die für uns relevanten Informationen rausgeschrieben, siehe Seite 8ff.
 ```
 Präampel:       2..20 mal 0xFF          // Synchronisierung des Datenverkehrs
 Startzeichen:   Master->Slave 0x02      // WAS?
@@ -237,13 +286,13 @@ Befehle:
 ```
 Flusseinheit in Prozent. Maximal 40,976sccm.
 
-### MKS [[Handbuch]](https://www.johnmorrisgroup.com/Content/Attachments/120115/MF1-man.pdf)
+### MKS [[Handbuch]](../master/dokus//120115/MF1-man.pdf)
 "Human Readable Protocol" siehe Seite 73ff, übertragung alles in Ascii Chars.
 ```
 Präambel:       @ (Synchronisierung des Datenverkehrs)
 Adresse:        2 Byte, 00 bis 99?
 Befehl:         1-stelliger Befehlscode (S.74)
-Wert:           1.00000 (Beispielhaft, aber diese Bytegröße)
+Wert:           1.00000 (Beispielhaft, aber diese Bytegröße (7))
 Terminierung:   \r (Carriage Return)
 ```
 Befehle:
@@ -253,11 +302,7 @@ S  - Setze Fluss (S.74)
 ```
 Fluss: 0..500 sccm (S.16)
 
-Flusseinheit in sccm (cm^3/min), 100% ensprechen 400k
-### allgemein:
-- Fehlermeldungen werden weitergereicht an Display und LabView
-- Baudrate ist 9600
-- **Wir nehmen sccm als Standardeinheit für beide Typen!** Für Bürkert wird der Wert auf dem Board umgerechnet
+Flusseinheit in sccm (cm^3/min)
 
 ## Programmaufbau:
 ### Hauptdatei:
@@ -265,14 +310,15 @@ Flusseinheit in sccm (cm^3/min), 100% ensprechen 400k
  Hier werden die Hauptobjekte erstellt und verwaltet. Außerdem werden an dieser Stellte die Threads gestartet und später auch wieder gestoppt. Vor dem Start der Threads werden noch Adressen zwischen den einzelnen Objekten ausgetauscht (beispielsweise die der Queues zum späteren Datenaustausch).
 
 ### Hauptklassen:
-Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgeleitet. Außerdem besitzen sie eine ```loop()```-Funktion, da die Klasse in Pseudothreads ausgeführt wird.
+Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgeleitet. Außerdem besitzen sie eine ```loop()```-Funktion, da die Klasse in Pseudothreads ausgeführt werden.
 
 1. **main_labCom** [[cpp]](../master/controller/src/main_labCom.cpp) [[h]](../master/controller/src/main_labCom.h): <br>
- Quasi Hauptklasse des Programms, verwaltet IN/OUT mit LabView
+Quasi Hauptklasse des Programms, verwaltet Kommunikation mit LabView
 
-2. **main_boschCom** [[cpp]](../master/controller/src/main_boschCom.cpp) [[h]](../master/controller/src/main_boschCom.h):
+2. **main_boschCom** [[cpp]](../master/controller/src/main_boschCom.cpp) [[h]](../master/controller/src/main_boschCom.h): <br>
+ Fragt getaktet den Boschsensor ab und speichert die Werte.
 3. **main_stringBuilder** [[cpp]](../master/controller/src/main_stringBuilder.cpp) [[h]](../master/controller/src/main_stringBuilder.h): <br>
- Diese Klasse sammelt sich per Abfragen alle Daten zusammen und baut im Messtakt daraus Strings, welche an LabCom und StoreD weiter gegeben werden. Diese Klasse erzeugt und verwaltet StoreD.
+ Dieses Objekt sammelt sich per Abfragen alle Daten, die in der Ausgabe gebraucht werden, zusammen und baut im Messtakt daraus Strings, welche an LabCom und StoreD weiter gegeben werden. Diese Klasse erzeugt und verwaltet StoreD.
 
 4. **main_mfcCtrl** [[cpp]](../master/controller/src/main_mfcCtrl.cpp) [[h]](../master/controller/src/main_mfcCtrl.h): <br>
  Verwaltet alle mfcCtrl Objekte
@@ -280,17 +326,24 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 5. **main_valveCtrl** [[cpp]](../master/controller/src/main_valveCtrl.cpp) [[h]](../master/controller/src/main_valveCtrl.h): <br>
  Verwaltet alle valveCtrl Objekte
 
-6. **main_display** [[cpp]](../master/controller/src/main_display.cpp) [[h]](../master/controller/src/main_display.h):
+6. **main_display** [[cpp]](../master/controller/src/main_display.cpp) [[h]](../master/controller/src/main_display.h): <br>
+ Verwaltet die Displaybefehle und baut Anzeigen anhand von Daten.
 
 ### Nebenklassen:
-1. **mfcCtrl** [[cpp]](../master/controller/src/mfcCtrl.cpp) [[h]](../master/controller/src/mfcCtrl.h):
-2. **valveCtrl** [[cpp]](../master/controller/src/valveCtrl.cpp) [[h]](../master/controller/src/valveCtrl.h):
-3. **mfcCom** [[cpp]](../master/controller/src/mfcCom.cpp) [[h]](../master/controller/src/mfcCom.h):
-4. **mfcCom_buerkert** [[cpp]](../master/controller/src/mfcCom_buerkert.cpp) [[h]](../master/controller/src/mfcCom_buerkert.h):
-5. **mfcCom_mks** [[cpp]](../master/controller/src/mfcCom_nks.cpp) [[h]](../master/controller/src/mfcCom_mks.h):
+1. **mfcCtrl** [[cpp]](../master/controller/src/mfcCtrl.cpp) [[h]](../master/controller/src/mfcCtrl.h): <br>
+ Verwaltung eines einzelnen MFCs
+2. **valveCtrl** [[cpp]](../master/controller/src/valveCtrl.cpp) [[h]](../master/controller/src/valveCtrl.h): <br>
+ Verwaltung eines einzelnen Ventils
+3. **mfcCom** [[cpp]](../master/controller/src/mfcCom.cpp) [[h]](../master/controller/src/mfcCom.h): <br>
+ Serielle Kommunikationsverwaltung der MFCs
+4. **mfcCom_buerkert** [[cpp]](../master/controller/src/mfcCom_buerkert.cpp) [[h]](../master/controller/src/mfcCom_buerkert.h): <br>
+ Serielle Kommunikation mit Bürkert MFCs
+5. **mfcCom_mks** [[cpp]](../master/controller/src/mfcCom_mks.cpp) [[h]](../master/controller/src/mfcCom_mks.h): <br>
+ Serielle Kommunikation mit MKS MFCs
 6. **StoreD** [[cpp]](../master/controller/src/StoreD.cpp) [[h]](../master/controller/src/StoreD.h): <br>
- Sorgt dafür, dass Daten auf der SD Karte gespeichert werden.
+ Sorgt dafür, dass Daten auf der SD-Karte gespeichert/gelesen werden.
 7. **parseInput** [[cpp]](../master/controller/src/parseInput.cpp) [[h]](../master/controller/src/parseInput.h): <br>
+ Zerteilt die Befehlsstrings von LabView und der SD-Karte
 
 ### Eigene Bibliotheken
 1. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h): <br>
@@ -309,10 +362,10 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 
 ### Sonstige:
 1. **common** [[cpp]](../master/controller/src/ownlibs/common.cpp) [[h]](../master/controller/src/ownlibs/common.h): <br>
- Standardfunktionen, die Überall gebraucht werden (```trim()```, ```getTimeString(time, timeString)```, ...)
+ Standardfunktionen, die überall gebraucht werden (```trim()```, ```getTimeString(time, timeString)```, ...)
 
 2. **config** [[h]](../master/controller/src/config.h): <br>
- Einstellmöglichkeiten diverser Parameter.
+ Einstellmöglichkeiten diverser Parameter. Eine Erläuterung dieser findet sich in der Datei selber.
 
 3. **eventElement** [[h]](../master/controller/src/eventElement.h): <br>
  Event-Struct, welches von MFCs und Ventilen verwendet wird.
@@ -330,8 +383,23 @@ Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausg
 [[Einrichtung von Python (Windows)]](https://learn.adafruit.com/arduino-lesson-17-email-sending-movement-detector/installing-python-and-pyserial)
 
 ## LabView:
-@Matthias Baltes: TODO!
+Das LabVIEW Programm erstellt beim Start eine Serielle Verbindung mit dem Teansy-Board. Dazu müssen die Baudrate und  der richtige Port eingestellt werden. Nachdem die Verbindung erstellt wurde, wartet LabVIEW auf ein Ready vom Teansy Board.
+Wenn ein ```ready``` gelesen wurde beginnt die Übertragung des Headers. Hier wird Zeile für Zeile, wie vorher im
+Übertragungsprotokoll beschrieben, gesendet. Nach jeder Zeile wartet LabVIEW auf die Überprüfung des Teansy-Boards. Wenn ein ```ok``` zurück kommt fährt das Programm mit der nächsten Zeile fort.
+Bei einem 1000er Error wird die letzte Zeile erneut gesendet bei einem 5000er Error wird die Übertragung abgebrochen (siehe Error Bibliothek).
+Nach dem Header werden die einzelnen Werte, analog zum Header, Zeile für Zeile mit Überprüfung gesendet.
 
+Der Header und die einzelnen zugehörigen Werte werden als zwei Tabellen eingegeben
+
+In Zeile 1 des Headers steht, ob es sich um ein Mfc oder Ventil handelt <br>
+In Zeile 2 wird die ID zugewiesen, die für den späteren Ablauf wichtig ist (Die Steuerung auf dem Board macht die ID-Zuweisung automatisch) <br>
+In Zeile 3 steht die Adresse und in Zeile 4 der Typ des Mfcs <br>
+
+Zusätlich zu den 2 Tabellen hat das LabVIEW Programm noch eine Eingabe für die Anzahl der Ventilplatinen und der Messauflösung.
+
+Input-String in Datumsobjekt: ```%d.%m.%Y-%H.%M.%S```
+
+**Verwendete Treiber:** NI-VISA Treiber
 
 ## Elektronik:
 ### Pinbelegung
@@ -352,7 +420,7 @@ Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer 
                     Debug - TX3 |o 08         17 o|
                  Uart-MKS - RX2 |o 09         16 o| EINGANG - OK-Taster
                  Uart-MKS - TX2 |o 10         15 o| EINGANG - Runter-Taster
-                                |o 11         14 o| EINGANG - Hoch-Tater
+                                |o 11         14 o| EINGANG - Hoch-Taster
                                 |o 12         13 o| AUSGANG - Abgeschlossen-LED
                                 |o 3V3       GND o|
                                 |o 24            o|
@@ -461,13 +529,13 @@ Aktuell haben wir einige Timingprobleme mit der Seriellen Kommunikation des Teen
        24 unique files.
         2 files ignored.
 
- https://github.com/AlDanial/cloc v 1.70  T=0.50 s (72.0 files/s, 6490.0 lines/s)
+ https://github.com/AlDanial/cloc v 1.70  T=0.50 s (80.0 files/s, 7966.0 lines/s)
  -------------------------------------------------------------------------------
  Language                     files          blank        comment           code
  -------------------------------------------------------------------------------
- C++                             17            424            235           1564
- C/C++ Header                    19            158            175            689
+ C++                             19            515            221           2099
+ C/C++ Header                    21            186            203            759
  -------------------------------------------------------------------------------
- SUM:                            36            582            410           2253
+ SUM:                            40            701            424           2858  ==>  3983 lines
  -------------------------------------------------------------------------------
  ```

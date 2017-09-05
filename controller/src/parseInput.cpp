@@ -175,7 +175,7 @@ namespace communication {
                     if (atoi(newLineArray[1]) < this->amount_MFC) {
                         this->main_mfcCtrl->setEvent(
                             atoi(newLineArray[1]), //MFC-ID
-                            atoi(newLineArray[2]), //value
+                            cmn::charArrayToFloat(newLineArray[2]), //value
                             strtoul(newLineArray[3], NULL, 0) //time (uint32_t)
                         );
                     } else {
@@ -213,6 +213,7 @@ namespace communication {
                 }
                 if (strcmp(newLineArray[0], "start") == 0) {
                     this->startFunction(); //Teile LabCom mit, dass die Messung zu starten ist
+                    srl->println('L', "ok"); //Sende 'Befehl ok' an LabView
                     return 0;
                 }
                 break;

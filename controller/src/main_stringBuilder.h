@@ -51,8 +51,9 @@ namespace communication {
         uint16_t intervall;
         char dateString[32];
 
-        uint16_t mfcValueList[MAX_AMOUNT_MFC];
-        uint16_t valveValueList[MAX_AMOUNT_VALVE];
+        float mfcValueList[MAX_AMOUNT_MFC];
+        float mfcDestinationList[MAX_AMOUNT_MFC];
+        uint8_t valveValueList[MAX_AMOUNT_VALVE];
         float* boschValues;
 
         char newLine[SERIAL_READ_MAX_LINE_SIZE];

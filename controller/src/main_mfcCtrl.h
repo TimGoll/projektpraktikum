@@ -28,15 +28,17 @@ namespace control {
         void setTypes(char adresses[][SERIAL_READ_MAX_BLOCK_SIZE]);
         //Wird von LabCom aufgerufen und enthält Eventdaten. Wichtig ist hier, dass
         //dieser Aufruf immer nur fuer EIN MFC ist, daher ist die ID von Noeten
-        void setEvent(uint16_t mfcID, uint16_t value, uint32_t time);
+        void setEvent(uint16_t mfcID, float value, uint32_t time);
         //setzt die 'ready'-Variable der MFCs auf true. Außerdem wird der Nullpunkt der Steuerung gesetzt
         void start(uint32_t startTime);
         //Gebe Adresse des Displayobjektes an die einzelnen MFCs, um zu kommunizieren
         void setMainDisplayObjectPointer(io::Main_Display *main_display);
         //Diese Funktion wird vom StringBuilder aufgerufen und sammelt die Daten der MFCs
         //um sie in den Ausgabestring zu schreiben
-        //Die Funktion fragt die einzelnen MFCs nach ihren Werten ab
-        void getMfcValueList(uint16_t mfcValueList[]);
+        //Die Funktion fragt die einzelnen MFCs nach ihren Ist-Werten ab
+        void getMfcValueList(float mfcValueList[]);
+        //Die Funktion fragt die einzelnen MFCs nach ihren Soll-Werten ab
+        void getMfcDestinationList(float mfcDestinationList[]);
         //gibt die Anzahl an MFCs zurueck
         uint16_t getAmount_MFC();
         //wird von Main_LabCom kontinuierlich abgefragt, ob die queue abgeschlossen ist.
@@ -53,7 +55,14 @@ namespace control {
         int16_t amount_of_finished_mfcs;
         bool queueFinished;
 
+        bool ready;
+
         control::MfcCtrl *mfc_list[MAX_AMOUNT_MFC]; //Hier werden die Adressen der MFC-Objekte gespeichert
+
+        //MFC Read Event Variablen
+        bool lastReadEventSuccess;
+        uint32_t nextReadEvent_time;
+        uint8_t nextMfcId;
 
         io::Main_Display *main_display;
     };

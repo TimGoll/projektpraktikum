@@ -24,16 +24,16 @@
 #define MAX_AMOUNT_VALVE_PCB 8
 
 //DISPLAY CONFIGS
-#define DISPLAY_SIZE_WIDTH 20
-#define DISPLAY_SIZE_HEIGHT 4
+#define DISPLAY_SIZE_WIDTH 20 //Anzahl der horizontalen Chars
+#define DISPLAY_SIZE_HEIGHT 4 //Anzahl der vertikalen Chars
 #define DISPLAY_REDRAW_INTERVALL 50 //ms, Bestimmt Häufigkeit der Bildaktualisierung, Errors ausgenommen
 #define PIN_DISPLAY_RED 37 //pwm
 #define PIN_DISPLAY_GREEN 36 //pwm
 #define PIN_DISPLAY_BLUE 35 //pwm
 
 //MENU AND BUTTONS
-#define MENU_MAX_AMOUNT_ENTRIES 32
-#define INPUTS_MAX_AMOUNT_BUTTONS 8
+#define MENU_MAX_AMOUNT_ENTRIES 64 //maximale Anzahl an Programmen, die dargestellt werden können
+#define INPUTS_MAX_AMOUNT_BUTTONS 8 //maximale Anzahl an Tastern, die ausgelesen werden können
 
 //INPUT OUTUT
 #define PIN_DEBUGSWITCH 20 //input
@@ -49,13 +49,15 @@
 #define PIN_SOFTWARE_RESET 23 //output
 
 //MFC COMMUNICATION TIMINGS
-#define MKS_READ_START_TIME 1000 //microseconds
+#define MKS_READ_START_TIME 400 //microseconds
 #define MKS_ANSWER_TIMEOUT 5 //milliseconds
 #define MKS_READ_TIMEOUT 5 //milliseconds
 
 #define BUERKERT_READ_START_TIME 1000 //microseconds
 #define BUERKERT_ANSWER_TIMEOUT 25 //milliseconds
 #define BUERKERT_READ_TIMEOUT 25 //milliseconds
+
+#define MFC_READ_TIMING 250 //ms, Zeitintervall, in dem die MFC Ist-Werte nacheinander ausgelesen werden (10 MFCs = 2,5s für einen Zyklus)
 
 //ADDRESSES
 #define ADDRESS_I2C_BOSCH 0x76
@@ -69,6 +71,7 @@
 #define ERR_SERIAL_COMMANDS_WRONG_AMOUNT 1004
 #define ERR_SERIAL_UNDEFINED_INDEX 5000
 
+//Anzeigedauer von Fehlern
 #define ERR_1000_TIME 1500
 #define ERR_5000_TIME 604800000 //1 Woche
 

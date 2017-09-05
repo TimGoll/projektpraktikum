@@ -19,10 +19,11 @@ namespace communication {
     }
 
     bool MfcCom::readValue(char type[], char address[], float *destination) {
-        if (strcmp(type, "MKS") == 0)
+        if (strcmp(type, "MKS") == 0) {
             return Mks::readValue(address, destination);
-        else if (strcmp(type, "Buerkert") == 0)
+        } else if (strcmp(type, "Buerkert") == 0) {
             return Buerkert::readValue(address, destination);
+        }
         return false;
     }
 
