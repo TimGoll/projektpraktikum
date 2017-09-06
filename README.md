@@ -462,7 +462,7 @@ V_IN_5V |o  |
 #### 1. Schaltskizze: [[link]](../master/electronic/Schaltplan.pdf)
 #### 2. Anschluss:
 
-* **Stromversorgung Control-Board, Valve-Board**
+* **Stromversorgung Control-Board, Valve-Board** <br>
   Die Stromversorgung des Control-Board erfolgt über die USB Ports.
   Die 5V und GND Leitungen von Debug Port und LabView Port sind auf der Platine zusammengeführt.
   Um eine stabile Stromversorgung zu gewährleisten muss ein aktiver USB-Hub zwischen der Platine und dem Computer geschaltet werden,
@@ -470,27 +470,27 @@ V_IN_5V |o  |
   <br>
   Das Valve-Board muss an eine externe Spannungsversorgung angeschlossen werden, die 24V für die Ventile liefert. Auf der Platine werden   die benötigten 5V für den Multiplexer durch einen Regler erzeugt (siehe auch Bauteile Valve-Board).
   
-* **Control-Board <-> Valve-Board** 
+* **Control-Board <-> Valve-Board** <br>
   Die Kommunikation zwischen den beiden Platinen erfolgt über I2C. Der Multiplexer auf dem Valve-Board arbeitet mit einem 5V Pegel. m     Daher werden die Signalleitungen zunächst über einen Pegelwandler von 3V3 auf 5V gewandelt. Die Signalleitungen sowie ein gemeinsames   GND Potential können am Control-Board an dem 3-poligen Anschlussblock oberhalb des Teensy Boards abgegriffen werden. 
   Beginnend auf der dem Teensy näheren Seite: GND, SDA, SCL.
 
-* **Control-Board <-> Bosch-Sensor**
+* **Control-Board <-> Bosch-Sensor** <br>
   Der Bosch Sensor wird an dem vier- poligen Anschlussblock links neben der Teensy Platine angeschlossen. Die Kommunikation erfolg wie     beim Valve-Board über I2C. Außerdem werden eine GND und eine 3V3 Leitung benötigt.
   Beginnend auf der dem Teensy näheren Seite: 3V3, SCL, SDA, GND.
   
-* **Control Board <-> MFC**
+* **Control Board <-> MFC** <br>
   Die MFC's empfangen Daten nach dem RS485 Protokoll. Daher muss das TTL 3V3 Signal des Teensy zunächst umgewandelt werden (siehe      b   Hardware Control-Board). 
   Um Verwechslungen auszuschließen werden die MFC's der Marke **Bürkert mit male D-Sub** angeschlossen. Die MFC's von **MKS mit female     D-Sub**. <br>
   Anschlussbelegung Bürkert auf Seite 4 im Datenblatt
   Anschlussbelegung MKS auf Seite 64 im Datenblatt
   
-* **Control Board <-> LabView**
+* **Control Board <-> LabView** <br>
   LabView kommuniziert mit dem Control-Board über den oberen, näher am Teensy gelegenen USB-B Anschluss.
   
-*  **Control Board <-> Debug**
+*  **Control Board <-> Debug** <br>
    Der untere USB-B Anschluss sendet, sofern aktiviert, debugging Informationen. Um diesen USB Port zu aktivieren muss ein Schalter        auf der Platine umgelegt werden. Dieser ist als einzelner DIP-Switch ausgeführt und befindet sich über dem Teensy-Board.
    
-*  **Control Board <-> Programmierung**
+*  **Control Board <-> Programmierung** <br>
    Um ein Programm auf das Teensy Board zu übertragen wird der Standarmäßige Micro-USB Port am Teensy selbst verwendet.
    
 
@@ -514,8 +514,8 @@ V_IN_5V |o  |
 
  * **UART <-> USB - CH340G** 
   [[link]](../master/electronic/data_sheets/usb_uart_interface_ch340g) <br>
-  Auf dem Control-Board ist eine integrierte Variante des IC's verbaut:
-  http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT
+  Auf dem Control-Board ist eine integrierte Variante des IC's verbaut: <br>
+  [[link]](http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT)
  
  #### 4. Hardware Valve-Board
  
