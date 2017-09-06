@@ -402,8 +402,8 @@ Input-String in Datumsobjekt: ```%d.%m.%Y-%H.%M.%S```
 **Verwendete Treiber:** NI-VISA Treiber
 
 ## Elektronik:
-### Pinbelegung
-#### Teensy
+## Pinbelegung
+### Teensy
 Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer aktuellen Belegung.
 ```
                                          U
@@ -434,8 +434,7 @@ Untenstehend eine Zeichnung des Teensyboards mit allen Anschlüssen und unserer 
              Uart-Bürkert - TX4 |o 32 |  D  | 33 o|
                                 +-----------------+
 ```
-#### Display
-PIN 		Belegung
+### Display
 ```
         +---+
   PWM_1 |o  |18                     
@@ -458,9 +457,9 @@ V_IN_5V |o  |
     GND |o  |1
         +---+
 ```
-### Hardware
-#### 1. Schaltskizze: [[link]](../master/electronic/Schaltplan.pdf)
-#### 2. Anschluss:
+## Hardware
+### 1. Schaltskizze [[link]](../master/electronic/Schaltplan.pdf) <br>
+### 2. Anschluss
 
 * **Stromversorgung Control-Board, Valve-Board** <br>
   Die Stromversorgung des Control-Board erfolgt über die USB Ports.
@@ -495,7 +494,7 @@ V_IN_5V |o  |
    
 
   
-#### 3. Hardware Control-Board
+### 3. Hardware Control-Board 
 
  * **Teensy 3.6** 
   Board [[link]](http://www.pjrc.com/teensy/) <br>
@@ -517,7 +516,7 @@ V_IN_5V |o  |
   Auf dem Control-Board ist eine integrierte Variante des IC's verbaut: <br>
   [[link]](http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT)
  
- #### 4. Hardware Valve-Board
+ ### 4. Hardware Valve-Board
   * **I2C-Multiplexer - PCA9555**
    [[link]](../master/electronic/data_sheets/valve_I2C_PCA9555) <br>
   
@@ -528,15 +527,15 @@ V_IN_5V |o  |
    [[link]](../master/electronic/data_sheets/valve_transistor) <br>
   Bestellnummer bei Farnell: 9264388
   
-  * **Pegelwandler - TSR 1 - 2450 ** 
+  * **Pegelwandler - TSR 1 - 2450** 
    [[link]](../master/electronic/data_sheets/valve_tsr1-2450) <br>
 
 
  
- #### 5. Teillisten
+ ### 5. Teillisten
  TBD
  
- #### 6. LED-Anzeigen
+ ### 6. LED-Anzeigen
  * **Control-Board**
    Power-LED über dem Lab-Vies USB Port. <br>
    Debug-LED neben dem Debug DIP-Schalter. <br>
