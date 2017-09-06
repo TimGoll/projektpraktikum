@@ -479,8 +479,15 @@ V_IN_5V |o  |
 * **Control Board <-> MFC** <br>
   Die MFC's empfangen Daten nach dem RS485 Protokoll. Daher muss das TTL 3V3 Signal des Teensy zunächst umgewandelt werden (siehe      b   Hardware Control-Board). 
   Um Verwechslungen auszuschließen werden die MFC's der Marke **Bürkert mit male D-Sub** angeschlossen. Die MFC's von **MKS mit female     D-Sub**. <br>
+  original Bürkert Datenblatt
+  [[link]](../master/electronic/data_sheets/bürkert_mfc) <br>
+
   Anschlussbelegung Bürkert auf Seite 4 im Datenblatt
-  Anschlussbelegung MKS auf Seite 64 im Datenblatt
+   [[link]](../master/electronic/data_sheets/bürkert_mfc) <br>
+  ![Bürkert Datenblatt Seite 4](../master/electronic/pictures/mks_pin_out "Bürkert Pin-Out")
+  Anschlussbelegung MKS auf Seite 68 im Datenblatt 
+  [[link]](../master/electronic/data_sheets/mks_mfc) <br>
+  ![MKS Datenblatt Seite 68](../master/electronic/pictures/mks_pin_out "MKS Pin-Out")
   
 * **Control Board <-> LabView** <br>
   LabView kommuniziert mit dem Control-Board über den oberen, näher am Teensy gelegenen USB-B Anschluss.
