@@ -480,14 +480,14 @@ V_IN_5V |o  |
   Die MFC's empfangen Daten nach dem RS485 Protokoll. Daher muss das TTL 3V3 Signal des Teensy zunächst umgewandelt werden (siehe      b   Hardware Control-Board). 
   Um Verwechslungen auszuschließen werden die MFC's der Marke **Bürkert mit male D-Sub** angeschlossen. Die MFC's von **MKS mit female     D-Sub**. <br>
   original Bürkert Datenblatt
-  [[link]](../master/electronic/data_sheets/bürkert_mfc) <br>
+  [[link]](../master/electronic/data_sheets/bürkert_mfc.pdf) <br>
 
   Anschlussbelegung Bürkert auf Seite 4 im Datenblatt
-   [[link]](../master/electronic/data_sheets/bürkert_mfc) <br>
+   [[link]](../master/electronic/data_sheets/bürkert_mfc.pdf) <br>
   ![Bürkert Datenblatt Seite 4](../master/electronic/pictures/mks_pin_out "Bürkert Pin-Out")
   Anschlussbelegung MKS auf Seite 68 im Datenblatt 
-  [[link]](../master/electronic/data_sheets/mks_mfc) <br>
-  ![MKS Datenblatt Seite 68](../master/electronic/pictures/mks_pin_out "MKS Pin-Out")
+  [[link]](../master/electronic/data_sheets/mks_mfc.pdf) <br>
+  ![MKS Datenblatt Seite 68](../master/electronic/pictures/mks_pin_out.png "MKS Pin-Out")
   
 * **Control Board <-> LabView** <br>
   LabView kommuniziert mit dem Control-Board über den oberen, näher am Teensy gelegenen USB-B Anschluss.
@@ -504,37 +504,37 @@ V_IN_5V |o  |
 
  * **Teensy 3.6** 
   Board [[link]](http://www.pjrc.com/teensy/) <br>
-  Vorderseite [[link]](../master/electronic/data_sheets/teens_front) <br>
-  Rückseite [[link]](../master/electronic/data_sheets/teens_back)
+  Vorderseite [[link]](../master/electronic/data_sheets/teensy_front.pdf) <br>
+  Rückseite [[link]](../master/electronic/data_sheets/teensy_back.pdf)
   
  * **20x4 LCD Display (RGB Backlight)** 
   [[link]](https://www.adafruit.com/product/499) <br>
-  Display Datasheet [[link]](../master/electronic/data_sheets/display) <br>
-  Display Controller HD44780U Datasheet [[link]](../master/electronic/data_sheets/display_controller_HD44780U) <br>
-  I2C-Chip für Display (PCF8574) [[link]](../master/electronic/data_sheets/display_i2c_pcf8574)
+  Display Datasheet [[link]](../master/electronic/data_sheets/display.pdf) <br>
+  Display Controller HD44780U Datasheet [[link]](../master/electronic/data_sheets/display_controller_HD44780U.pdf) <br>
+  I2C-Chip für Display (PCF8574) [[link]](../master/electronic/data_sheets/display_i2c_pcf8574.pdf)
    
  * **"TTL" (3V3) auf RS-485 - MAX14776E**
- [[link]](../master/electronic/data_sheets/mfc_communication) <br>
+ [[link]](../master/electronic/data_sheets/mfc_communication.pdf) <br>
  Der MAX14776E kann, bei 5V Versorungsspannung, sowohl 3V3 als auch 5V Pegel als High erkennen.
 
  * **UART <-> USB - CH340G** 
-  [[link]](../master/electronic/data_sheets/usb_uart_interface_ch340g) <br>
+  [[link]](../master/electronic/data_sheets/usb_uart_interface_ch340g.pdf) <br>
   Auf dem Control-Board ist eine integrierte Variante des IC's verbaut: <br>
   [[link]](http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT)
  
  #### 4. Hardware Valve-Board
   * **I2C-Multiplexer - PCA9555**
-   [[link]](../master/electronic/data_sheets/valve_I2C_PCA9555) <br>
+   [[link]](../master/electronic/data_sheets/valve_I2C_PCA9555.pdf) <br>
   
   * **Operationsverstärker - LMC6484** 
-   [[link]](../master/electronic/data_sheets/valve_op-amp_lmc6484) <br>
+   [[link]](../master/electronic/data_sheets/valve_op-amp_lmc6484.pdf) <br>
    
   * **Transistoren -  IRFIZ24NPBF**
-   [[link]](../master/electronic/data_sheets/valve_transistor) <br>
+   [[link]](../master/electronic/data_sheets/valve_transistor.pdf) <br>
   Bestellnummer bei Farnell: 9264388
   
   * **Pegelwandler - TSR 1 - 2450** 
-   [[link]](../master/electronic/data_sheets/valve_tsr1-2450) <br>
+   [[link]](../master/electronic/data_sheets/valve_tsr1-2450.pdf) <br>
 
 
  
