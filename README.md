@@ -459,12 +459,12 @@ V_IN_5V |o  |
         +---+
 ```
 ### Hardware
-1. Schaltkizze: [[link]](../master/electronic/Schalplan.pdf)
+1. Schaltskizze: [[link]](../master/electronic/Schaltplan.pdf)
 2. Verwendete Bauteile auf dem Haupboard:
  * **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/) <br>
-  Vorderseite [[link]](http://www.pjrc.com/teensy/beta/card9a_rev1_print.pdf) <br>
-  Rückseite [[link]](https://www.pjrc.com/teensy/card9b_rev1.pdf)
- * **20x4 LCD Display (Buntes Backlight)** [[link]](https://www.adafruit.com/product/499) <br>
+  Vorderseite [[link]](../master/electronic/data_sheets/teens_front.pdf) <br>
+  Rückseite [[link]](../master/electronic/data_sheets/teens_back.pdf)
+ * **20x4 LCD Display (RGB Backlight)** [[link]](https://www.adafruit.com/product/499) <br>
   RGB-LCD Pin Header [[link]](https://cdn-shop.adafruit.com/datasheets/WH2004A-CFH-JT%23.pdf) <br>
   I2C-Chip für Display (PCF8574) [[link]](http://www.sunfounder.com/wiki/images/1/18/PCF8574T_datasheet.pdf)
 3. Weitere Dinge:
