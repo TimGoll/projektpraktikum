@@ -459,20 +459,71 @@ V_IN_5V |o  |
         +---+
 ```
 ### Hardware
-1. Schaltskizze: [[link]](../master/electronic/Schaltplan.pdf)
-2. Verwendete Bauteile auf dem Haupboard:
- * **Teensy 3.6** Board [[link]](http://www.pjrc.com/teensy/) <br>
-  Vorderseite [[link]](../master/electronic/data_sheets/teens_front.pdf) <br>
-  Rückseite [[link]](../master/electronic/data_sheets/teens_back.pdf)
- * **20x4 LCD Display (RGB Backlight)** [[link]](https://www.adafruit.com/product/499) <br>
-  RGB-LCD Pin Header [[link]](https://cdn-shop.adafruit.com/datasheets/WH2004A-CFH-JT%23.pdf) <br>
-  I2C-Chip für Display (PCF8574) [[link]](http://www.sunfounder.com/wiki/images/1/18/PCF8574T_datasheet.pdf)
-3. Weitere Dinge:
- * **Wandlung "TTL" (3V3) auf RS-485** (Teensy auf RS485 für die MFCs) [[link]](https://datasheets.maximintegrated.com/en/ds/MAX14775E-MAX14776E.pdf) <br>
- Seite 3 Logic Inputs, 3V3 funktioniert
- Seite 2 Logic Output, Vcc-0,2V
- DE High für enable
- Dieser IC kann sowohl 5V als auch 3V3 als High Pegel erkennen. Dadurch werden Pegelwandler eingespart.
+#### 1. Schaltskizze: [[link]](../master/electronic/Schaltplan.pdf)
+#### 2. Anschluss:
+
+* **Stromversorgung Control-Board, Valve-Board**
+  Die Stromversorgung des Control-Board erfolgt über die USB Ports.
+  Die 5V und GND Leitungen von Debug Port und LabView Port sind auf der Platine zusammengeführt.
+  Um eine stabile Stromversorgung zu gewährleisten muss ein aktiver USB-Hub zwischen der Platine und dem Computer geschaltet werden,
+  da sich die Platine nicht als USB-Verbraucher anmeldet und nur bis maximal 100mA über einen normalen USB Port erhält. <br>
+  <br>
+  Das Valve-Board muss an eine externe Spannungsversorgung angeschlossen werden, die 24V für die Ventile liefert. Auf der Platine werden   die benötigten 5V für den Multiplexer durch einen Regler erzeugt (siehe auch Bauteile Valve-Board).
+  
+* **Control-Board <-> Valve-Board** 
+  Die Kommunikation zwischen den beiden Platinen erfolgt über I2C. Der Multiplexer auf dem Valve-Board arbeitet mit einem 5V Pegel. m     Daher werden die Signalleitungen zunächst über einen Pegelwandler von 3V3 auf 5V gewandelt. Die Signalleitungen sowie ein gemeinsames   GND Potential können am Control-Board an dem 3-poligen Anschlussblock oberhalb des Teensy Boards abgegriffen werden. 
+  Beginnend auf der dem Teensy näheren Seite: GND, SDA, SCL.
+
+* **Control-Board <-> Bosch-Sensor**
+  Der Bosch Sensor wird an dem vier- poligen Anschlussblock links neben der Teensy Platine angeschlossen. Die Kommunikation erfolg wie     beim Valve-Board über I2C. Außerdem werden eine GND und eine 3V3 Leitung benötigt.
+  Beginnend auf der dem Teensy näheren Seite: 3V3, SCL, SDA, GND.
+  
+* **Control Board <-> MFC**
+  Die MFC's empfangen Daten nach dem RS485 Protokoll. Daher muss das TTL 3V3 Signal des Teensy zunächst umgewandelt werden (siehe      b   Hardware Control-Board). 
+  Um Verwechslungen auszuschließen werden die MFC's der Marke **Bürkert mit male D-Sub** angeschlossen. Die MFC's von **MKS mit female     D-Sub**. <br>
+  Anschlussbelegung Bürkert auf Seite 4 im Datenblatt
+  Anschlussbelegung MKS auf Seite 64 im Datenblatt
+  
+* **Control Board <-> LabView**
+  LabView kommuniziert mit dem Control-Board über den oberen, näher am Teensy gelegenen USB-B Anschluss.
+  
+*  **Control Board <-> Debug**
+   Der untere USB-B Anschluss sendet, sofern aktiviert, debugging Informationen. Um diesen USB Port zu aktivieren muss ein Schalter        auf der Platine umgelegt werden. Dieser ist als einzelner DIP-Switch ausgeführt und befindet sich über dem Teensy-Board.
+   
+*  **Control Board <-> Programmierung**
+   Um ein Programm auf das Teensy Board zu übertragen wird der Standarmäßige Micro-USB Port am Teensy selbst verwendet.
+   
+
+  
+#### 3. Hardware Control-Board
+
+ * **Teensy 3.6** 
+  Board [[link]](http://www.pjrc.com/teensy/) <br>
+  Vorderseite [[link]](../master/electronic/data_sheets/teens_front) <br>
+  Rückseite [[link]](../master/electronic/data_sheets/teens_back)
+  
+ * **20x4 LCD Display (RGB Backlight)** 
+  [[link]](https://www.adafruit.com/product/499) <br>
+  Display Datasheet [[link]](../master/electronic/data_sheets/display) <br>
+  Display Controller HD44780U Datasheet [[link]](../master/electronic/data_sheets/display_controller_HD44780U) <br>
+  I2C-Chip für Display (PCF8574) [[link]](../master/electronic/data_sheets/display_i2c_pcf8574)
+   
+ * **"TTL" (3V3) auf RS-485 - MAX14776E**
+ [[link]](../master/electronic/data_sheets/mfc_communication) <br>
+ Der MAX14776E kann, bei 5V Versorungsspannung, sowohl 3V3 als auch 5V Pegel als High erkennen.
+
+ * **UART <-> USB - CH340G** 
+  [[link]](../master/electronic/data_sheets/usb_uart_interface_ch340g) <br>
+  Auf dem Control-Board ist eine integrierte Variante des IC's verbaut:
+  http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT
+ 
+ #### 4. Hardware Valve-Board
+ 
+ 
+ #### 5. Teillisten
+ 
+ #### 6. LED-Anzeigen
+
  * **Anschließen der Ventile** [[link]](http://www.nxp.com/documents/data_sheet/PCA9555.pdf) <br>
   Werden über I2C angesteuert (16bit I2C GPIO-Expander dient als Erweiterung) <br>
   Jede Ventilplatine hat einen PCA9555DB mit 8 möglichen Adressen. Dadurch sind bis zu 8 Ventilplatinen an einem Teensy möglich<br>
@@ -481,23 +532,15 @@ V_IN_5V |o  |
  * **Ventilansteuerung** [[link]](http://www.infineon.com/dgdl/Infineon-BTS555-DS-v01_00-en.pdf?fileId=db3a30432ba3fa6f012bd3dfdd0b3b65) <br>
  ToDo: Datenblätter Op-Amp und transistoren finden
 
- * **UART <-> USB** <br>
-  Integrierte Lösung: http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT
-#### MFC
-### Bürkert
-S.4 Datenblatt für die Anschlüsse am D-Sub Stecker
 
-### MKS
-S.68 Datenblatt für die Anschlüsse am D-Sub Stecker
+
 
 #### Ventile
 Die Steuersignale aus dem I/O Expander werden durch einen Operationsverstärker (einer pro 4 Ventile) von den 24V Signalen getrennt.
 Ein Operationsverstärker kann 4 Transistoren unabhängig schalten welche die Ventile mit der 24V verbinden.
 
 
-#### USB Anschlüsse
-USB1 (näher am Teensy) : LabView über RX1, TX1
-USB2: Debug über RX3, TX3
+
 
 #### LED Anzeigen
 Über den USB Anschlüssen ist die Power-LED
