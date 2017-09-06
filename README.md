@@ -518,35 +518,33 @@ V_IN_5V |o  |
   [[link]](http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT)
  
  #### 4. Hardware Valve-Board
- 
+  * **I2C-Multiplexer - PCA9555**
+   [[link]](../master/electronic/data_sheets/valve_I2C_PCA9555) <br>
+  
+  * **Operationsverstärker - LMC6484** 
+   [[link]](../master/electronic/data_sheets/valve_op-amp_lmc6484) <br>
+   
+  * **Transistoren -  IRFIZ24NPBF**
+   [[link]](../master/electronic/data_sheets/valve_transistor) <br>
+  Bestellnummer bei Farnell: 9264388
+  
+  * **Pegelwandler - TSR 1 - 2450 ** 
+   [[link]](../master/electronic/data_sheets/valve_tsr1-2450) <br>
+
+
  
  #### 5. Teillisten
+ TBD
  
  #### 6. LED-Anzeigen
-
- * **Anschließen der Ventile** [[link]](http://www.nxp.com/documents/data_sheet/PCA9555.pdf) <br>
-  Werden über I2C angesteuert (16bit I2C GPIO-Expander dient als Erweiterung) <br>
-  Jede Ventilplatine hat einen PCA9555DB mit 8 möglichen Adressen. Dadurch sind bis zu 8 Ventilplatinen an einem Teensy möglich<br>
-  Dieser IC läuft auch auf 3V3, lässt sich also OHNE Pegelwandler betreiben<br>
-  Hängt mit allen anderen I2C Geräten an Bus 0
- * **Ventilansteuerung** [[link]](http://www.infineon.com/dgdl/Infineon-BTS555-DS-v01_00-en.pdf?fileId=db3a30432ba3fa6f012bd3dfdd0b3b65) <br>
- ToDo: Datenblätter Op-Amp und transistoren finden
+ * **Control-Board**
+   Power-LED über dem Lab-Vies USB Port. <br>
+   Debug-LED neben dem Debug DIP-Schalter. <br>
+   
+ * **Control-Board**
+   Jedes Ventil hat eine eigene LED, die leuchtet wenn das Ventil geöffnet wird.
 
 
-
-
-#### Ventile
-Die Steuersignale aus dem I/O Expander werden durch einen Operationsverstärker (einer pro 4 Ventile) von den 24V Signalen getrennt.
-Ein Operationsverstärker kann 4 Transistoren unabhängig schalten welche die Ventile mit der 24V verbinden.
-
-
-
-
-#### LED Anzeigen
-Über den USB Anschlüssen ist die Power-LED
-Über dem Teensy Bord, neben dem Debug Schalter, ist die Debug LED.
-
-#### PCF8547
 
 ## Ausblick:
 ### RTC
