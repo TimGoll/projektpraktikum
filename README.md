@@ -483,13 +483,15 @@ V_IN_5V |o  |
   Anschlussbelegung Bürkert auf Seite 4 im Datenblatt
    [[link]](../master/electronic/data_sheets/bürkert_mfc.pdf) <br>
   ![Bürkert Datenblatt Seite 4](../master/electronic/pictures/mks_pin_out.png)
-  [![solarized dualmode](https://github.com/TimDerGoll/projektpraktikum/blob/master/electronic/pictures/mks_pin_out.PNG)]
+  TBD
+
+
 
   <br>
-  Anschlussbelegung MKS auf Seite 68 im Datenblatt 
+  Anschlussbelegung MKS auf Seite 68 im Datenblatt (RTS Pin wird nicht verwendet)
   [[link]](../master/electronic/data_sheets/mks_mfc.pdf) <br>
-  ![MKS Datenblatt Seite 68](../master/electronic/pictures/mks_pin_out.png "MKS Pin-Out")
-  
+  ![Screenshost S.68](https://github.com/TimDerGoll/projektpraktikum/blob/master/electronic/pictures/mks_pin_out.PNG)
+<br>  
 * **Control Board <-> LabView** <br>
   LabView kommuniziert mit dem Control-Board über den oberen, näher am Teensy gelegenen USB-B Anschluss.
   
