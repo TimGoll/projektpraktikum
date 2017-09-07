@@ -483,7 +483,7 @@ V_IN_5V |o  |
   Anschlussbelegung Bürkert auf Seite 4 im Datenblatt
    [[link]](../master/electronic/data_sheets/bürkert_mfc.pdf) <br>
   ![Bürkert Datenblatt Seite 4](../master/electronic/pictures/mks_pin_out.png)
-  ![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+  [![solarized dualmode](https://github.com/TimDerGoll/projektpraktikum/blob/master/electronic/pictures/mks_pin_out.PNG)]
 
   <br>
   Anschlussbelegung MKS auf Seite 68 im Datenblatt 
