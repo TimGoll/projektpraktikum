@@ -458,7 +458,9 @@ V_IN_5V |o  |
 ```
 ### Hardware
 #### 1. Schaltskizze [[link]](../master/electronic/Schaltplan.pdf) <br>
-#### 2. Anschluss
+#### 2. Gesamtübersicht
+![Gesamtübersicht](https://github.com/TimDerGoll/projektpraktikum/blob/master/electronic/pictures/Bild_Gesamtsystem.pdf) <br>
+#### 3. Anschluss
 
 * **Stromversorgung Control-Board, Valve-Board** <br>
   Die Stromversorgung des Control-Board erfolgt über die USB Ports.
@@ -503,7 +505,7 @@ V_IN_5V |o  |
    
 
   
-#### 3. Hardware Control-Board 
+#### 4. Hardware Control-Board 
 
  * **Teensy 3.6** 
   Board [[link]](http://www.pjrc.com/teensy/) <br>
@@ -525,7 +527,7 @@ V_IN_5V |o  |
   Auf dem Control-Board ist eine integrierte Variante des IC's verbaut: <br>
   [[link]](http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT)
  
- #### 4. Hardware Valve-Board
+ #### 5. Hardware Valve-Board
   * **I2C-Multiplexer - PCA9555**
    [[link]](../master/electronic/data_sheets/valve_I2C_PCA9555.pdf) <br>
   
@@ -540,10 +542,7 @@ V_IN_5V |o  |
    [[link]](../master/electronic/data_sheets/valve_tsr1-2450.pdf) <br>
 
 
- 
- #### 5. Teillisten
- TBD
- 
+
  #### 6. LED-Anzeigen
  * **Control-Board**
    Power-LED über dem Lab-Vies USB Port. <br>
