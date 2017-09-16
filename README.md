@@ -463,7 +463,7 @@ V_IN_5V |o  |
 ### Hardware
 #### 1. Schaltskizze [[link]](../master/electronic/Schaltplan.pdf) <br>
 #### 2. Gesamtübersicht
-![Gesamtübersicht](../master/docu/pictures/Bild_Gesamtsystem.png)
+![Gesamtübersicht](../master/docu/pictures/Bild_Gesamtsystem.jpg)
 
 #### 3. Anschluss
 
