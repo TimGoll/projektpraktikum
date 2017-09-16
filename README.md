@@ -305,6 +305,9 @@ Fluss: 0..500 sccm (S.16)
 Flusseinheit in sccm (cm^3/min)
 
 ## Programmaufbau:
+![Blockschaltbild](../master/docu/pictures/SoftwareBlockschaltbild.png)
+_**Blockschaltbild der Software.** Violette Klassen stellen Hauptklassen mit eigenem Thread dar._
+
 ### Hauptdatei:
 1. **Controller.ino**: [[ino]](../master/controller/controller.ino) <br>
  Hier werden die Hauptobjekte erstellt und verwaltet. Außerdem werden an dieser Stelle die Threads gestartet und später auch wieder gestoppt. Vor dem Start der Threads werden noch Adressen zwischen den einzelnen Objekten ausgetauscht (beispielsweise die der Queues zum späteren Datenaustausch).
@@ -312,8 +315,6 @@ Flusseinheit in sccm (cm^3/min)
 ### Hauptklassen:
 Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgeleitet. Außerdem besitzen sie eine ```loop()```-Funktion, da die Klasse in Pseudothreads ausgeführt werden.
 
-![Blockschaltbild](../master/docu/pictures/SoftwareBlockschaltbild.png)
-**Blockschaltbild der Software.** Violette Klassen stellen Hauptklassen mit eigenem Thread dar.
 
 1. **main_labCom** [[cpp]](../master/controller/src/main_labCom.cpp) [[h]](../master/controller/src/main_labCom.h): <br>
 Quasi Hauptklasse des Programms, verwaltet die Kommunikation mit LabView
