@@ -312,6 +312,9 @@ Flusseinheit in sccm (cm^3/min)
 ### Hauptklassen:
 Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgeleitet. Außerdem besitzen sie eine ```loop()```-Funktion, da die Klasse in Pseudothreads ausgeführt werden.
 
+![Blockschaltbild](../master/docu/pictures/SoftwareBlockschaltbild.png)
+**Blockschaltbild der Software.** Violette Klassen stellen Hauptklassen mit eigenem Thread dar.
+
 1. **main_labCom** [[cpp]](../master/controller/src/main_labCom.cpp) [[h]](../master/controller/src/main_labCom.h): <br>
 Quasi Hauptklasse des Programms, verwaltet die Kommunikation mit LabView
 
@@ -469,77 +472,74 @@ V_IN_5V |o  |
   da sich die Platine nicht als USB-Verbraucher anmeldet und nur bis maximal 100mA über einen normalen USB Port erhält. <br>
   <br>
   Das Valve-Board muss an eine externe Spannungsversorgung angeschlossen werden, die 24V für die Ventile liefert. Auf der Platine werden   die benötigten 5V für den Multiplexer durch einen Regler erzeugt (siehe auch Bauteile Valve-Board).
-  
+
 * **Control-Board <-> Valve-Board** <br>
-  Die Kommunikation zwischen den beiden Platinen erfolgt über I2C. Der Multiplexer auf dem Valve-Board arbeitet mit einem 5V Pegel. m     Daher werden die Signalleitungen zunächst über einen Pegelwandler von 3V3 auf 5V gewandelt. Die Signalleitungen sowie ein gemeinsames   GND Potential können am Control-Board an dem 3-poligen Anschlussblock oberhalb des Teensy Boards abgegriffen werden. 
+  Die Kommunikation zwischen den beiden Platinen erfolgt über I2C. Der Multiplexer auf dem Valve-Board arbeitet mit einem 5V Pegel. m     Daher werden die Signalleitungen zunächst über einen Pegelwandler von 3V3 auf 5V gewandelt. Die Signalleitungen sowie ein gemeinsames   GND Potential können am Control-Board an dem 3-poligen Anschlussblock oberhalb des Teensy Boards abgegriffen werden.
   Beginnend auf der dem Teensy näheren Seite: GND, SDA, SCL.
 
 * **Control-Board <-> Bosch-Sensor** <br>
   Der Bosch Sensor wird an dem vier- poligen Anschlussblock links neben der Teensy Platine angeschlossen. Die Kommunikation erfolg wie     beim Valve-Board über I2C. Außerdem werden eine GND und eine 3V3 Leitung benötigt.
   Beginnend auf der dem Teensy näheren Seite: 3V3, SCL, SDA, GND.
-  
+
 * **Control Board <-> MFC** <br>
-  Die MFC's empfangen Daten nach dem RS485 Protokoll. Daher muss das TTL 3V3 Signal des Teensy zunächst umgewandelt werden (siehe      b   Hardware Control-Board). 
+  Die MFC's empfangen Daten nach dem RS485 Protokoll. Daher muss das TTL 3V3 Signal des Teensy zunächst umgewandelt werden (siehe      b   Hardware Control-Board).
   Um Verwechslungen auszuschließen werden die MFC's der Marke **Bürkert mit male D-Sub** angeschlossen. Die MFC's von **MKS mit female     D-Sub**. <br>
 
   Anschlussbelegung Bürkert auf Seite 4 im Datenblatt
-   [[link]](../master/electronic/data_sheets/bürkert_mfc.pdf) <br>
-  ![Bürkert Datenblatt Seite 4](../master/electronic/pictures/mks_pin_out.png)
+  [[link]](LZString../master/docu/data_sheets/bürkert_mfc.pdf) <br>
+  ![Bürkert Datenblatt Seite 4](../master/docu/pictures/mks_pin_out.png)
   TBD
-
-
-
   <br>
   Anschlussbelegung MKS auf Seite 68 im Datenblatt (RTS Pin wird nicht verwendet)
-  [[link]](../master/electronic/data_sheets/mks_mfc.pdf) <br>
-  ![Screenshost S.68](https://github.com/TimDerGoll/projektpraktikum/blob/master/electronic/pictures/mks_pin_out.PNG)
-<br>  
+  [[link]](LZString../master/docu/data_sheets/mks_mfc.pdf) <br>
+  ![Screenshost S.68](../master/docu/pictures/mks_pin_out.PNG)
+
 * **Control Board <-> LabView** <br>
   LabView kommuniziert mit dem Control-Board über den oberen, näher am Teensy gelegenen USB-B Anschluss.
-  
+
 *  **Control Board <-> Debug** <br>
    Der untere USB-B Anschluss sendet, sofern aktiviert, debugging Informationen. Um diesen USB Port zu aktivieren muss ein Schalter        auf der Platine umgelegt werden. Dieser ist als einzelner DIP-Switch ausgeführt und befindet sich über dem Teensy-Board.
-   
+
 *  **Control Board <-> Programmierung** <br>
    Um ein Programm auf das Teensy Board zu übertragen wird der Standarmäßige Micro-USB Port am Teensy selbst verwendet.
-   
 
-  
-#### 4. Hardware Control-Board 
 
- * **Teensy 3.6** 
+
+#### 4. Hardware Control-Board
+
+ * **Teensy 3.6**
   Board [[link]](http://www.pjrc.com/teensy/) <br>
-  Vorderseite [[link]](../master/electronic/data_sheets/teensy_front.pdf) <br>
-  Rückseite [[link]](../master/electronic/data_sheets/teensy_back.pdf)
-  
- * **20x4 LCD Display (RGB Backlight)** 
+  Vorderseite [[link]](LZString../master/docu/data_sheets/teensy_front.pdf) <br>
+  Rückseite [[link]](LZString../master/docu/data_sheets/teensy_back.pdf)
+
+ * **20x4 LCD Display (RGB Backlight)**
   [[link]](https://www.adafruit.com/product/499) <br>
-  Display Datasheet [[link]](../master/electronic/data_sheets/display.pdf) <br>
-  Display Controller HD44780U Datasheet [[link]](../master/electronic/data_sheets/display_controller_HD44780U.pdf) <br>
-  I2C-Chip für Display (PCF8574) [[link]](../master/electronic/data_sheets/display_i2c_pcf8574.pdf)
-   
+  Display Datasheet [[link]](LZString../master/docu/data_sheets/display.pdf) <br>
+  Display Controller HD44780U Datasheet [[link]](LZString../master/docu/data_sheets/display_controller_HD44780U.pdf) <br>
+  I2C-Chip für Display (PCF8574) [[link]](LZString../master/docu/data_sheets/display_i2c_pcf8574.pdf)
+
  * **"TTL" (3V3) auf RS-485 - MAX14776E**
- [[link]](../master/electronic/data_sheets/mfc_communication.pdf) <br>
+ [[link]](LZString../master/docu/data_sheets/mfc_communication.pdf) <br>
  Der MAX14776E kann, bei 5V Versorungsspannung, sowohl 3V3 als auch 5V Pegel als High erkennen.
 
- * **UART <-> USB - CH340G** 
-  [[link]](../master/electronic/data_sheets/usb_uart_interface_ch340g.pdf) <br>
+ * **UART <-> USB - CH340G**
+  [[link]](LZString../master/docu/data_sheets/usb_uart_interface_ch340g.pdf) <br>
   Auf dem Control-Board ist eine integrierte Variante des IC's verbaut: <br>
-  [[link]](http://www.ebay.de/itm/252960740317?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT)
- 
+  [[link]](http://www.ebay.de/itm/252960740317)
+
  #### 5. Hardware Valve-Board
   * **I2C-Multiplexer - PCA9555**
-   [[link]](../master/electronic/data_sheets/valve_I2C_PCA9555.pdf) <br>
-  
-  * **Operationsverstärker - LMC6484** 
-   [[link]](../master/electronic/data_sheets/valve_op-amp_lmc6484.pdf) <br>
-   
+   [[link]](LZString../master/docu/data_sheets/valve_I2C_PCA9555.pdf) <br>
+
+  * **Operationsverstärker - LMC6484**
+   [[link]](LZString../master/docu/data_sheets/valve_op-amp_lmc6484.pdf) <br>
+
   * **Transistoren -  IRFIZ24NPBF**
-   [[link]](../master/electronic/data_sheets/valve_transistor.pdf) <br>
+   [[link]](LZString../master/docu/data_sheets/valve_transistor.pdf) <br>
   Bestellnummer bei Farnell: 9264388
-  
-  * **Pegelwandler - TSR 1 - 2450** 
-   [[link]](../master/electronic/data_sheets/valve_tsr1-2450.pdf) <br>
+
+  * **Pegelwandler - TSR 1 - 2450**
+   [[link]](LZString../master/docu/data_sheets/valve_tsr1-2450.pdf) <br>
 
 
 
@@ -547,7 +547,7 @@ V_IN_5V |o  |
  * **Control-Board**
    Power-LED über dem Lab-Vies USB Port. <br>
    Debug-LED neben dem Debug DIP-Schalter. <br>
-   
+
  * **Control-Board**
    Jedes Ventil hat eine eigene LED, die leuchtet wenn das Ventil geöffnet wird.
 
