@@ -463,7 +463,8 @@ V_IN_5V |o  |
 ### Hardware
 #### 1. Schaltskizze [[link]](../master/electronic/Schaltplan.pdf) <br>
 #### 2. Gesamtübersicht
-![Gesamtübersicht](https://github.com/TimDerGoll/projektpraktikum/blob/master/electronic/pictures/Bild_Gesamtsystem.jpg) <br>
+![Gesamtübersicht](../master/docu/pictures/Bild_Gesamtsystem.png)
+
 #### 3. Anschluss
 
 * **Stromversorgung Control-Board, Valve-Board** <br>
