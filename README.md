@@ -22,17 +22,17 @@ _Tim Goll, Matthias Baltes, Matthias Jost, Markus Herrmann-Wicklmayr_
   Ansteuerung des Boschsensors (Die Version im Repo ist leicht verändert).
 
 ## Programmablauf:
-1. Programm startet automatisch nach Herstellung der Stromversorgung
-2. Es kann ein Programm per USB von LabView übertragen werden, oder - falls eine SD-Karte eingesteckt ist - ein Programm von der SD-Karte aus gestartet werden
-3. Programm liest Daten (werden überprüft) und startet nach einem Tasterdruck/"Start"-Befehl
-4. Arbeitet Eventlisten ab, gibt Debug-Informationen aus, sofern über Schalter aktiviert, während der Laufzeit einstellbar
-5. Im Idle-Modus nach vollständiger Abarbeitung aller Events; nach Abschluss des Programms leuchtet eine LED und das Display leuchtet grün
-6. Zum Starten eines weiteren Programms muss das Board zurückgesetzt werden
-7. Es sind maximal 14.000 Events auf dem Board möglich. Dann ist der Speicher voll
+1. Programm startet automatisch nach Herstellung der Stromversorgung.
+2. Es kann ein Programm per USB von LabView übertragen werden, oder - falls eine SD-Karte eingesteckt ist - ein Programm von der SD-Karte aus gestartet werden.
+3. Programm liest Daten (werden überprüft) und startet nach einem Tasterdruck/"Start"-Befehl.
+4. Arbeitet Eventlisten ab, gibt Debug-Informationen aus, sofern über Schalter aktiviert, während der Laufzeit einstellbar.
+5. Im Idle-Modus nach vollständiger Abarbeitung aller Events; nach Abschluss des Programms leuchtet eine LED und das Display leuchtet grün.
+6. Zum Starten eines weiteren Programms muss das Board zurückgesetzt werden.
+7. Es sind maximal 14.000 Events auf dem Board möglich. Dann ist der Speicher voll.
 8. Für eine korrekte Steuerung muss **mindestens ein Ventil und ein MFC** existieren, sonst kommt es zu Fehlern. Falls in der Steuerung kein MFC/Ventil gebraucht wird, kann man auch einen leeres pseudo MFC/Ventil hinzufügen, das keine Events hat. Dafür muss nicht einmal Hardware angeschlossen sein.
 
 ## Übertragungsprotokoll (LabView -> Mikrocontroller):
-Die Übertragung erfolgt Zeilenweise in einem möglichst übertragungssicheren Format. Als Anfangs und Endzeichen dienen zur Überprüfung der Vollständigkeit jeweils eine öffnende und eine schließende spitze Klammer. Alle Zeitangaben sind in Millisekunden, es gibt nur ganzzahlige Integerwerte.
+Die Übertragung erfolgt zeilenweise in einem möglichst übertragungssicheren Format. Als Anfangs- und Endzeichen dienen zur Überprüfung der Vollständigkeit jeweils eine öffnende und eine schließende spitze Klammer. Alle Zeitangaben sind in Millisekunden. Es gibt nur ganzzahlige Integerwerte.
 
 Die IDs der MFCs und Ventile ergeben sich jeweils aus der gegebenen Reihenfolge startend bei null.
 
@@ -72,7 +72,7 @@ Die IDs der MFCs und Ventile ergeben sich jeweils aus der gegebenen Reihenfolge 
 <start>
 ```
 
-**Softwarereset**: Es ist auch möglich das Board per Software neu zu starten. Dafür muss ein ```reset``` Befehl übertragen werden, woraufhin das Board neu startet und anschließend wieder ein ```ready``` ausgibt. (Hardwareimplementierung noch ausstehend). Weiteres siehe Ausblick.
+**Softwarereset**: Es ist auch möglich, das Board per Software neu zu starten. Dafür muss ein ```reset``` Befehl übertragen werden, woraufhin das Board neu startet und anschließend wieder ein ```ready``` ausgibt. (Hardwareimplementierung noch ausstehend). Weiteres siehe Ausblick.
 
 ## Serielle Kommunikation:
 Vier Ports des Boards werden verwendet. Port 0 dient zur Kommunikation mit LabView (IN/OUT), Port 1 gibt Debug-Nachrichten aus, sofern der Debug-Schalter am Board aktiviert ist. Zur Kommunikation mit den MFCs dient Port 2.
@@ -88,7 +88,7 @@ srl->println('D', "Hallo Welt mit Zeilenende!"); //Natuerlich gibt es das ganze 
 ```
 Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei Typen: L, D und M, B für LabView, Debug, MKS und Bürkert. Die Baudrate wird in der **config.h** eingestellt.
 
-Über den LabView-Port wird nach erfolgreicher Initialisierung des Boards ein _"ready"_ gesendet. Wurde ein Befehl korrekt erkannt und erfolgreich verarbeitet wird ein _"ok"_ gesendet, andernfalls kommt ein Errorcode. Nach Abschluss einer Messung wird eine _"finished"_ Zeile übertragen.
+Über den LabView-Port wird nach erfolgreicher Initialisierung des Boards ein _"ready"_ gesendet. Wurde ein Befehl korrekt erkannt und erfolgreich verarbeitet, wird ein _"ok"_ gesendet, andernfalls kommt ein Errorcode. Nach Abschluss einer Messung wird eine _"finished"_ Zeile übertragen.
 
 ## Serielle Hardware
 Die Verbindung zwischen dem Teensy und dem PC über eine serielle Verbindung wird mit dem IC **CH340G** realisiert. Dieser funktioniert Plug and Play unter Windows (Windows 10 getestet) und lässt sich auch [mit einfachen Treibern](https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver) unter MacOS zum Laufen bringen.
@@ -127,7 +127,7 @@ Wertsortierung: Laufzeit (ms), MFC Soll, MFC Ist, Ventil Soll, Bosch (Temp /C, D
 1. Einzelne Befehlzeilen werden mit einem ```\n``` (Zeilenumbruch) voneinander getrennt.
 2. Die Befehlszeilen werden bei Dateien **nicht** mit ```<``` und ```>``` umschlossen.
 3. Leerzeilen und Leerzeichen werden ignoriert
-4. Ebenso wird alles in einer Zeile nach einem ```#``` ignoriert, somit sind Kommentare möglich
+4. Ebenso wird alles in einer Zeile nach einem ```#``` ignoriert, somit sind Kommentare möglich.
 5. Dateinamen sind im FAT 8.3 Format und dürfen nicht mit ```.``` oder ```_``` beginnen.
 6. Programme müssen sich im Ordner ```programs``` auf der SD Karte befinden.
 
@@ -198,7 +198,7 @@ this->bme280->readHumidity();
 ## Ventile
 Die Ventilsteuerung befindet sich auf einer eigenen Platine. Das hat die beiden Vorteile, dass zum einen Kurzschlüsse auf der Ventilplatine keinen Schaden an der Hauptsteuerung verursachen können und es zum anderen möglich ist, "beliebig" viele Ventile mit einem Mikrocontroller zu steuern.
 
-Theoretisch sind bis zu 8 Ventilplatinen mit je 16 Ventilen möglich, also insgesamt 128 Ventile. Auf der Platine befindet sich ein dreipoliger DIP-Switch zum Einstellen der Adresse (Adressraum: 0x20..0x27). Die Adressen sind bei Programmstart per LabView an den Controller zu übertragen. Jede der acht Platinen hat 16 Pins (0 bis 15), die auch bei der Initialisierung so angegeben werden müssen (```<Platinen-ID Pin-ID, ...>```), intern haben die Ventile jedoch eine andere, fortlaufende, Nummerierung (siehe Übertragungsprotokoll).
+Theoretisch sind bis zu 8 Ventilplatinen mit je 16 Ventilen möglich, also insgesamt 128 Ventile. Auf der Platine befindet sich ein dreipoliger DIP-Switch zum Einstellen der Adresse (Adressraum: 0x20..0x27). Die Adressen sind bei Programmstart per LabView an den Controller zu übertragen. Jede der acht Platinen hat 16 Pins (0 bis 15), die auch bei der Initialisierung so angegeben werden müssen (```<Platinen-ID Pin-ID, ...>```). Intern haben die Ventile jedoch eine andere, fortlaufende, Nummerierung (siehe Übertragungsprotokoll).
 
 Die softwareseitige Ansteuerung wird mittels einer kleinen von uns geschriebenen Bibliothek namens ```pca9555``` (Name des I2C ICs) realisiert. Angelehnt an die Syntax der Arduino-Umgebung gibt es auch hier eine ```digitalWrite(pinNumber)```-Funktion, der Einfachheit halber haben wir jedoch auf weitere Funktionen verzichtet und bei Porgammstart werden automatisch alle Pins als Ausgang definiert.
 
@@ -257,10 +257,10 @@ Bei allen Fehlermeldungen im 1000er Bereich wird das Programm weiterhin ausgefü
 **Zugriff auf nicht definierte MFC/Ventil ID.** Tritt dieser Fall ein, dann wird eine irreversible Errormeldung geworfen, die nur duch einen Programmneustart behoben werden kann. Man sollte in diesem Fall seine Eingaben darauf überprüfen, ob in den Events nur auf vorher definierte MFCs/Ventile zugegriffen wird.
 
 ## MFCs
-Bei unserem Aufbau verwenden wir zwei verschiedene Typen von MFCs. **Bürkert** und **MKS** sind die beiden Hersteller, dazu gibt es noch alte analoge MFCs, die von einer anderen Projektgruppe digitalisiert wurden. Diese basieren dadurch auch auf dem **Bürkert** Protokoll. <br>
+Bei unserem Aufbau verwenden wir zwei verschiedene Typen von MFCs. **Bürkert** und **MKS** sind die beiden Hersteller. Dazu gibt es noch alte analoge MFCs, die von einer anderen Projektgruppe digitalisiert wurden. Diese basieren dadurch auch auf dem **Bürkert** Protokoll. <br>
 Von uns angesteuert werden alle MFCs von ihrer jeweiligen Klasse, je nach Typ bekommen sie bei der Initialisierung jedoch ein anderes Kommunikationsobjekt übergeben. Dieses Objekt führt verschiedene Befehle aus und gibt gegebenenfalls Daten an das MFC-Objekt zurück.
 
-Um Verzögerungen zu verringern wird die Übertragung mittels zeitlichen Interrupts gesteuert. Sowohl mfcCom_mks, als auch mfcCom_buerkert besitzen einen ```IntervalTimer```, der Microsekunden genau Callbackfunktionen ausführen kann. Zum Start der Befehlsübertragung wird die Übertragungs- und Antwortzeit berechnet, sowie die erwartete Pause zwischen den beiden Übertragungen. Nach dem Schieben des Strings in den seriellen Outputbuffer wird ein Interrupt gesetzt auf den Augenblick nach der Übertragung. Die aufgerufene Funktion setzt den Enablepin des RS-485 IC und einen weiteren Interrupt auf den erwarteten Zeitpunkt nach dem kompletten Eintreffen der Antwort. Anschließend wird der empfangene Wert der Antwort in einem vorher gesetzten Pointer gespeichert und der Port wieder frei gegeben. Es gibt einen Lesetimeout, der in der _config.h_ eingestellt werden kann. <br>
+Um Verzögerungen zu verringern wird die Übertragung mittels zeitlichen Interrupts gesteuert. Sowohl mfcCom_mks, als auch mfcCom_buerkert besitzen einen ```IntervalTimer```, der mikrosekundengenaue Callbackfunktionen ausführen kann. Zum Start der Befehlsübertragung wird die Übertragungs- und Antwortzeit berechnet, sowie die erwartete Pause zwischen den beiden Übertragungen. Nach dem Schieben des Strings in den seriellen Outputbuffer wird ein Interrupt auf den Augenblick nach der Übertragung gesetzt . Die aufgerufene Funktion setzt den Enablepin des RS-485 IC und einen weiteren Interrupt auf den erwarteten Zeitpunkt nach dem kompletten Eintreffen der Antwort. Anschließend wird der empfangene Wert der Antwort in einem vorher gesetzten Pointer gespeichert und der Port wieder freigegeben. Es gibt einen Lesetimeout, der in der _config.h_ eingestellt werden kann. <br>
 Während einer Übertagung (Befehl senden und Antwort erhalten) ist der Port gesperrt und weitere Befehle werden zurückgewiesen. Unsere Steuerung registriert dies aber und sendet den Befehl anschließend erneut.
 
 ### Bürkert [[Handbuch]](../master/dokus/MA8006-Supplem.MFC-DE-DE.pdf)
@@ -317,7 +317,7 @@ Aus allen Klassen mit einem "main" im Namen wird immer nur **ein** Objekt abgele
 
 
 1. **main_labCom** [[cpp]](../master/controller/src/main_labCom.cpp) [[h]](../master/controller/src/main_labCom.h): <br>
-Quasi Hauptklasse des Programms, verwaltet die Kommunikation mit LabView
+Quasi Hauptklasse des Programms, verwaltet die Kommunikation mit LabView.
 
 2. **main_boschCom** [[cpp]](../master/controller/src/main_boschCom.cpp) [[h]](../master/controller/src/main_boschCom.h): <br>
  Liest getaktet den Boschsensor aus und speichert die Werte.
@@ -325,33 +325,33 @@ Quasi Hauptklasse des Programms, verwaltet die Kommunikation mit LabView
  Dieses Objekt sammelt sich per Abfragen alle Daten, die in der Ausgabe gebraucht werden, zusammen und baut im Messtakt daraus Strings, welche an LabCom und StoreD weiter gegeben werden. Diese Klasse erzeugt und verwaltet StoreD.
 
 4. **main_mfcCtrl** [[cpp]](../master/controller/src/main_mfcCtrl.cpp) [[h]](../master/controller/src/main_mfcCtrl.h): <br>
- Verwaltet alle mfcCtrl Objekte
+ Verwaltet alle mfcCtrl Objekte.
 
 5. **main_valveCtrl** [[cpp]](../master/controller/src/main_valveCtrl.cpp) [[h]](../master/controller/src/main_valveCtrl.h): <br>
- Verwaltet alle valveCtrl Objekte
+ Verwaltet alle valveCtrl Objekte.
 
 6. **main_display** [[cpp]](../master/controller/src/main_display.cpp) [[h]](../master/controller/src/main_display.h): <br>
  Verwaltet die Displaybefehle und baut Anzeigen anhand von Daten.
 
 ### Nebenklassen:
 1. **mfcCtrl** [[cpp]](../master/controller/src/mfcCtrl.cpp) [[h]](../master/controller/src/mfcCtrl.h): <br>
- Verwaltung eines einzelnen MFCs
+ Verwaltung eines einzelnen MFCs.
 2. **valveCtrl** [[cpp]](../master/controller/src/valveCtrl.cpp) [[h]](../master/controller/src/valveCtrl.h): <br>
- Verwaltung eines einzelnen Ventils
+ Verwaltung eines einzelnen Ventils.
 3. **mfcCom** [[cpp]](../master/controller/src/mfcCom.cpp) [[h]](../master/controller/src/mfcCom.h): <br>
- Serielle Kommunikationsverwaltung der MFCs
+ Serielle Kommunikationsverwaltung der MFCs.
 4. **mfcCom_buerkert** [[cpp]](../master/controller/src/mfcCom_buerkert.cpp) [[h]](../master/controller/src/mfcCom_buerkert.h): <br>
- Serielle Kommunikation mit Bürkert MFCs
+ Serielle Kommunikation mit Bürkert MFCs.
 5. **mfcCom_mks** [[cpp]](../master/controller/src/mfcCom_mks.cpp) [[h]](../master/controller/src/mfcCom_mks.h): <br>
- Serielle Kommunikation mit MKS MFCs
+ Serielle Kommunikation mit MKS MFCs.
 6. **StoreD** [[cpp]](../master/controller/src/StoreD.cpp) [[h]](../master/controller/src/StoreD.h): <br>
  Sorgt dafür, dass Daten auf der SD-Karte gespeichert/gelesen werden.
 7. **parseInput** [[cpp]](../master/controller/src/parseInput.cpp) [[h]](../master/controller/src/parseInput.h): <br>
- Zerteilt die Befehlsstrings von LabView und der SD-Karte
+ Zerteilt die Befehlsstrings von LabView und der SD-Karte.
 
 ### Eigene Bibliotheken
 1. **serialCommunication** [[cpp]](../master/controller/src/ownlibs/serialCommunication.cpp) [[h]](../master/controller/src/ownlibs/serialCommunication.h): <br>
- Überklasse zu Arduino Serial. Verteilt Eingaben anhand der Parameter automatisch auf die verschiendenen Seriellen Ports, die sich auch dort komplett deaktivieren lassen.
+ Überklasse zu Arduino Serial. Verteilt Eingaben anhand der Parameter automatisch auf die verschiendenen seriellen Ports, die sich auch dort komplett deaktivieren lassen.
 2. **inputHandler** [[cpp]](../master/controller/src/ownlibs/inputHandler.cpp) [[h]](../master/controller/src/ownlibs/inputHandler.h): <br>
  Kümmert sich um Tastereingaben, ruft Callbackfunktionen auf. Entprellt und erkennt Flanken. <br>
  Ermöglicht außerdem Dauerpulse zu senden, indem man zwei weitere Werte im Aufruf hinzufügt. Die Klasse initialisiert den entsprechenden Button dann automatisch.
@@ -360,13 +360,13 @@ Quasi Hauptklasse des Programms, verwaltet die Kommunikation mit LabView
  inputHandler->addInterrupt(PIN_ID, FUNCTION, BUTTON_STATE, MIN_PRESS_TIME, PUSH_INTERVAL);
  ```
 3. **lcd_I2C** [[cpp]](../master/controller/src/ownlibs/lcd_I2C.cpp) [[h]](../master/controller/src/ownlibs/lcd_I2C.h): <br>
- Steuert das Display an
+ Steuert das Display an.
 4. **pca9555** [[cpp]](../master/controller/src/ownlibs/pca9555.cpp) [[h]](../master/controller/src/ownlibs/pca9555.h): <br>
- Steuert die Ventilplatine via I2C an
+ Steuert die Ventilplatine via I2C an.
 
 ### Sonstige:
 1. **common** [[cpp]](../master/controller/src/ownlibs/common.cpp) [[h]](../master/controller/src/ownlibs/common.h): <br>
- Standardfunktionen, die überall gebraucht werden (```trim()```, ```getTimeString(time, timeString)```, ...)
+ Standardfunktionen, die überall gebraucht werden (```trim()```, ```getTimeString(time, timeString)```, ...).
 
 2. **config** [[h]](../master/controller/src/config.h): <br>
  Einstellmöglichkeiten diverser Parameter. Eine Erläuterung dieser findet sich in der Datei selber.
@@ -382,22 +382,22 @@ Derzeit gibt es ein kleines Testskript zum Test der Steuerungssoftware auf dem B
 
 Zur Ausführung müssen ```Python 2.7``` und ```pySerial``` installiert sein und bestenfalls die PATH-Variable für die Konsole gesetzt sein. Da das Programm hardgecoded ist, muss der Port in Zeile 10 angepasst werden. Der Port ist beispielsweise in der Arduino IDE sehr einfach einzusehen.
 
-Ist alles vorbereitet wird das Skript mit ```python serial_connection.py``` ausgeführt, insofern man sich im Verzeichnis dieser Datei befindet. In der Datei kann in einem Array die Übertragung definiert werden.
+Ist alles vorbereitet, wird das Skript mit ```python serial_connection.py``` ausgeführt, insofern man sich im Verzeichnis dieser Datei befindet. In der Datei kann in einem Array die Übertragung definiert werden.
 
 [[Einrichtung von Python (Windows)]](https://learn.adafruit.com/arduino-lesson-17-email-sending-movement-detector/installing-python-and-pyserial)
 
 ## LabView:
-Das LabVIEW Programm erstellt beim Start eine serielle Verbindung mit dem Teensy-Board. Dazu müssen die Baudrate und  der richtige Port eingestellt werden. Nachdem die Verbindung erstellt wurde, wartet LabVIEW auf ein Ready vom Teensy-Board.
+Das LabVIEW Programm erstellt beim Start eine serielle Verbindung mit dem Teensy-Board. Dazu müssen die Baudrate und der richtige Port eingestellt werden. Nachdem die Verbindung erstellt wurde, wartet LabVIEW auf ein Ready vom Teensy-Board.
 Wenn ein ```ready``` gelesen wurde beginnt die Übertragung des Headers. Hier wird Zeile für Zeile, wie vorher im
-Übertragungsprotokoll beschrieben, gesendet. Nach jeder Zeile wartet LabVIEW auf die Überprüfung des Teensy-Boards. Wenn ein ```ok``` zurück kommt fährt das Programm mit der nächsten Zeile fort.
+Übertragungsprotokoll beschrieben, gesendet. Nach jeder Zeile wartet LabVIEW auf die Überprüfung des Teensy-Boards. Wenn ein ```ok``` zurückkommt, fährt das Programm mit der nächsten Zeile fort.
 Bei einem 1000er Error wird die letzte Zeile erneut gesendet bei einem 5000er Error wird die Übertragung abgebrochen (siehe Error Bibliothek).
 Nach dem Header werden die einzelnen Werte, analog zum Header, Zeile für Zeile mit Überprüfung gesendet.
 
 Der Header und die einzelnen zugehörigen Werte werden als zwei Tabellen eingegeben.
 
-In Zeile 1 des Headers steht, ob es sich um ein Mfc oder Ventil handelt <br>
-In Zeile 2 wird die ID zugewiesen, die für den späteren Ablauf wichtig ist (Die Steuerung auf dem Board macht die ID-Zuweisung automatisch) <br>
-In Zeile 3 steht die Adresse und in Zeile 4 der Typ des Mfcs <br>
+In Zeile 1 des Headers steht, ob es sich um ein Mfc oder Ventil handelt. <br>
+In Zeile 2 wird die ID zugewiesen, die für den späteren Ablauf wichtig ist (Die Steuerung auf dem Board macht die ID-Zuweisung automatisch). <br>
+In Zeile 3 steht die Adresse und in Zeile 4 der Typ des Mfcs. <br>
 
 Zusätlich zu den 2 Tabellen hat das LabVIEW Programm noch eine Eingabe für die Anzahl der Ventilplatinen und der Messauflösung.
 
@@ -470,21 +470,21 @@ V_IN_5V |o  |
 * **Stromversorgung Control-Board, Valve-Board** <br>
   Die Stromversorgung des Control-Board erfolgt über die USB Ports.
   Die 5V und GND Leitungen von Debug Port und LabView Port sind auf der Platine zusammengeführt.
-  Um eine stabile Stromversorgung zu gewährleisten muss ein aktiver USB-Hub zwischen der Platine und dem Computer geschaltet werden,
+  Um eine stabile Stromversorgung zu gewährleisten, muss ein aktiver USB-Hub zwischen der Platine und dem Computer geschaltet werden,
   da sich die Platine nicht als USB-Verbraucher anmeldet und nur bis maximal 100mA über einen normalen USB Port erhält. <br>
   <br>
   Das Valve-Board muss an eine externe Spannungsversorgung angeschlossen werden, die 24V für die Ventile liefert. Auf der Platine werden   die benötigten 5V für den Multiplexer durch einen Regler erzeugt (siehe auch Bauteile Valve-Board).
 
 * **Control-Board <-> Valve-Board** <br>
-  Die Kommunikation zwischen den beiden Platinen erfolgt über I2C. Der Multiplexer auf dem Valve-Board arbeitet mit einem 5V Pegel. m     Daher werden die Signalleitungen zunächst über einen Pegelwandler von 3V3 auf 5V gewandelt. Die Signalleitungen sowie ein gemeinsames   GND Potential können am Control-Board an dem 3-poligen Anschlussblock oberhalb des Teensy Boards abgegriffen werden.
+  Die Kommunikation zwischen den beiden Platinen erfolgt über I2C. Der Multiplexer auf dem Valve-Board arbeitet mit einem 5V Pegel.       Daher werden die Signalleitungen zunächst über einen Pegelwandler von 3V3 auf 5V gewandelt. Die Signalleitungen, sowie ein gemeinsames   GND Potential können am Control-Board an dem 3-poligen Anschlussblock oberhalb des Teensy Boards abgegriffen werden.
   Beginnend auf der dem Teensy näheren Seite: GND, SDA, SCL.
 
 * **Control-Board <-> Bosch-Sensor** <br>
-  Der Bosch Sensor wird an dem vier- poligen Anschlussblock links neben der Teensy Platine angeschlossen. Die Kommunikation erfolg wie     beim Valve-Board über I2C. Außerdem werden eine GND und eine 3V3 Leitung benötigt.
+  Der Bosch Sensor wird an dem vier- poligen Anschlussblock links neben der Teensy Platine angeschlossen. Die Kommunikation erfolgt wie   beim Valve-Board über I2C. Außerdem werden eine GND und eine 3V3 Leitung benötigt.
   Beginnend auf der dem Teensy näheren Seite: 3V3, SCL, SDA, GND.
 
 * **Control Board <-> MFC** <br>
-  Die MFC's empfangen Daten nach dem RS485 Protokoll. Daher muss das TTL 3V3 Signal des Teensy zunächst umgewandelt werden (siehe      b   Hardware Control-Board).
+  Die MFC's empfangen Daten nach dem RS485 Protokoll. Daher muss das TTL 3V3 Signal des Teensy zunächst umgewandelt werden (siehe         Hardware Control-Board).
   Um Verwechslungen auszuschließen werden die MFC's der Marke **Bürkert mit male D-Sub** angeschlossen. Die MFC's von **MKS mit female     D-Sub**. <br>
 
   Anschlussbelegung Bürkert auf Seite 4 im Datenblatt
@@ -551,7 +551,7 @@ V_IN_5V |o  |
    Debug-LED neben dem Debug DIP-Schalter. <br>
 
  * **Control-Board**
-   Jedes Ventil hat eine eigene LED, die leuchtet wenn das Ventil geöffnet wird.
+   Jedes Ventil hat eine eigene LED, die leuchtet, wenn das Ventil geöffnet wird.
 
 
 
@@ -564,7 +564,7 @@ Wenn per LabView der Befehl "reset" kommt, dann wird ein Pin auf HIGH gezogen, w
 Dieses Feature ist softwareseitig bereits implementiert.
 
 ### Kommunikationscontroller
-Aktuell haben wir einige Timingprobleme mit der Seriellen Kommunikation des Teensyboards, da wir das Programm blockieren müssen, bis Daten gesendet sind und eine Antwort erhalten wurde. Sinnvoller wäre es, einen weiteren Microcontroller (beispielsweise einen Arduino Nano) zuzuschalten, welcher per SPI (sehr schnell) mit dem Teensy kommuniziert und die Serielle Steuerung abarbeitet. Dadurch treten keine Verzögerungen mehr auf dem Hauptcontroller auf.
+Aktuell haben wir einige Timingprobleme mit der seriellen Kommunikation des Teensyboards, da wir das Programm blockieren müssen, bis Daten gesendet sind und eine Antwort erhalten wurde. Sinnvoller wäre es, einen weiteren Microcontroller (beispielsweise einen Arduino Nano) zuzuschalten, welcher per SPI (sehr schnell) mit dem Teensy kommuniziert und die serielle Steuerung abarbeitet. Dadurch treten keine Verzögerungen mehr auf dem Hauptcontroller auf.
 
 ## Sonstiges:
 1. **MarkdownGuide** [[link]](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
