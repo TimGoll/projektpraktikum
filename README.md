@@ -493,7 +493,7 @@ V_IN_5V |o  |
   <br>
   <br>
   Anschlussbelegung MKS auf Seite 68 im Datenblatt (RTS Pin wird nicht verwendet)
-  [[link]](LZString../master/docu/data_sheets/mks_mfc.pdf) <br>
+  [[link]](../master/docu/data_sheets/mks_mfc.pdf) <br>
   ![Screenshost S.68](../master/docu/pictures/mks_pin_out.PNG)
 
 * **Control Board <-> LabView** <br>
@@ -511,37 +511,37 @@ V_IN_5V |o  |
 
  * **Teensy 3.6**
   Board [[link]](http://www.pjrc.com/teensy/) <br>
-  Vorderseite [[link]](LZString../master/docu/data_sheets/teensy_front.pdf) <br>
-  Rückseite [[link]](LZString../master/docu/data_sheets/teensy_back.pdf)
+  Vorderseite [[link]](../master/docu/data_sheets/teensy_front.pdf) <br>
+  Rückseite [[link]](./master/docu/data_sheets/teensy_back.pdf)
 
  * **20x4 LCD Display (RGB Backlight)**
   [[link]](https://www.adafruit.com/product/499) <br>
-  Display Datasheet [[link]](LZString../master/docu/data_sheets/display.pdf) <br>
-  Display Controller HD44780U Datasheet [[link]](LZString../master/docu/data_sheets/display_controller_HD44780U.pdf) <br>
-  I2C-Chip für Display (PCF8574) [[link]](LZString../master/docu/data_sheets/display_i2c_pcf8574.pdf)
+  Display Datasheet [[link]](../master/docu/data_sheets/display.pdf) <br>
+  Display Controller HD44780U Datasheet [[link]](../master/docu/data_sheets/display_controller_HD44780U.pdf) <br>
+  I2C-Chip für Display (PCF8574) [[link]](../master/docu/data_sheets/display_i2c_pcf8574.pdf)
 
  * **"TTL" (3V3) auf RS-485 - MAX14776E**
- [[link]](LZString../master/docu/data_sheets/mfc_communication.pdf) <br>
+ [[link]](../master/docu/data_sheets/mfc_communication.pdf) <br>
  Der MAX14776E kann, bei 5V Versorungsspannung, sowohl 3V3 als auch 5V Pegel als High erkennen.
 
  * **UART <-> USB - CH340G**
-  [[link]](LZString../master/docu/data_sheets/usb_uart_interface_ch340g.pdf) <br>
+  [[link]](../master/docu/data_sheets/usb_uart_interface_ch340g.pdf) <br>
   Auf dem Control-Board ist eine integrierte Variante des IC's verbaut: <br>
   [[link]](http://www.ebay.de/itm/252960740317)
 
  #### 5. Hardware Valve-Board
   * **I2C-Multiplexer - PCA9555**
-   [[link]](LZString../master/docu/data_sheets/valve_I2C_PCA9555.pdf) <br>
+   [[link]](../master/docu/data_sheets/valve_I2C_PCA9555.pdf) <br>
 
   * **Operationsverstärker - LMC6484**
-   [[link]](LZString../master/docu/data_sheets/valve_op-amp_lmc6484.pdf) <br>
+   [[link]](../master/docu/data_sheets/valve_op-amp_lmc6484.pdf) <br>
 
   * **Transistoren -  IRFIZ24NPBF**
-   [[link]](LZString../master/docu/data_sheets/valve_transistor.pdf) <br>
+   [[link]](../master/docu/data_sheets/valve_transistor.pdf) <br>
   Bestellnummer bei Farnell: 9264388
 
   * **Pegelwandler - TSR 1 - 2450**
-   [[link]](LZString../master/docu/data_sheets/valve_tsr1-2450.pdf) <br>
+   [[link]](../master/docu/data_sheets/valve_tsr1-2450.pdf) <br>
 
 
 
