@@ -86,7 +86,7 @@ Anschließend kann man an beliebiger Stelle im Programm diese Klasse einfach nut
 srl->print('D', "Hallo Welt!"); //(Typ: L, D, M, B / Ausgabetext)
 srl->println('D', "Hallo Welt mit Zeilenende!"); //Natuerlich gibt es das ganze auch mit Linebreak
 ```
-Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei Typen: L, D und M, B für LabView, Debug, MKS und Bürkert. Die Baudrate wird in der **config.h** eingestellt.
+Der Typ der Ausgabe entscheidet, welcher Port genutzt wird. Hierbei gibt es drei Typen: L, D und M, B für LabView, Debug, MKS und Bürkert. Die Parameter, wie die Baudrate, werden in der **config.h** eingestellt.
 
 Über den LabView-Port wird nach erfolgreicher Initialisierung des Boards ein _"ready"_ gesendet. Wurde ein Befehl korrekt erkannt und erfolgreich verarbeitet, wird ein _"ok"_ gesendet, andernfalls kommt ein Errorcode. Nach Abschluss einer Messung wird eine _"finished"_ Zeile übertragen.
 
