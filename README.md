@@ -487,10 +487,9 @@ V_IN_5V |o  |
   Die MFC's empfangen Daten nach dem RS485 Protokoll. Daher muss das TTL 3V3 Signal des Teensy zunächst umgewandelt werden (siehe         Hardware Control-Board).
   Um Verwechslungen auszuschließen werden die MFC's der Marke **Bürkert mit male D-Sub** angeschlossen. Die MFC's von **MKS mit female     D-Sub**. <br>
 
-  Anschlussbelegung Bürkert auf Seite 4 im Datenblatt
+  Anschlussbelegung Bürkert auf Seite 7 im Datenblatt
   [[link]](LZString../master/docu/data_sheets/bürkert_mfc.pdf) <br>
-  ![Bürkert Datenblatt Seite 4](../master/docu/pictures/mks_pin_out.png)
-  TBD
+  ![Bürkert Datenblatt Seite 4](../master/docu/pictures/bürkert_pin_out.PNG)
   <br>
   Anschlussbelegung MKS auf Seite 68 im Datenblatt (RTS Pin wird nicht verwendet)
   [[link]](LZString../master/docu/data_sheets/mks_mfc.pdf) <br>
