@@ -31,7 +31,7 @@ try:
     #filename
     name_id = 0
     while (True):
-        name = "PROG%04d.TXT" % name_id
+        name = "programs/PROG%04d.TXT" % name_id
         if (os.path.isfile(name)):
             name_id+=1
         else:
